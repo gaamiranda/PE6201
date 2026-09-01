@@ -1,0 +1,11 @@
+# PE6201 A2 — runtime dependencies.
+# Keep this short. Ordinary libraries for data, HTTP, testing and plotting are fine and expected;
+# a framework that owns the agent loop (LangChain, LangGraph, CrewAI, AutoGen) is out of scope.
+
+requests           # the one HTTP call in backends.py, for the live OpenRouter battery
+python-dotenv      # reads OPENROUTER_API_KEY from .env, which is gitignored
+
+# Add as needed, pinned:
+# pandas
+# matplotlib
+# pytest

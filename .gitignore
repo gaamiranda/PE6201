@@ -1,0 +1,39 @@
+# ─── Secrets. Never commit these: the repository is public. ──────────────────
+.env
+.env.*
+!.env.example
+*.key
+secrets.*
+**/openrouter_key*
+
+# ─── Teaching workspace (personal study material, not part of the submission) ─
+MISSION.md
+NOTES.md
+RESOURCES.md
+lessons/
+reference/
+assets/
+learning-records/
+.claude/
+.agents/
+skills-lock.json
+
+# ─── Course materials issued by the instructor (not ours to republish) ───────
+# Named individually on purpose: a blanket *.pdf would also swallow our own report.
+PE6201_A2_Applied_AI_System.pdf
+PE6201_A2_FAQ.pdf
+
+# ─── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.ipynb_checkpoints/
+
+# ─── Editors and OS ──────────────────────────────────────────────────────────
+.DS_Store
+.vscode/
+.idea/
+*.swp
