@@ -7,36 +7,35 @@ submission folder on NTULearn. A team that files nothing has an incomplete submi
 
 ## 1 · Team ID and section
 
-**Team:** [e.g. B-4]
-**Section:** [e.g. Section B]
+**Team:** 7
+**Section:** B
 
 ## 2 · Members
 
 | Name | Matriculation number |
 |---|---|
-| | |
-| | |
-| | |
-| | |
-| | |
-| | |
-| | |
+| Goncalo Miranda | G261090K |
+| JIN CHENG | G2606760K |
+| NIU TONG | G2604236D |
+| SUN YUCONG | G2602784D |
+| WANG HONGJUN |G2606978K |
+| ZHENG YONGJIE | G2610659B |
 
 ## 3 · Problem chosen
 
-**[ ] Problem A — Health-insurance claim first response**
+**[x] Problem A — Health-insurance claim first response**
 **[ ] Problem B — Outpatient referral coordination**
 
 ## 4 · Who owns what
 
 | Member | Strand | Deliverables |
 |---|---|---|
-| | The loop and the tools | D1, D2(a), D2(c) |
-| | The loop and the tools | D1, D2(a), D2(c) |
-| | Descriptors, v1→v2 rewrite, guardrail layer | D2(b), D3 |
-| | Evaluation harness and the runs | D4, D5 |
-| | Evaluation harness and the runs | D4, D5 |
-| | Cost model, ledger, sensitivity | D6 |
+| Goncalo Miranda | The loop and the tools | D1, D2(a), D2(c) |
+| ZHENG YONGJIE | The loop and the tools | D1, D2(a), D2(c) |
+| SUN YUCONG | Descriptors, v1→v2 rewrite, guardrail layer | D2(b), D3 |
+| JIN CHENG | Evaluation harness and the runs | D4, D5 |
+| NIU TONG | Evaluation harness and the runs | D4, D5 |
+| WANG HONGJUN | Cost model, ledger, sensitivity | D6 |
 | | D0 write-up, report assembly | D0, report |
 | **All members** | **Evaluation cases, 5–8 each** | **D4** |
 
