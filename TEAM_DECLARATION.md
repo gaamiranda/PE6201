@@ -14,7 +14,7 @@ submission folder on NTULearn. A team that files nothing has an incomplete submi
 
 | Name | Matriculation number |
 |---|---|
-| Goncalo Miranda | G261090K |
+| Goncalo Miranda | G2610908K |
 | JIN CHENG | G2606760K |
 | NIU TONG | G2604236D |
 | SUN YUCONG | G2602784D |
