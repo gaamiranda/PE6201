@@ -6,6 +6,11 @@
 > Putting X back must recover the behaviour. A separately written bad agent does not count: you
 > could not then tell whether the fix worked or the rewrite did.
 
+> **Both failures and their before/after tables run on the scripted backend** (change notice,
+> 1 Sep). A failure built as a deletion is deterministic *by construction* — that is the point of
+> building it that way. Script the observation that causes the loop and it reproduces for ever at no
+> cost. **D7 needs no key, and it must reproduce for a marker.**
+
 ---
 
 ## Failure 1 · Loop control — required

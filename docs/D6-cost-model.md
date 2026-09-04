@@ -16,6 +16,7 @@
 | Measured pass rate `P` | | D4 |
 | Median turns `T` | | D7 |
 | Tokens in / out per run | | D5 |
+| Runs per model | 56 (40 cases: 32 ordinary × 1 trial + 8 negative × 3) | D4 |
 
 ## The three layers
 
@@ -72,6 +73,30 @@ measured numbers in it — the brief calls this "the most useful thing in your r
 
 **Which dominated our bill, and how we know:** [...] — a fat tool block is *linear*; a fat
 observation *compounds*. Only one of them explodes.
+
+## What the battery actually cost us
+
+The brief's section 7 table was corrected on 1 September — it had been pricing 64 runs by giving
+negative cases four trials instead of three. **One member, one full 56-run battery:**
+
+| Tier | Corrected | (was) |
+|---|---|---|
+| Cheap | **US$0.27** | 0.31 |
+| Mid | **US$2.76** | 3.15 |
+| Frontier | **US$13.78** | 15.74 |
+
+One member on a frontier model spends **more than the whole course allowance**. If we want a
+frontier model in the comparison, run it on the negative cases only and say so in the report.
+
+Because every member runs one model on their own key, fielding five or six models costs the team no
+more per person than fielding three — the table is per member, per model.
+
+| Member | Model | Family | Tier | Est. | Actual |
+|---|---|---|---|---|---|
+| | | | | | |
+
+> Only D5(b) spends money. D3(b), D5(a) and D7 all run on the scripted backend, free. If we find
+> ourselves spending live tokens on any of those three, stop.
 
 ## Caching / reasoning models
 

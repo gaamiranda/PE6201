@@ -17,6 +17,11 @@ Suggested shape (rename freely — nothing in the marking rewards keeping our la
 LangGraph, CrewAI, AutoGen), multi-agent anything, fine-tuning, a UI, a letter or document
 generator, a booking application, real email, a database server, a deployment.
 
+**Tool names in Appendix A are suggestions, not an interface.** Rename, merge, split or add as the
+design requires — you cannot write an honest six-field descriptor for a signature somebody else
+fixed. The **routing rule** and the **gated action** are the parts that are fixed, because the
+answer key is written against them.
+
 **The gated action is a log entry.** One function, three steps: check the gate, append one
 structured record to a local file, return a confirmation string. `issue_decision_letter` does not
 compose a letter; `book_slot` does not book anything.

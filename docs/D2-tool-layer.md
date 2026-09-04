@@ -5,6 +5,12 @@
 > The tool descriptions and signatures are the entire manual the model gets. It cannot ask a
 > colleague, hover a tooltip, read our source, or try it in staging.
 
+> **The tool names in Appendix A are suggestions, not an interface to implement** (change notice,
+> 1 Sep). Rename, re-argument, merge, split or add tools as our design requires — the reason is
+> D2(b): you cannot meaningfully write a six-field descriptor for a signature somebody else fixed.
+> **What is not negotiable is the routing rule and the gated action**, because the answer key is
+> written against them.
+
 ---
 
 ## D2(a) · The tool set — chosen, not collected
@@ -67,6 +73,17 @@ not help, honestly reported, scores better than one that was never measured.
 ---
 
 ## D2(c) · Calling more than one tool in a turn
+
+> **The brief's worked examples are examples, not the prescribed answer** (change notice, 1 Sep).
+> If we parallelise less, group calls differently, or keep a call on its own so we can read its
+> result first, that is not a mistake. **D2(c) marks the reasoning, not the number.** What is
+> required: a stated dependency rule, the measurement taken both ways, and evidence that correctness
+> did not change.
+>
+> For reference, the corrected figures in the brief: Problem A, 8 sequential turns → 4,
+> 20,800 → 9,600 tokens (54%). Problem B, referral REF-5602, 6 calls, 4 turns, 13,200 → 8,400 (36%)
+> — deliberately smaller, because B's work is a chain and a chain cannot be shortened by running
+> things at the same time.
 
 ### The dependency rule
 

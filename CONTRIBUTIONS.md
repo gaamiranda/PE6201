@@ -19,19 +19,33 @@ Strands follow the split suggested in the A2 FAQ. Adjust to suit the team, but k
 | [Name] | @[user] | Cost model, ledger, sensitivity | D6 |
 | [Name] | @[user] | D0 write-up, report assembly | D0, report |
 
-**Everyone writes 5–8 evaluation cases.** That task is not delegated to one person — a set written
-by one head tests one head's assumptions.
+**Two rows are fixed by the instructor and cannot be delegated:** everyone writes 5–8 evaluation
+cases, and everyone runs one live model. Everything else in the split above is our decision — the
+change notice states plainly that the suggested strands are a suggestion.
 
-## Model battery — one member, one model, one key
+## Model battery — **every member runs one live model**, on their own key
 
-| Member | Model | Tier | Est. spend | Actual spend |
-|---|---|---|---|---|
-| [Name] | [model id] | cheap | ~US$0.31 | |
-| [Name] | [model id] | cheap | ~US$0.31 | |
-| [Name] | [model id] | mid | ~US$3.15 | |
+Changed 1 September: three models is the *floor*. For a team of N, **N − 1 models plus one member on
+the v1 prompt pass** is what is expected — five models and a v1 pass in a team of six.
 
-Budget rule: if estimated live spend exceeds **US$3 per member**, the battery is too large — cut
-trials or cases, or move a model down a tier, and say so in the report.
+**Two conditions, or the comparison means nothing:** models must span **at least two price tiers**,
+and **no two members may pick models from the same family**. Everyone runs the identical evaluation
+set and the identical v2 prompt.
+
+| Member | Model | Family | Tier | Est. (56 runs) | Actual |
+|---|---|---|---|---|---|
+| [Name] | | | cheap | ~US$0.27 | |
+| [Name] | | | cheap | ~US$0.27 | |
+| [Name] | | | cheap | ~US$0.27 | |
+| [Name] | | | mid | ~US$2.76 | |
+| [Name] | | | mid | ~US$2.76 | |
+| [Name] | **v1 prompt pass** | — | same model as its v2 | ~US$0.27 | |
+
+Fielding six models costs no more *per person* than fielding three — the price table is per member,
+per model. Budget rule unchanged: if any member's estimated live spend exceeds **US$3**, cut runs or
+move a model down a tier, and say so in the report.
+
+**Only D5(b) spends money.** D3(b), D5(a) and D7 all run on the scripted backend, free.
 
 ## Log
 

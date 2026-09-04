@@ -22,6 +22,9 @@ skills-lock.json
 # Named individually on purpose: a blanket *.pdf would also swallow our own report.
 PE6201_A2_Applied_AI_System.pdf
 PE6201_A2_FAQ.pdf
+PE6201_A2_Document_Updates.pdf
+PE6201_A2_Team_Self_Appraisal.docx
+TEAM_DECLARATION.docx
 
 # ─── Python ──────────────────────────────────────────────────────────────────
 __pycache__/

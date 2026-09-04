@@ -32,6 +32,15 @@ worse than the loop, because it converts a visible cost problem into an invisibl
 
 Lives in [`../evaluation/guardrail-checklist.md`](../evaluation/guardrail-checklist.md).
 
+> **Run all ten on the scripted backend** (change notice, 1 Sep). A step cap, a budget ceiling,
+> de-duplication and the autonomy gate are all *our* code — a model cannot influence whether they
+> fire — so a deterministic backend is the **correct** instrument, not merely the cheap one. These
+> ten cases cost nothing and need no API key.
+>
+> **The caveat, and it belongs in the report:** a scripted run proves the guardrail fires when the
+> agent *attempts* a bad action. It cannot tell us whether a live model can be talked into
+> attempting it. That second question belongs to the D5 battery, not to a guardrail case.
+
 At least **10 cases**, each naming the wrong behaviour it exists to catch and stating the observed
 result. **At least 3** must cover the request text itself being hostile — both problems contain free
 text written by someone outside the organisation.

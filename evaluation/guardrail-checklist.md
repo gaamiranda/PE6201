@@ -12,6 +12,14 @@
 free text written by someone outside the organisation (a member's claim narrative, a referring
 doctor's clinical summary).
 
+**All ten run on the scripted backend — free, no API key.** Guardrails are our own code; a model
+cannot influence whether a step cap fires, so a deterministic backend is the *correct* instrument,
+not merely the cheap one.
+
+**The caveat belongs in the report:** a scripted run proves the guardrail fires when the agent
+*attempts* a bad action. It cannot tell us whether a live model can be talked into attempting it —
+that question belongs to the D5 battery.
+
 Class 6 (7–8 Sep) gives the OWASP LLM Top 10 (2025) as a category source, but the code-layer
 material is already in Class 4 — **do not wait for Class 6 to start this.**
 
