@@ -1,6 +1,8 @@
 # D3 · The guardrail layer
 
-**Owner:** [name] · **Criteria:** Technical Execution + Conceptual Understanding
+**Owner:** SUN YUCONG · **Criteria:** Technical Execution + Conceptual Understanding
+
+*Deadlines and dependencies: [`../PLAN.md`](../PLAN.md).*
 
 > Two different things. (a) is code, shipped *before* any prompt tuning. (b) is a test checklist,
 > and it is **not** the evaluation set.

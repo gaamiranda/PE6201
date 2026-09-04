@@ -1,13 +1,20 @@
 # src — the agent
 
+**Owners:** Goncalo Miranda · ZHENG YONGJIE (loop and tools) · SUN YUCONG (guardrail layer).
+*Deadlines and dependencies: [`../PLAN.md`](../PLAN.md).*
+
 D1, D2, D3(a). Keep this as `.py` modules, not one large notebook: notebook merges are brutal with
-seven contributors, and the loop is the thing being marked.
+six contributors, and the loop is the thing being marked.
+
+**Start from [`contracts.py`](contracts.py).** It is already committed and frozen: the decision
+record, the answer-key row, the trial result, the `run_case` seam and the vendor seam. Four people
+are coding against it, so add fields rather than renaming them.
 
 Suggested shape (rename freely — nothing in the marking rewards keeping our layout):
 
 | File | Holds |
 |---|---|
-| `config.py` | The single `BACKEND` / `MODEL` / `BASE_URL` block. `BACKEND = "scripted"` is the **default**. |
+| `contracts.py` | ✅ **committed.** The shared types, the `BACKEND` / `MODEL` / `BASE_URL` block, and the two seams. `BACKEND = "scripted"` is the **default**. |
 | `backends.py` | Exactly **one** function that knows a vendor exists. Switching model is a string. |
 | `loop.py` | The ReAct loop. Parses an `Action:` **block**, executes each call, appends every observation. |
 | `tools.py` | The tool set, each carrying its six-field descriptor as its docstring. |

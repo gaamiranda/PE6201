@@ -1,6 +1,8 @@
 # D6 · The cost-to-serve model
 
-**Owner:** [name] · **Feeds:** report §4 (400 words) · **Criterion:** Reasoning & Justification
+**Owner:** WANG HONGJUN · **Feeds:** report §4 (400 words) · **Criterion:** Reasoning & Justification
+
+*The `usage` block in [`../src/contracts.py`](../src/contracts.py) is where turns, tokens and cost come from. Deadlines: [`../PLAN.md`](../PLAN.md).*
 
 > "The part we mark hardest." A cost model that only reports a number says nothing about our design.
 > Reuse the Class 5 cost-to-serve notebook. Use measured numbers from D4 and D5, not estimates.

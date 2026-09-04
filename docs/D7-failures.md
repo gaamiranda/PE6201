@@ -1,6 +1,8 @@
 # D7 · Two reproduced failures
 
-**Owner:** [name] · **Feeds:** report §5 (250 words) · **Criteria:** Technical Execution + Reasoning
+**Owners:** Goncalo Miranda (failure 1 — loop control) · SUN YUCONG (failure 2 — tool interface or prompt) · JIN CHENG + NIU TONG (scripted reproduction) · **Feeds:** report §5 (250 words) · **Criteria:** Technical Execution + Reasoning
+
+*Deadlines and dependencies: [`../PLAN.md`](../PLAN.md).*
 
 > Each must be built as a **deletion from the working agent** — "the working agent, minus X".
 > Putting X back must recover the behaviour. A separately written bad agent does not count: you

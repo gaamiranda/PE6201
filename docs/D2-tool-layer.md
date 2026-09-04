@@ -1,6 +1,8 @@
 # D2 · The tool layer
 
-**Owner:** [names] · **Feeds:** report §2 (450 words) · **Criteria:** Technical Execution + Reasoning
+**Owners:** Goncalo Miranda · ZHENG YONGJIE (D2a, D2c) · SUN YUCONG (D2b) · **Feeds:** report §2 (450 words) · **Criteria:** Technical Execution + Reasoning
+
+*Signatures are frozen in [`../src/contracts.py`](../src/contracts.py). Deadlines: [`../PLAN.md`](../PLAN.md).*
 
 > The tool descriptions and signatures are the entire manual the model gets. It cannot ask a
 > colleague, hover a tooltip, read our source, or try it in staging.

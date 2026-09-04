@@ -1,6 +1,15 @@
 # harness — the evaluation runner
 
+**Owners:** JIN CHENG · NIU TONG. *Deadlines and dependencies: [`../PLAN.md`](../PLAN.md).*
+
 D4 and D5. This is the instrument that makes the whole submission credible.
+
+**You are not blocked on the loop.** [`../src/contracts.py`](../src/contracts.py) is committed and
+frozen — `DecisionRecord`, `ExpectedOutcome`, `TrialResult`, `run_case()` and `complete()`. Build
+against it now; the loop fills in behind you.
+
+**The answer key is `../A2_reference_data/expected_outcomes_A.json`** — one file, joined on
+`case_id`. There is no second key. See [`../evaluation/cases/README.md`](../evaluation/cases/README.md).
 
 > **Updated against the change notice of 1 September 2026** — trial arithmetic, grader names, and
 > the rule that every member runs a live model.
