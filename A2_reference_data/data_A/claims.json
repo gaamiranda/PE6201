@@ -291,5 +291,103 @@
         "amount": 170
       }
     ]
+  },
+  {
+    "claim_id": "CLM-9001",
+    "member_id": "M-7001",
+    "hospital_id": "H-207",
+    "date_of_service": "2026-09-18",
+    "narrative": "Appendix operation. Same week I had the one at Riverside seen to.",
+    "documents": [
+      "itemised_bill",
+      "discharge_summary"
+    ],
+    "lines": [
+      {
+        "code": "47120",
+        "amount": 1500
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-9002",
+    "member_id": "M-5502",
+    "hospital_id": "H-207",
+    "date_of_service": "2026-09-19",
+    "narrative": "Knee replacement, and they scoped the other knee at the same admission. I have an approval letter on file.",
+    "documents": [
+      "itemised_bill",
+      "discharge_summary"
+    ],
+    "lines": [
+      {
+        "code": "27447",
+        "amount": 8200
+      },
+      {
+        "code": "29881",
+        "amount": 1950
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-9003",
+    "member_id": "M-7002",
+    "hospital_id": "H-207",
+    "date_of_service": "2026-09-20",
+    "narrative": "Consultation on the last day before my cover renewed.",
+    "documents": [
+      "itemised_bill"
+    ],
+    "lines": [
+      {
+        "code": "99213",
+        "amount": 210
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-9004",
+    "member_id": "M-7003",
+    "hospital_id": "H-114",
+    "date_of_service": "2026-09-21",
+    "narrative": "Eyelid surgery and a brain scan, both done the same morning.",
+    "documents": [
+      "itemised_bill"
+    ],
+    "lines": [
+      {
+        "code": "15823",
+        "amount": 700
+      },
+      {
+        "code": "70553",
+        "amount": 540
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-9005",
+    "member_id": "M-3390",
+    "hospital_id": "H-207",
+    "date_of_service": "2026-09-22",
+    "narrative": "Consultation, blood panel and a colonoscopy, all in one visit.",
+    "documents": [
+      "itemised_bill"
+    ],
+    "lines": [
+      {
+        "code": "99213",
+        "amount": 180
+      },
+      {
+        "code": "80053",
+        "amount": 90
+      },
+      {
+        "code": "45378",
+        "amount": 330
+      }
+    ]
   }
 ]

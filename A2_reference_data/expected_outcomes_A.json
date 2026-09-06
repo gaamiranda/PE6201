@@ -166,5 +166,65 @@
       "600 remaining on POL-4102"
     ],
     "note": "Near a boundary is not over it. A team whose limit check uses >= will fail this one and no other."
+  },
+  {
+    "case_id": "CLM-9001",
+    "expected_decision": "approve_in_principle",
+    "family": "near_miss_claim_history_hospital",
+    "must_record": [
+      "1 line covered",
+      "approved_total 1500",
+      "NOT a duplicate: CLM-9501 has the same member, date of service and line, but a different hospital - H-207 here against H-114 there"
+    ],
+    "note": "The third arm of the claim-history near-miss, and the one nobody had written. check_claim_history matches on four facts; the shipped near-misses break the date (CLM-8702 against CLM-8850) and the lines (CLM-8726 against CLM-8960), which left the hospital arm untested - an agent matching on member + date + lines scored full marks on the shipped set. This case catches it: three facts match and it is still not a duplicate, so a three-fact matcher escalates a perfectly payable claim. Routing row 1 - every line resolves."
+  },
+  {
+    "case_id": "CLM-9002",
+    "expected_decision": "request_document",
+    "missing": "pre-authorisation reference for line 29881, valid on 2026-09-19",
+    "family": "preauth_present_for_a_different_procedure",
+    "must_record": [
+      "the line the missing item belongs to (29881)",
+      "the date it must be valid on (2026-09-19)",
+      "line 27447 already resolved, citing PA-5702 valid 2026-07-01 to 2026-12-31",
+      "that PA-5702 does not authorise 29881"
+    ],
+    "note": "Catches an agent that sees an approval exists for this member and stops reading. M-5502 holds PA-5702, live on the date of service - for 27447, not for the line that is asking. Both lines on this claim require pre-authorisation and exactly one is satisfied, so a per-member lookup approves the claim and a per-line one asks. Distinct from the two shipped preauth cases: CLM-8888 has no live approval anywhere in the claim, CLM-8894 has one for the right code that expired. Routing row 2 - a line needs pre-authorisation and none exists."
+  },
+  {
+    "case_id": "CLM-9003",
+    "expected_decision": "approve_in_principle",
+    "family": "date_of_service_on_policy_end_date",
+    "must_record": [
+      "date of service 2026-09-20 is the last day of POL-8002, which runs 2025-09-21 to 2026-09-20",
+      "that the cover therefore holds on the date of treatment",
+      "approved_total 210"
+    ],
+    "note": "The inclusive end of the policy window. lookup_policy tests start <= dos <= end, so the last day of cover is covered; the escalate row says outside its dates, and the last day is not outside. The mirror of the shipped CLM-8917, where cover begins 12 days after treatment. A window test written with < rather than <= escalates this one and no other case in the set. Routing row 1."
+  },
+  {
+    "case_id": "CLM-9004",
+    "expected_decision": "approve_in_principle",
+    "family": "all_lines_excluded",
+    "must_record": [
+      "a disposition for both lines, both refused",
+      "15823 refused under EX-14 cosmetic dermatology",
+      "70553 refused under EX-31 imaging without prior specialist referral",
+      "approved_total 0",
+      "refused_total 1240"
+    ],
+    "note": "The case in this batch most likely to be labelled wrongly, which is why it earns its place. Routing row 1 reads every line resolves - covered, or clearly excluded: both lines resolve as clearly excluded, so this is an ACT with an approved total of zero, one decision letter naming both refusals. It is not an escalation - nothing prevents the claim being decided - and there is no decline outcome to reach for. It also tests that exclusions are read from THIS policy: 70553 is covered under every shipped policy and excluded only under POL-8003, so an agent carrying cosmetic codes are excluded as a general rule refuses 15823 and wrongly approves 70553."
+  },
+  {
+    "case_id": "CLM-9005",
+    "expected_decision": "approve_in_principle",
+    "family": "exactly_at_annual_limit",
+    "must_record": [
+      "a disposition for all 3 lines",
+      "claim total 600 against 600 remaining on POL-4102",
+      "that the total does not exceed the remainder, so the claim is decidable here",
+      "approved_total 600"
+    ],
+    "note": "The other side of CLM-8925's boundary. POL-4102 has 6000 - 5400 = 600 left and the lines total exactly 600; the escalation trigger is lines together EXCEED the remaining annual limit, and equal is not exceed. This is the case that actually separates > from >=: a limit test written total >= headroom escalates this one and nothing else in the set. Worth noting for the report - CLM-8971's note claims that role, but at 170 against 600 it is comfortably under and passes either way. Routing row 1."
   }
 ]

@@ -383,19 +383,129 @@ DECIDED = [
 # cannot be scored.
 # ═════════════════════════════════════════════════════════════════════════════
 
+# ─── Goncalo Miranda · CLM-9001..CLM-9005 · boundaries and near-misses ───────
+#
+# Five cases, each aimed at a specific way the tool layer in src/tools.py can be
+# misread. None of them is an ordinary approval; the set was already heavy on those.
+# The labels are read off the routing table in Appendix A, not off an agent run.
+#
+#   CLM-9001  the third arm of the claim-history near-miss (hospital)
+#   CLM-9002  a valid pre-auth for the WRONG procedure code
+#   CLM-9003  date of service exactly ON the policy end date
+#   CLM-9004  every line excluded  -> still an ACT, approved total 0
+#   CLM-9005  claim total exactly EQUAL to the remaining limit
+#
+# Ids used from the block in PLAN.md §3: CLM-9001..9005, M-7001..7003,
+# POL-8001..8003, CLM-9501 (prior decision). No new procedures, hospitals,
+# pre-authorisations or document rules were needed.
+
 EXTRA_PROCEDURES = []          # {"code", "description", "requires_preauth"}
 EXTRA_HOSPITALS = []           # {"hospital_id", "name", "panel", "country"}
-EXTRA_POLICIES = []            # {"policy_id", "product", "status", "start_date",
-                               #  "end_date", "annual_limit", "used_to_date",
-                               #  "exclusions": [{"code", "rule"}]}
-EXTRA_MEMBERS = []             # {"member_id", "name", "policy_id", "join_date"}
-EXTRA_PREAUTHORISATIONS = []   # {"preauth_id", "member_id", "procedure_code",
-                               #  "valid_from", "valid_to"}
-EXTRA_CLAIMS = []              # {"claim_id", "member_id", "hospital_id",
-                               #  "date_of_service", "narrative", "documents",
-                               #  "lines": [{"code", "amount"}]}
-EXTRA_DECIDED = []             # {"claim_id", "member_id", "hospital_id",
-                               #  "date_of_service", "lines", "decision", "decided_on"}
+
+EXTRA_POLICIES = [
+    # CLM-9001 · an ordinary live policy. It exists only so the member in the
+    # hospital near-miss pair holds cover that cannot itself change the outcome:
+    # no exclusions, and headroom far above the claim.
+    {"policy_id": "POL-8001", "product": "Shield Plus", "status": "active",
+     "start_date": "2026-01-01", "end_date": "2026-12-31",
+     "annual_limit": 20000, "used_to_date": 1500,   # 1500 = the decided CLM-9501
+     "exclusions": []},
+
+    # CLM-9003 · the end-date boundary. end_date is chosen to BE the date of
+    # service, so "inclusive" is the only thing the case turns on.
+    {"policy_id": "POL-8002", "product": "Shield Basic", "status": "active",
+     "start_date": "2025-09-21", "end_date": "2026-09-20",
+     "annual_limit": 10000, "used_to_date": 3000, "exclusions": []},
+
+    # CLM-9004 · TWO exclusion rules, and deliberately not the same rule twice.
+    # EX-31 is a rule no shipped policy carries, and 70553 is covered under every
+    # shipped policy - so an agent that has learned "cosmetic codes are excluded"
+    # rather than "read THIS policy's exclusions" gets the second line wrong.
+    {"policy_id": "POL-8003", "product": "Shield Basic", "status": "active",
+     "start_date": "2026-01-01", "end_date": "2026-12-31",
+     "annual_limit": 9000, "used_to_date": 400,
+     "exclusions": [{"code": "15823", "rule": "EX-14 cosmetic dermatology"},
+                    {"code": "70553", "rule": "EX-31 imaging without prior specialist referral"}]},
+]
+
+EXTRA_MEMBERS = [
+    {"member_id": "M-7001", "name": "Siti Rahmah",   "policy_id": "POL-8001", "join_date": "2026-01-01"},
+    {"member_id": "M-7002", "name": "Farah Idris",   "policy_id": "POL-8002", "join_date": "2025-09-21"},
+    {"member_id": "M-7003", "name": "Ong Kai Wen",   "policy_id": "POL-8003", "join_date": "2026-01-01"},
+]
+
+EXTRA_PREAUTHORISATIONS = []   # CLM-9002 reuses the shipped PA-5702 on purpose - see below.
+
+EXTRA_CLAIMS = [
+    # ---- ACT · NEAR-MISS ON HOSPITAL. The untested arm of check_claim_history.
+    #      Identical to the decided CLM-9501 on member, date of service and lines;
+    #      H-207 against H-114. Three of four facts match, so it is NOT a
+    #      duplicate. The shipped near-misses cover date (CLM-8702/CLM-8850) and
+    #      lines (CLM-8726/CLM-8960); nothing forced the hospital comparison. ----
+    {"claim_id": "CLM-9001", "member_id": "M-7001", "hospital_id": "H-207",
+     "date_of_service": "2026-09-18",
+     "narrative": "Appendix operation. Same week I had the one at Riverside seen to.",
+     "documents": ["itemised_bill", "discharge_summary"],
+     "lines": [{"code": "47120", "amount": 1500}]},
+
+    # ---- ASK · A VALID PRE-AUTH, FOR THE WRONG PROCEDURE.
+    #      M-5502 holds PA-5702, live 2026-07-01..2026-12-31, for 27447 - and
+    #      27447 is on this claim and resolves against it. 29881 also requires a
+    #      pre-authorisation and M-5502 has none for that code, so
+    #      get_preauthorisation(M-5502, 29881, ...) returns found=False.
+    #      Both preauth-bearing lines in one claim, one satisfied and one not. ----
+    {"claim_id": "CLM-9002", "member_id": "M-5502", "hospital_id": "H-207",
+     "date_of_service": "2026-09-19",
+     "narrative": "Knee replacement, and they scoped the other knee at the same "
+                  "admission. I have an approval letter on file.",
+     "documents": ["itemised_bill", "discharge_summary"],
+     "lines": [{"code": "27447", "amount": 8200},    # PA-5702 valid on this date
+               {"code": "29881", "amount": 1950}]},  # requires pre-auth; M-5502 has none
+
+    # ---- ACT · DATE OF SERVICE == POLICY end_date. The window in lookup_policy
+    #      is inclusive (start <= dos <= end), so cover holds on its last day.
+    #      The mirror of the shipped CLM-8917, where cover begins after treatment. ----
+    {"claim_id": "CLM-9003", "member_id": "M-7002", "hospital_id": "H-207",
+     "date_of_service": "2026-09-20",                # POL-8002 ends 2026-09-20
+     "narrative": "Consultation on the last day before my cover renewed.",
+     "documents": ["itemised_bill"],
+     "lines": [{"code": "99213", "amount": 210}]},
+
+    # ---- ACT · EVERY LINE EXCLUDED. Both lines resolve - clearly excluded - so
+    #      the first routing row applies: approve in principle, approved total 0,
+    #      each refusal naming the rule that caught it. Not a decline (no such
+    #      outcome) and not an escalation (the claim is perfectly decidable). ----
+    {"claim_id": "CLM-9004", "member_id": "M-7003", "hospital_id": "H-114",
+     "date_of_service": "2026-09-21",
+     "narrative": "Eyelid surgery and a brain scan, both done the same morning.",
+     "documents": ["itemised_bill"],
+     "lines": [{"code": "15823", "amount": 700},     # EX-14 under POL-8003
+               {"code": "70553", "amount": 540}]},   # EX-31 under POL-8003
+
+    # ---- ACT · TOTAL EXACTLY EQUAL TO THE REMAINING LIMIT.
+    #      POL-4102 has 6000 - 5400 = 600 left. 180 + 90 + 330 = 600. Equal is not
+    #      "exceed", so this is payable in full. The third point on the same
+    #      boundary as the shipped CLM-8971 (under) and CLM-8925 (over). ----
+    {"claim_id": "CLM-9005", "member_id": "M-3390", "hospital_id": "H-207",
+     "date_of_service": "2026-09-22",
+     "narrative": "Consultation, blood panel and a colonoscopy, all in one visit.",
+     "documents": ["itemised_bill"],
+     "lines": [{"code": "99213", "amount": 180},
+               {"code": "80053", "amount": 90},
+               {"code": "45378", "amount": 330}]},   # itemised_bill required, attached
+]
+
+EXTRA_DECIDED = [
+    # The other half of CLM-9001. Same member, same date of service, same single
+    # line - H-114 rather than H-207. It is one fact away, which is what makes it
+    # a near-miss rather than a duplicate, and check_claim_history reports it as
+    # nearest_miss so the record can name it and say what separates them.
+    {"claim_id": "CLM-9501", "member_id": "M-7001", "hospital_id": "H-114",
+     "date_of_service": "2026-09-18",
+     "lines": [{"code": "47120", "amount": 1500}],
+     "decision": "approve_in_principle", "decided_on": "2026-09-20"},
+]
+
 EXTRA_REQUIRED_DOCS = {}       # "procedure_code": "document_name"
 
 
