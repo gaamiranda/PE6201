@@ -164,6 +164,24 @@ Boilerplate — adjust in this file if the team agrees something else.
 **Thursday's freeze is the one date that cannot slip.** Six people running the battery off six
 different commits silently voids the whole comparison.
 
+### The 10 Sep freeze checklist
+
+Things that are legitimately unanswerable today and become answerable the moment D4 and D5(a)
+land. Each has a named owner and a document it has to be written back into — a deferred number is
+a tracked dependency, not a free pass.
+
+| # | What closes | Unblocked by | Written back into | Owner |
+|---|---|---|---|---|
+| 1 | **D0(b) reliability arithmetic** — measured `P`, median `T`, and our own `s = P^(1/T)`. Report §1 requires the figure, not the formula | D4 labels + the D5(a) run | `docs/D0-why-an-agent.md` and the D0 submission draft | ZHENG YONGJIE |
+| 1b | **D0(a) turn counts** — CLM-8925 and CLM-8842 currently carry *predicted* turns from our dependency rule (2 and 5), labelled as such. Replace with measured medians. Note the brief's own worked example is 4, and live runs vary run to run — that variance is itself the R7 cost | the D5(a) run | the D0 submission draft | ZHENG YONGJIE |
+| 2 | **`Guards.step_cap` and `budget_ceiling_usd`** — set from the measured turn distribution, not a round number | the D5(a) run | `src/loop.py` | SUN YUCONG |
+| 3 | **D2(b) v1 → v2** — tokens per call, pass rate, guardrail cases, both measured | a working harness | `docs/D2-tool-layer.md` | SUN YUCONG |
+| 4 | **D2(c) sequential vs parallel** — the real comparison, not the dev transcripts | D5(a) replay over the whole set | `docs/D2-tool-layer.md` | Goncalo, ZHENG YONGJIE |
+| 5 | **`PRICES` re-verified** on openrouter.ai before anyone spends | — do it Thu | `src/backends.py` | WANG HONGJUN |
+
+Item 1 is the one that gets discovered on the 13th if nobody owns it: D0 reads as finished, and the
+gap is a single sentence deep inside it.
+
 ---
 
 ## 6 · House rules
