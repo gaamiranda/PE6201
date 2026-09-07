@@ -36,22 +36,27 @@ is the expected shape. Two conditions, or the comparison means nothing: the mode
 least two price tiers**, and **no two members may take models from the same family**. Everyone runs
 the identical evaluation set and the identical v2 prompt, off the frozen `battery-v2` tag.
 
-| Member | Model | Family | Tier | Est. (60 runs) | Actual |
+| Member | Model | Family | Tier | Est. (76 runs) | Actual |
 |---|---|---|---|---|---|
-| Goncalo Miranda | `openai/gpt-4o-mini` | OpenAI | cheap | ~US$0.30 | |
-| JIN CHENG | `google/gemini-2.0-flash-001` | Google | cheap | ~US$0.30 | |
-| NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | ~US$0.30 | |
-| SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap | ~US$0.30 | |
-| WANG HONGJUN | `anthropic/claude-haiku-4.5` | Anthropic | **mid** | ~US$2.94 | |
-| ZHENG YONGJIE | **v1 prompt pass** on `openai/gpt-4o-mini` | — | cheap | ~US$0.30 | |
+| Goncalo Miranda | `openai/gpt-4o-mini` | OpenAI | cheap | ~US$0.37 | |
+| JIN CHENG | `google/gemini-2.0-flash-001` | Google | cheap | ~US$0.37 | |
+| NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | ~US$0.37 | |
+| SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap | ~US$0.37 | |
+| WANG HONGJUN | `anthropic/claude-haiku-4.5` | Anthropic | **mid** | ~US$3.75 | |
+| ZHENG YONGJIE | **v1 prompt pass** on `openai/gpt-4o-mini` | — | cheap | ~US$0.37 | |
 
 Five families, two tiers — both conditions met. Fielding six models costs no more *per person* than
 fielding three; the price table is per member, per model.
 
 Budget rule: if any member's estimated live spend exceeds **US$3**, the battery is too large — cut
-trials or cases, or move a model down a tier, **and say so in the report**. WANG HONGJUN's mid-tier
-run is the binding constraint at ~US$2.94, which is why the set stops at 40 cases / 10 negatives.
-See [`PLAN.md` §3](PLAN.md).
+trials or cases, or move a model down a tier, **and say so in the report**.
+
+> ⚠ **OPEN DECISION — owner JIN CHENG (D4), due before the 10 Sep freeze.** The set closed at
+> **42 cases with 17 negatives**, not the 40/10 planned in [`PLAN.md` §3](PLAN.md). At one trial
+> per ordinary case and three per negative that is **25 + 51 = 76 runs per model**, which puts
+> WANG HONGJUN's mid-tier battery at roughly **US$3.75 — over the US$3 rule**. Two ways out, and
+> it has to be a decision rather than an accident: trim the negative count, or move WANG HONGJUN
+> to the cheap tier and state that in the report. The brief permits the second explicitly.
 
 **Only D5(b) spends money.** D3(b), D5(a) and D7 all run on the scripted backend, free.
 
@@ -59,12 +64,39 @@ See [`PLAN.md` §3](PLAN.md).
 
 Append as work lands. One line per meaningful contribution; the commit is the evidence.
 
-| Date | Member | What landed |
+| Date | Member | Commit | What landed |
+|---|---|---|---|
+| 2026-09-01 | Goncalo Miranda | `a12156f` | Repository scaffold — deliverable skeletons for D0, D2, D3, D6, D7 |
+| 2026-09-01 | Goncalo Miranda | `ce01322`, `51daad6` | Team declaration |
+| 2026-09-04 | Goncalo Miranda | `4fb6d33` | Instructor reference data package (generator, `data_A/`, `data_B/`, answer keys, checker) |
+| 2026-09-04 | Goncalo Miranda | `5f064e9` | Repo restructured: `PLAN.md`, single answer key, `src/contracts.py` — the frozen types four people were blocked on |
+| 2026-09-06 | ZHENG YONGJIE | `04882a5` | **D0** — the ladder, both Capsule 1 tests, the five statements of what good looks like |
+| 2026-09-06 | Goncalo Miranda | `976ed2d` | **The agent** — tool layer, ReAct loop with multi-call turns, vendor seam, ground-truth benchmark (D1, D2a) |
+| 2026-09-06 | Goncalo Miranda | `b0464fa` | Evaluation cases `CLM-9001`–`9005` — boundary and near-miss cases (5) |
+| 2026-09-07 | ZHENG YONGJIE | `e0ca263`, `c7c5096` | Evaluation cases `CLM-9101`–`9105` — policy/pre-auth start boundaries, per-policy exclusions (5) |
+| 2026-09-07 | Goncalo Miranda | `67923de` | GitHub handles recorded against each member, so the history is attributable |
+| 2026-09-07 | JIN CHENG | `8f900ea`, `6f31442` | Evaluation cases `CLM-9031`–`9035` — document gap behind a valid pre-auth, benign narrative control (5) |
+| 2026-09-07 | SUN YUCONG | `1ed4c77`, `f9c9676` | Evaluation cases `CLM-9061`–`9065` — lapsed-inside-dates, pre-auth not yet valid, limit exceeded by one, valid pre-auth on an excluded line (5) |
+| 2026-09-07 | NIU TONG | `6423572`, `4f82d0e` | Evaluation cases `CLM-9041`, `9042`, `9044`, `9046`, `9047` — pre-auth last valid day, injection on a clean claim, duplicate with reordered lines against a prior decline (5) |
+| 2026-09-07 | WANG HONGJUN | `f7ca294`, `9a87705` | Evaluation cases `CLM-9081`–`9082` — false-positive controls for the guardrail layer: a benign bracketed narrative and a clinical use of "ignore" (2) |
+
+**Evaluation set closed at 42 cases** — 15 shipped by the instructor plus 27 written by the team.
+Every case was labelled from the Appendix A routing table before any agent run, and every label was
+checked against the tool layer before it was committed. `check_my_data.py` passes.
+
+| Member | Cases written | Ids |
 |---|---|---|
-| 2026-09-01 | Goncalo Miranda | Repository scaffold — deliverable skeletons for D0, D2, D3, D6, D7 |
-| 2026-09-02 | Goncalo Miranda | Instructor reference data package committed (generator, `data_A/`, answer key, checker) |
-| 2026-09-04 | Goncalo Miranda | Team declaration filed · repo restructured: `PLAN.md`, single answer key, README status |
-| | | |
+| Goncalo Miranda | 5 | `CLM-9001`–`9005` |
+| ZHENG YONGJIE | 5 | `CLM-9101`–`9105` |
+| JIN CHENG | 5 | `CLM-9031`–`9035` |
+| SUN YUCONG | 5 | `CLM-9061`–`9065` |
+| NIU TONG | 5 | `CLM-9041`, `9042`, `9044`, `9046`, `9047` |
+| WANG HONGJUN | 2 | `CLM-9081`–`9082` |
+
+Cases were screened before encoding: five were rejected for duplicating coverage already in the set
+(one of them also ambiguous — it matched two routing rows, so no answer key could grade it). A
+rejected case is recorded here because the screening is part of D4, not a gap in anyone's
+contribution.
 
 ## Demo — every member speaks
 
@@ -89,3 +121,6 @@ was AI-assisted.
 | What | Tool | Who reviewed it |
 |---|---|---|
 | Repository structure and deliverable scaffolding (docs, README, PLAN) | Claude | Goncalo Miranda |
+| Agent loop, tool layer, vendor seam and ground-truth benchmark (`src/`) | Claude | Goncalo Miranda |
+| D0 long-form draft — argument and structure; every figure in it re-measured before commit | Claude | ZHENG YONGJIE, Goncalo Miranda |
+| Encoding team members' cases into the fixtures, and checking each label against the routing table | Claude | Goncalo Miranda, and each case's author |
