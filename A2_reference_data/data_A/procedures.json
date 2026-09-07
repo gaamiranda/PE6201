@@ -48,5 +48,15 @@
     "code": "80053",
     "description": "Comprehensive metabolic panel",
     "requires_preauth": false
+  },
+  {
+    "code": "94001",
+    "description": "Open cholecystectomy",
+    "requires_preauth": false
+  },
+  {
+    "code": "94002",
+    "description": "Inguinal hernia repair",
+    "requires_preauth": false
   }
 ]

@@ -46,5 +46,35 @@
     "name": "Ong Kai Wen",
     "policy_id": "POL-8003",
     "join_date": "2026-01-01"
+  },
+  {
+    "member_id": "M-7031",
+    "name": "Goh Mei Ling",
+    "policy_id": "POL-8031",
+    "join_date": "2026-01-01"
+  },
+  {
+    "member_id": "M-7032",
+    "name": "Arun Nair",
+    "policy_id": "POL-8032",
+    "join_date": "2026-01-01"
+  },
+  {
+    "member_id": "M-7033",
+    "name": "Zhang Wei",
+    "policy_id": "POL-8033",
+    "join_date": "2026-01-01"
+  },
+  {
+    "member_id": "M-7034",
+    "name": "Nur Hidayah",
+    "policy_id": "POL-8034",
+    "join_date": "2026-01-01"
+  },
+  {
+    "member_id": "M-7035",
+    "name": "Teo Boon Hock",
+    "policy_id": "POL-8035",
+    "join_date": "2026-01-01"
   }
 ]

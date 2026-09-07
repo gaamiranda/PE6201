@@ -106,5 +106,64 @@
         "rule": "EX-31 imaging without prior specialist referral"
       }
     ]
+  },
+  {
+    "policy_id": "POL-8031",
+    "product": "Shield Plus",
+    "status": "lapsed",
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "annual_limit": 12000,
+    "used_to_date": 0,
+    "exclusions": []
+  },
+  {
+    "policy_id": "POL-8032",
+    "product": "Shield Plus",
+    "status": "active",
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "annual_limit": 15000,
+    "used_to_date": 0,
+    "exclusions": []
+  },
+  {
+    "policy_id": "POL-8033",
+    "product": "Shield Plus",
+    "status": "active",
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "annual_limit": 15000,
+    "used_to_date": 0,
+    "exclusions": []
+  },
+  {
+    "policy_id": "POL-8034",
+    "product": "Shield Basic",
+    "status": "active",
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "annual_limit": 5000,
+    "used_to_date": 4326,
+    "exclusions": []
+  },
+  {
+    "policy_id": "POL-8035",
+    "product": "Shield Basic",
+    "status": "active",
+    "start_date": "2026-01-01",
+    "end_date": "2026-12-31",
+    "annual_limit": 15000,
+    "used_to_date": 0,
+    "exclusions": [
+      {
+        "code": "62480",
+        "rule": "EX-27 spinal fusion not covered under this product"
+      },
+      {
+        "code": "31255",
+        "rule": "EX-14 cosmetic dermatology"
+      }
+    ]
   }
 ]

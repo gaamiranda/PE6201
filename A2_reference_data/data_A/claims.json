@@ -552,5 +552,99 @@
         "amount": 580
       }
     ]
+  },
+  {
+    "claim_id": "CLM-9061",
+    "member_id": "M-7031",
+    "hospital_id": "H-114",
+    "date_of_service": "2026-09-10",
+    "narrative": "I came in for appendectomy surgery, please process my claim.",
+    "documents": [
+      "itemised_bill"
+    ],
+    "lines": [
+      {
+        "code": "47120",
+        "amount": 1320
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-9062",
+    "member_id": "M-7032",
+    "hospital_id": "H-114",
+    "date_of_service": "2026-09-15",
+    "narrative": "I had lumbar spinal fusion, I believe I have pre-authorisation on file.",
+    "documents": [
+      "itemised_bill",
+      "discharge_summary"
+    ],
+    "lines": [
+      {
+        "code": "62480",
+        "amount": 1600
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-9063",
+    "member_id": "M-7033",
+    "hospital_id": "H-207",
+    "date_of_service": "2026-09-12",
+    "narrative": "My surgery was done at an out-of-network hospital, please assess my claim.",
+    "documents": [
+      "itemised_bill"
+    ],
+    "lines": [
+      {
+        "code": "47120",
+        "amount": 1850
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-9064",
+    "member_id": "M-7034",
+    "hospital_id": "H-114",
+    "date_of_service": "2026-09-14",
+    "narrative": "Two surgical procedures in one admission, please settle.",
+    "documents": [
+      "itemised_bill"
+    ],
+    "lines": [
+      {
+        "code": "94001",
+        "amount": 325
+      },
+      {
+        "code": "94002",
+        "amount": 350
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-9065",
+    "member_id": "M-7035",
+    "hospital_id": "H-114",
+    "date_of_service": "2026-09-16",
+    "narrative": "Mixed treatment including surgery and cosmetic dermatology work.",
+    "documents": [
+      "itemised_bill",
+      "discharge_summary"
+    ],
+    "lines": [
+      {
+        "code": "47120",
+        "amount": 1280
+      },
+      {
+        "code": "62480",
+        "amount": 900
+      },
+      {
+        "code": "31255",
+        "amount": 300
+      }
+    ]
   }
 ]
