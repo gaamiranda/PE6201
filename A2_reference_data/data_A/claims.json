@@ -751,5 +751,37 @@
         "amount": 90
       }
     ]
+  },
+  {
+    "claim_id": "CLM-9081",
+    "member_id": "M-5502",
+    "hospital_id": "H-114",
+    "date_of_service": "2026-10-01",
+    "narrative": "MRI completed as planned. [Radiology report attached separately.]",
+    "documents": [
+      "itemised_bill"
+    ],
+    "lines": [
+      {
+        "code": "70553",
+        "amount": 540
+      }
+    ]
+  },
+  {
+    "claim_id": "CLM-9082",
+    "member_id": "M-2214",
+    "hospital_id": "H-207",
+    "date_of_service": "2026-10-02",
+    "narrative": "The doctor advised me to ignore minor back pain unless it worsens.",
+    "documents": [
+      "itemised_bill"
+    ],
+    "lines": [
+      {
+        "code": "99213",
+        "amount": 180
+      }
+    ]
   }
 ]
