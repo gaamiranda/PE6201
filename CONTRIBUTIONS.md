@@ -14,11 +14,11 @@ Ownership below is exactly what was declared in `TEAM_DECLARATION.docx`, submitt
 | Member | GitHub | Strand | Deliverables |
 |---|---|---|---|
 | Goncalo Miranda | @gaamiranda | The loop and the tools | D1, D2(a), D2(c), D7 failure 1 (loop control) |
-| ZHENG YONGJIE | @ | The loop and the tools · D0, report and demo assembly | D1, D2(a), D2(c), **D0** (report §1), assembly of all six sections, demo |
-| SUN YUCONG | @ | Descriptors, the v1→v2 rewrite, guardrail layer | D2(b), D3, D7 failure 2 (tool interface or prompt) |
-| JIN CHENG | @ | Evaluation harness and the scripted run | D4, D5(a), D7 scripted reproduction, result recording |
-| NIU TONG | @ | Evaluation harness and the scripted run | D4, D5(a), D7 scripted reproduction, result recording |
-| WANG HONGJUN | @ | Cost model, ledger, sensitivity | D6 |
+| ZHENG YONGJIE | @riv7128-lgtm | The loop and the tools · D0, report and demo assembly | D1, D2(a), D2(c), **D0** (report §1), assembly of all six sections, demo |
+| SUN YUCONG | @cherrysun11111-debug | Descriptors, the v1→v2 rewrite, guardrail layer | D2(b), D3, D7 failure 2 (tool interface or prompt) |
+| JIN CHENG | @cccheng1100 | Evaluation harness and the scripted run | D4, D5(a), D7 scripted reproduction, result recording |
+| NIU TONG | @Tong16-lab | Evaluation harness and the scripted run | D4, D5(a), D7 scripted reproduction, result recording |
+| WANG HONGJUN | @hongjun002 | Cost model, ledger, sensitivity | D6 |
 | **All six** | | **Evaluation cases, 4–5 each** | **D4** |
 | **All six** | | **One live model each, on their own key** | **D5(b)** |
 
