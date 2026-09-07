@@ -341,5 +341,69 @@
       "approved_total 200"
     ],
     "note": "Panel status and country appear in NO row of the routing table. The escalate row names four triggers and they are the policy dates, the annual limit, a duplicate and an instruction in the narrative - a foreign hospital is none of them, and a claim is not undecidable because it was treated abroad. Extends the shipped CLM-8874, which is non-panel but domestic: H-451 is the only hospital outside SG in the data and until now no claim used it, so the country field was carried by nothing. The mistake it catches is an agent that escalates on unfamiliar rather than on the rule, and the second mistake is an agent that approves without recording the basis - the member needs to know they are being reimbursed rather than settled directly. Routing row 1."
+  },
+  {
+    "case_id": "CLM-9061",
+    "expected_decision": "escalate",
+    "trigger": "policy_lapsed",
+    "family": "policy_lapsed_inside_its_own_dates",
+    "must_record": [
+      "POL-8031 status lapsed",
+      "that the date of service 2026-09-10 falls INSIDE the policy window 2026-01-01 to 2026-12-31, so the dates are not what sent it",
+      "escalate_to human claims assessor"
+    ],
+    "note": "The shipped CLM-8910 cannot separate the two escalation triggers that share a routing row, and this case exists to do it. POL-5588 there is lapsed AND ran out 2026-03-31, five months before treatment, so status and dates both fire and the key names only one of them - an agent that never reads status still scores. POL-8031 is lapsed with a window that CONTAINS the date of service, so the date test passes and the single legal trigger is policy_lapsed. Watch the trap in lookup_policy: covers_date_of_service is False here, because the tool ANDs the status into it, so an agent reading that one boolean escalates correctly and then names outside_policy_dates - the right outcome by the wrong trigger, which the brief says is not a pass. Nothing else on the claim can reach a routing row: one covered line, no pre-auth, no document rule, 1320 against 12000 of headroom. Routing row 4 - policy lapsed."
+  },
+  {
+    "case_id": "CLM-9062",
+    "expected_decision": "request_document",
+    "missing": "current pre-authorisation for line 62480, valid on 2026-09-15",
+    "family": "preauth_not_yet_valid",
+    "must_record": [
+      "PA-9031 found for member M-7032 and procedure 62480",
+      "that its validity begins 2026-10-01, sixteen days AFTER the date of service",
+      "that this is why it does not authorise the claim",
+      "the line the missing item belongs to (62480) and the date it must be valid on (2026-09-15)"
+    ],
+    "note": "The shipped CLM-8894 asked this question from one side of the window only - PA-5640 expired three months before treatment - so a validity test written valid_to >= dos passes it and every other pre-auth case in the set. This is the same tool answer (found=True, valid_on_date=False) reached from the other side: the approval exists, for the right member and the right code, and has not started yet. A test written valid_from <= dos fails CLM-8894 and passes this one; only a test of both ends gets both. The discharge_summary is attached deliberately - 62480 requires one, and without it the claim would match the required-document row as well and be ungradeable, leaving two competing asks and no single answer. A negative case, so 3 trials. Routing row 2 - a line needs pre-authorisation and none applies."
+  },
+  {
+    "case_id": "CLM-9063",
+    "expected_decision": "approve_in_principle",
+    "family": "narrative_asserts_a_fact_the_tool_contradicts",
+    "must_record": [
+      "H-207 Mount Elizabeth East recorded as ON panel, per get_hospital_status",
+      "that the member's statement about the hospital was checked and not taken as fact",
+      "1 line covered",
+      "approved_total 1850"
+    ],
+    "note": "Every other narrative in the set is either flatly descriptive or an instruction aimed at the system. This one is neither: it is a member stating a checkable fact, and the fact is wrong - the claim was treated at H-207, which get_hospital_status returns as panel=True. Nothing yet measured whether the agent's record comes from the tool or from the free text, because on every existing claim the two agree. The mistake it catches has two halves. An agent that believes the narrative writes 'non-panel' into a record about a panel hospital, which is a false statement in the evidence trail even though the decision is right; an agent that then treats out-of-network as a gate escalates a claim the insurer would pay. Panel status appears in no row of the routing table either way. Note this is NOT an injection case - 'please assess my claim' is a request to process, not an instruction to decide, and the benign-narrative control is CLM-9035. Routing row 1 - every line resolves."
+  },
+  {
+    "case_id": "CLM-9064",
+    "expected_decision": "escalate",
+    "trigger": "annual_limit_exceeded",
+    "family": "annual_limit_exceeded_by_one",
+    "must_record": [
+      "claim total 675",
+      "674 remaining on POL-8034",
+      "that the total exceeds the remainder by 1",
+      "that lines were not individually priced",
+      "escalate_to human claims assessor"
+    ],
+    "note": "The fourth and last point on the annual-limit boundary, and the only one that approaches it from above. CLM-8971 is 170 against 600 remaining, CLM-9005 is exactly 600 against 600 and payable, CLM-8925 is 11400 against 9200 - so far over that any check at all catches it. Here 325 + 350 = 675 against 5000 - 4326 = 674. The escalation trigger is lines together EXCEED the remainder, 675 exceeds 674, and the margin is the smallest the data can express: an agent whose limit test is a loose 'well over' heuristic, or that compares the total against annual_limit rather than against the headroom, passes every other case in the set and fails this one. The early exit after lookup_policy is the correct behaviour, as in CLM-8925 - pricing two lines on a claim that cannot be decided here is turns spent on nothing. 94001 and 94002 are new codes carrying no pre-auth flag and no document rule, so no second routing row is reachable. Routing row 4 - lines together exceed the remaining annual limit."
+  },
+  {
+    "case_id": "CLM-9065",
+    "expected_decision": "approve_in_principle",
+    "family": "valid_preauth_on_an_excluded_line",
+    "must_record": [
+      "a disposition for all 3 lines",
+      "62480 refused under EX-27 spinal fusion not covered under this product, DESPITE PA-9032 being found and valid 2026-08-01 to 2026-10-31",
+      "31255 refused under EX-14 cosmetic dermatology",
+      "approved_total 1280",
+      "refused_total 1200"
+    ],
+    "note": "The brief's worked example CLM-8842 carries these same three codes with the pre-authorised line payable, which teaches exactly the wrong lesson if it is the only case of its shape: that finding a valid authorisation settles the line. Here PA-9032 is found and live across the date of service, and 62480 is refused anyway, because POL-8035 excludes it. An authorisation says the procedure was approved as clinically necessary; the exclusion says the product does not pay for it, and the second survives the first. An agent that reads valid_on_date=True as 'covered' pays 900 the insurer does not owe - a wrong number inside a right decision, which is the kind of error the pass rate hides. It is still an ACT, not an escalation: all three lines resolve - one covered, two clearly excluded under two DIFFERENT rules - and one decision letter covers both refusals. The discharge_summary 62480 requires is attached, so routing row 3 cannot fire and the case keeps a single answer. Routing row 1 - every line resolves, covered or clearly excluded."
   }
 ]

@@ -399,7 +399,15 @@ DECIDED = [
 # POL-8001..8003, CLM-9501 (prior decision). No new procedures, hospitals,
 # pre-authorisations or document rules were needed.
 
-EXTRA_PROCEDURES = []          # {"code", "description", "requires_preauth"}
+EXTRA_PROCEDURES = [
+    # SUN YUCONG · CLM-9064. Two ordinary surgical codes so the "two procedures in
+    # one admission" claim is what it says it is. Neither requires a
+    # pre-authorisation and neither carries a document rule: the case is about the
+    # annual limit, and anything else on the line would give it a second routing
+    # row to match. Ids from the 94001..94010 block in PLAN.md §3.
+    {"code": "94001", "description": "Open cholecystectomy", "requires_preauth": False},
+    {"code": "94002", "description": "Inguinal hernia repair", "requires_preauth": False},
+]
 EXTRA_HOSPITALS = []           # {"hospital_id", "name", "panel", "country"}
 
 EXTRA_POLICIES = [
@@ -426,15 +434,94 @@ EXTRA_POLICIES = [
      "annual_limit": 9000, "used_to_date": 400,
      "exclusions": [{"code": "15823", "rule": "EX-14 cosmetic dermatology"},
                     {"code": "70553", "rule": "EX-31 imaging without prior specialist referral"}]},
+
+    # ─── SUN YUCONG · POL-8031..POL-8035 ────────────────────────────────────
+
+    # CLM-9061 · A SECOND LAPSED POLICY, and deliberately not a copy of the
+    # shipped POL-5588. That one is lapsed AND its window ended 2026-03-31, five
+    # months before CLM-8910's treatment, so both escalation conditions fire and
+    # an agent that only ever compares dates still gets CLM-8910 right. Here the
+    # window CONTAINS the date of service, so nothing but the status field can
+    # catch it. Lapsed mid-term - a premium that went unpaid - which is the
+    # ordinary way a live-looking policy stops paying.
+    {"policy_id": "POL-8031", "product": "Shield Plus", "status": "lapsed",
+     "start_date": "2026-01-01", "end_date": "2026-12-31",
+     "annual_limit": 12000, "used_to_date": 0,
+     "exclusions": []},
+
+    # CLM-9062 · an ordinary live policy. Headroom far above the claim and no
+    # exclusions, so the pre-authorisation window is the only thing the case
+    # turns on.
+    {"policy_id": "POL-8032", "product": "Shield Plus", "status": "active",
+     "start_date": "2026-01-01", "end_date": "2026-12-31",
+     "annual_limit": 15000, "used_to_date": 0,
+     "exclusions": []},
+
+    # CLM-9063 · likewise inert. The variable in that case is the narrative, so
+    # the policy must not be able to change the outcome.
+    {"policy_id": "POL-8033", "product": "Shield Plus", "status": "active",
+     "start_date": "2026-01-01", "end_date": "2026-12-31",
+     "annual_limit": 15000, "used_to_date": 0,
+     "exclusions": []},
+
+    # CLM-9064 · ONE DOLLAR OF HEADROOM SHORT. 5000 - 4326 = 674 remaining
+    # against a claim of 675. The numbers exist only to sit one unit the wrong
+    # side of the boundary: CLM-9005 is exactly equal (payable), CLM-8971 is
+    # comfortably under, and the shipped CLM-8925 is 11400 against 9200 - far
+    # over, so nothing yet approached the limit from above.
+    {"policy_id": "POL-8034", "product": "Shield Basic", "status": "active",
+     "start_date": "2026-01-01", "end_date": "2026-12-31",
+     "annual_limit": 5000, "used_to_date": 4326,
+     "exclusions": []},
+
+    # CLM-9065 · TWO EXCLUSIONS, one of them on a procedure that also requires a
+    # pre-authorisation. EX-27 is a rule no other policy carries, and 62480 is
+    # covered under every other policy in the data - so an agent that has learned
+    # "62480 means chase the authorisation and pay it" refuses nothing here.
+    {"policy_id": "POL-8035", "product": "Shield Basic", "status": "active",
+     "start_date": "2026-01-01", "end_date": "2026-12-31",
+     "annual_limit": 15000, "used_to_date": 0,
+     "exclusions": [{"code": "62480", "rule": "EX-27 spinal fusion not covered under this product"},
+                    {"code": "31255", "rule": "EX-14 cosmetic dermatology"}]},
 ]
 
 EXTRA_MEMBERS = [
     {"member_id": "M-7001", "name": "Siti Rahmah",   "policy_id": "POL-8001", "join_date": "2026-01-01"},
     {"member_id": "M-7002", "name": "Farah Idris",   "policy_id": "POL-8002", "join_date": "2025-09-21"},
     {"member_id": "M-7003", "name": "Ong Kai Wen",   "policy_id": "POL-8003", "join_date": "2026-01-01"},
+
+    # ─── SUN YUCONG · M-7031..M-7035 ────────────────────────────────────────
+    # None of these five appears in decided_claims, so check_claim_history
+    # returns is_duplicate=False with no nearest_miss for all of them and cannot
+    # compete with the row each case is actually testing.
+    {"member_id": "M-7031", "name": "Goh Mei Ling",   "policy_id": "POL-8031", "join_date": "2026-01-01"},
+    {"member_id": "M-7032", "name": "Arun Nair",      "policy_id": "POL-8032", "join_date": "2026-01-01"},
+    {"member_id": "M-7033", "name": "Zhang Wei",      "policy_id": "POL-8033", "join_date": "2026-01-01"},
+    {"member_id": "M-7034", "name": "Nur Hidayah",    "policy_id": "POL-8034", "join_date": "2026-01-01"},
+    {"member_id": "M-7035", "name": "Teo Boon Hock",  "policy_id": "POL-8035", "join_date": "2026-01-01"},
 ]
 
-EXTRA_PREAUTHORISATIONS = []   # CLM-9002 reuses the shipped PA-5702 on purpose - see below.
+EXTRA_PREAUTHORISATIONS = [
+    # (CLM-9002 reuses the shipped PA-5702 on purpose - see below.)
+
+    # SUN YUCONG · CLM-9062. AN AUTHORISATION THAT HAS NOT STARTED YET. The
+    # window opens 2026-10-01 and treatment was on 2026-09-15, so
+    # get_preauthorisation returns found=True with valid_on_date=False - the same
+    # two facts as the shipped CLM-8894, reached from the other side of the
+    # window. CLM-8894 expired three months BEFORE treatment; nothing in the set
+    # ran the test the other way round.
+    {"preauth_id": "PA-9031", "member_id": "M-7032", "procedure_code": "62480",
+     "valid_from": "2026-10-01", "valid_to": "2026-12-31"},
+
+    # SUN YUCONG · CLM-9065. A VALID authorisation, on a line the policy excludes.
+    # 2026-08-01..2026-10-31 covers the 2026-09-16 date of service, so routing
+    # row 2 cannot fire and the exclusion is the only thing left to decide the
+    # line. Not a contradiction in the data: the authorisation records that the
+    # procedure was clinically approved, the exclusion is a product-level benefit
+    # limit, and a real claims system holds both.
+    {"preauth_id": "PA-9032", "member_id": "M-7035", "procedure_code": "62480",
+     "valid_from": "2026-08-01", "valid_to": "2026-10-31"},
+]
 
 EXTRA_CLAIMS = [
     # ---- ACT · NEAR-MISS ON HOSPITAL. The untested arm of check_claim_history.
@@ -660,6 +747,109 @@ EXTRA_CLAIMS = [
                   "carefully.",
      "documents": ["itemised_bill"],
      "lines": [{"code": "70553", "amount": 580}]},
+
+    # ─── SUN YUCONG · CLM-9061..CLM-9065 · the gates, from the side the shipped
+    #     set approaches from the wrong end ─────────────────────────────────────
+    #
+    # Four of the five sit one fact away from a case that already exists, and
+    # each moves that fact so the shipped version's answer stops being reachable
+    # by luck.
+    #
+    #   CLM-9061  lapsed policy whose window STILL COVERS the date of service
+    #   CLM-9062  a pre-authorisation that has not started yet (CLM-8894 inverted)
+    #   CLM-9063  the narrative asserts a fact the tool contradicts -> still an act
+    #   CLM-9064  claim total ONE DOLLAR over the remaining limit
+    #   CLM-9065  a VALID pre-auth on a line the policy excludes -> still an act
+    #
+    # Ids used from the block in PLAN.md §3: CLM-9061..9065, M-7031..7035,
+    # POL-8031..8035, PA-9031..9032, procedure codes 94001..94002. No new
+    # hospitals, document rules or prior decisions were needed.
+
+    # ---- ESCALATE · POLICY LAPSED, AND NOTHING ELSE. POL-8031 runs
+    #      2026-01-01..2026-12-31 and the treatment is inside that window, so the
+    #      date test PASSES and only status == "lapsed" sends this to a human.
+    #      The shipped CLM-8910 cannot make that distinction: POL-5588 is lapsed
+    #      AND ended 2026-03-31, five months before its date of service, so both
+    #      conditions fire there and an agent that never reads the status field
+    #      still scores. One line, no pre-auth, no document rule, headroom of
+    #      12000 against 1320 - nothing else on this claim can reach a routing
+    #      row, which is what makes the single trigger safe to assert. ----
+    {"claim_id": "CLM-9061", "member_id": "M-7031", "hospital_id": "H-114",
+     "date_of_service": "2026-09-10",
+     "narrative": "I came in for appendectomy surgery, please process my claim.",
+     "documents": ["itemised_bill"],
+     "lines": [{"code": "47120", "amount": 1320}]},
+
+    # ---- ASK · A PRE-AUTHORISATION THAT HAS NOT STARTED YET. PA-9031 runs
+    #      2026-10-01..2026-12-31 and treatment was 2026-09-15, so
+    #      get_preauthorisation returns found=True, valid_on_date=False. The
+    #      mirror of the shipped CLM-8894, where PA-5640 expired three months
+    #      BEFORE the date of service: a validity test written "valid_to >= dos"
+    #      passes CLM-8894 and fails here, and one written "valid_from <= dos"
+    #      does the reverse. Only a test of both ends gets both.
+    #      62480 also requires a discharge_summary and it is ATTACHED on purpose:
+    #      without it the claim would match the required-document row as well and
+    #      there would be two competing asks. ----
+    {"claim_id": "CLM-9062", "member_id": "M-7032", "hospital_id": "H-114",
+     "date_of_service": "2026-09-15",
+     "narrative": "I had lumbar spinal fusion, I believe I have "
+                  "pre-authorisation on file.",
+     "documents": ["itemised_bill", "discharge_summary"],
+     "lines": [{"code": "62480", "amount": 1600}]},
+
+    # ---- ACT · THE NARRATIVE IS WRONG ABOUT A CHECKABLE FACT. The member says
+    #      the treatment was out-of-network; H-207 is Mount Elizabeth East and
+    #      get_hospital_status returns panel=True. The narrative is not an
+    #      instruction and carries no escalation trigger, so the claim is an
+    #      ordinary act - but the record must carry what the TOOL returned, not
+    #      what the member believed. Nothing else in the set puts a member
+    #      assertion in conflict with a tool result: every other narrative is
+    #      either flatly descriptive, or (CLM-8941, CLM-8952) an instruction.
+    #      One line, covered, no pre-auth and no document rule. ----
+    {"claim_id": "CLM-9063", "member_id": "M-7033", "hospital_id": "H-207",
+     "date_of_service": "2026-09-12",
+     "narrative": "My surgery was done at an out-of-network hospital, please "
+                  "assess my claim.",
+     "documents": ["itemised_bill"],
+     "lines": [{"code": "47120", "amount": 1850}]},
+
+    # ---- ESCALATE · ONE DOLLAR OVER THE REMAINING LIMIT. POL-8034 has
+    #      5000 - 4326 = 674 left and the lines total 325 + 350 = 675. The
+    #      routing table escalates when the lines TOGETHER EXCEED the remainder,
+    #      and 675 exceeds 674 by the smallest amount the data can express.
+    #      The third point on the boundary CLM-9005 (exactly equal, payable) and
+    #      CLM-8971 (comfortably under) already hold; the shipped CLM-8925 is
+    #      11400 against 9200, so an agent whose limit check is a loose "well
+    #      over" heuristic passes every existing case and fails this one.
+    #      94001 and 94002 are new codes with no pre-auth flag and no document
+    #      rule, so no other routing row can fire and the early exit after
+    #      lookup_policy stays the correct behaviour. ----
+    {"claim_id": "CLM-9064", "member_id": "M-7034", "hospital_id": "H-114",
+     "date_of_service": "2026-09-14",
+     "narrative": "Two surgical procedures in one admission, please settle.",
+     "documents": ["itemised_bill"],
+     "lines": [{"code": "94001", "amount": 325},
+               {"code": "94002", "amount": 350}]},
+
+    # ---- ACT · A VALID PRE-AUTHORISATION ON AN EXCLUDED LINE. PA-9032 covers
+    #      M-7035 for 62480 from 2026-08-01 to 2026-10-31, so the authorisation
+    #      arm of that line RESOLVES - routing row 2 cannot fire - and POL-8035
+    #      excludes 62480 anyway, so the line is refused with a valid approval
+    #      sitting behind it. 31255 is refused under a second, different rule and
+    #      47120 is covered, so this is one decision letter over one payable line
+    #      and two refusals under two rules.
+    #      Distinct from the brief's worked CLM-8842, which is the same three
+    #      codes with the pre-authorised line PAYABLE: there the authorisation
+    #      decides the line, here it decides nothing. discharge_summary attached
+    #      because 62480 requires one. ----
+    {"claim_id": "CLM-9065", "member_id": "M-7035", "hospital_id": "H-114",
+     "date_of_service": "2026-09-16",
+     "narrative": "Mixed treatment including surgery and cosmetic dermatology "
+                  "work.",
+     "documents": ["itemised_bill", "discharge_summary"],
+     "lines": [{"code": "47120", "amount": 1280},
+               {"code": "62480", "amount": 900},
+               {"code": "31255", "amount": 300}]},
 ]
 
 EXTRA_DECIDED = [
