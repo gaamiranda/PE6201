@@ -68,5 +68,27 @@
     ],
     "decision": "approve_in_principle",
     "decided_on": "2026-09-20"
+  },
+  {
+    "claim_id": "CLM-9521",
+    "member_id": "M-7021",
+    "hospital_id": "H-207",
+    "date_of_service": "2026-08-12",
+    "lines": [
+      {
+        "code": "99213",
+        "amount": 180
+      },
+      {
+        "code": "80053",
+        "amount": 90
+      },
+      {
+        "code": "70553",
+        "amount": 610
+      }
+    ],
+    "decision": "decline",
+    "decided_on": "2026-08-14"
   }
 ]
