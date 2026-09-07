@@ -123,4 +123,4 @@ was AI-assisted.
 | Repository structure and deliverable scaffolding (docs, README, PLAN) | Claude | Goncalo Miranda |
 | Agent loop, tool layer, vendor seam and ground-truth benchmark (`src/`) | Claude | Goncalo Miranda |
 | D0 long-form draft — argument and structure; every figure in it re-measured before commit | Claude | ZHENG YONGJIE, Goncalo Miranda |
-| Encoding team members' cases into the fixtures, and checking each label against the routing table | Claude | Goncalo Miranda, and each case's author |
+| Encoding team members' cases into the fixtures, and checking each label against the routing table | Claude | Each case's author |
