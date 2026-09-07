@@ -226,5 +226,61 @@
       "approved_total 600"
     ],
     "note": "The other side of CLM-8925's boundary. POL-4102 has 6000 - 5400 = 600 left and the lines total exactly 600; the escalation trigger is lines together EXCEED the remaining annual limit, and equal is not exceed. This is the case that actually separates > from >=: a limit test written total >= headroom escalates this one and nothing else in the set. Worth noting for the report - CLM-8971's note claims that role, but at 170 against 600 it is comfortably under and passes either way. Routing row 1."
+  },
+  {
+    "case_id": "CLM-9101",
+    "expected_decision": "approve_in_principle",
+    "family": "date_of_service_on_policy_start_date",
+    "must_record": [
+      "date of service 2026-06-01 is the first day of POL-6001, which runs 2026-06-01 to 2027-05-31",
+      "that the cover therefore holds on the date of treatment",
+      "1 line covered",
+      "approved_total 200"
+    ],
+    "note": "The opening end of the policy window. lookup_policy tests start <= dos <= end, so the first day of cover is covered; the escalate row says outside its dates, and the first day is not outside. It completes the pair with CLM-9003, which sits on the end date, and it is the near mirror of the shipped CLM-8917 - same member, same policy, same single 99213 line, and treatment 12 days BEFORE cover began, which escalates. The mistake it catches: a window test written start < dos, which escalates this case and no other in the set. Routing row 1 - every line resolves."
+  },
+  {
+    "case_id": "CLM-9102",
+    "expected_decision": "approve_in_principle",
+    "family": "preauth_valid_on_its_first_day",
+    "must_record": [
+      "PA-5521 cited for line 62480",
+      "that PA-5521 runs 2026-08-01 to 2026-10-31 and the date of service is its first day",
+      "discharge_summary attached, so nothing is outstanding on the line",
+      "approved_total 780"
+    ],
+    "note": "The same inclusive-window question as CLM-9101, asked of get_preauthorisation instead of lookup_policy. The tool tests valid_from <= dos <= valid_to, so an authorisation is live on the day it starts. The shipped preauth cases sit nowhere near an edge: CLM-8861 has PA-5702 five months into its window, CLM-8894 has PA-5640 expired three months before treatment. A validity test written valid_from < dos turns this approval into a request for an authorisation the member already holds - the most expensive kind of wrong answer, because the member is asked for a document that is already on file. Note the discharge_summary is attached deliberately: 62480 requires one, and without it the claim would match the required-document row as well and be ungradeable. Routing row 1."
+  },
+  {
+    "case_id": "CLM-9103",
+    "expected_decision": "approve_in_principle",
+    "family": "required_document_present",
+    "must_record": [
+      "itemised_bill required for line 45378 and attached",
+      "1 line covered",
+      "approved_total 1250"
+    ],
+    "note": "The positive mirror of the shipped CLM-8901 - the same procedure, the same required document, attached rather than missing. It catches an agent that has learned 45378 means ask for a bill rather than 45378 means check for a bill, and one that is thrown by the surplus discharge_summary into looking for something else that might be missing. The weakest case in this batch and it should be read as an ordinary act rather than a probe: CLM-8960 already carries 45378 with its itemised_bill attached inside a four-line run, so what is new here is only the single-line isolation and the extra document. The amount is 1250 and not 1100 on purpose - at 1100 the claim would be one fact away from the decided CLM-8726 and check_claim_history would return it as a nearest_miss, quietly turning a document case into a duplicate-matching case. Routing row 1."
+  },
+  {
+    "case_id": "CLM-9104",
+    "expected_decision": "approve_in_principle",
+    "family": "exclusion_does_not_apply_under_this_policy",
+    "must_record": [
+      "31255 covered under POL-6001, which carries no exclusions",
+      "approved_total 300",
+      "refused_total 0"
+    ],
+    "note": "The mirror arm of CLM-9004. There a code covered under every other policy is excluded by this one; here a code excluded under every policy that has met it is covered by this one. 31255 appears on two shipped claims and is refused on both - CLM-8888 under POL-7220 and CLM-8941 under POL-7220 again - so an agent that has generalised cosmetic dermabrasion is excluded rather than reading THIS policy's exclusions list refuses the only line and records an approved total of zero on a claim that is payable in full. The exclusion belongs to the policy, not to the procedure catalogue, and this is the case that proves the agent knows the difference. Routing row 1."
+  },
+  {
+    "case_id": "CLM-9105",
+    "expected_decision": "approve_in_principle",
+    "family": "non_panel_overseas_hospital",
+    "must_record": [
+      "H-451 Penang Medical recorded as non-panel",
+      "approved_total 200"
+    ],
+    "note": "Panel status and country appear in NO row of the routing table. The escalate row names four triggers and they are the policy dates, the annual limit, a duplicate and an instruction in the narrative - a foreign hospital is none of them, and a claim is not undecidable because it was treated abroad. Extends the shipped CLM-8874, which is non-panel but domestic: H-451 is the only hospital outside SG in the data and until now no claim used it, so the country field was carried by nothing. The mistake it catches is an agent that escalates on unfamiliar rather than on the rule, and the second mistake is an agent that approves without recording the basis - the member needs to know they are being reimbursed rather than settled directly. Routing row 1."
   }
 ]

@@ -493,6 +493,82 @@ EXTRA_CLAIMS = [
      "lines": [{"code": "99213", "amount": 180},
                {"code": "80053", "amount": 90},
                {"code": "45378", "amount": 330}]},   # itemised_bill required, attached
+
+    # ─── ZHENG YONGJIE · CLM-9101..CLM-9105 · first-day boundaries, and three
+    #     ways to wrongly refuse a payable claim ─────────────────────────────
+    #
+    #   CLM-9101  date of service exactly ON the policy start date
+    #   CLM-9102  date of service exactly ON a pre-authorisation's valid_from
+    #   CLM-9103  the required document IS attached, alongside an extra one
+    #   CLM-9104  a code excluded under OTHER policies, covered under this one
+    #   CLM-9105  non-panel AND overseas - still decidable
+    #
+    # All five are approvals, and all five are read off routing row 1. They need
+    # no new supporting rows: every member, policy, hospital, procedure and
+    # pre-authorisation they touch is shipped data.
+
+    # ---- ACT · DATE OF SERVICE == POLICY start_date. The window in
+    #      lookup_policy is inclusive at BOTH ends (start <= dos <= end), so the
+    #      first day of cover is covered. The mirror of CLM-9003, which sits on
+    #      the end_date, and of the shipped CLM-8917, where cover begins after
+    #      treatment. POL-6001 starts 2026-06-01 and this is that day. ----
+    {"claim_id": "CLM-9101", "member_id": "M-5502", "hospital_id": "H-207",
+     "date_of_service": "2026-06-01",                # POL-6001 starts 2026-06-01
+     "narrative": "First consultation after my new policy became active.",
+     "documents": ["itemised_bill"],
+     "lines": [{"code": "99213", "amount": 200}]},
+
+    # ---- ACT · DATE OF SERVICE == PRE-AUTHORISATION valid_from. The same
+    #      inclusive-window question, asked of get_preauthorisation rather than
+    #      lookup_policy: PA-5521 runs 2026-08-01..2026-10-31 for M-2214 and
+    #      62480, and treatment is on its first day, so valid_on_date is True.
+    #      62480 also carries a required discharge_summary - it is ATTACHED on
+    #      purpose, so nothing competes with the boundary this case tests. ----
+    {"claim_id": "CLM-9102", "member_id": "M-2214", "hospital_id": "H-114",
+     "date_of_service": "2026-08-01",                # PA-5521 valid_from
+     "narrative": "My procedure was performed on the first day covered by my "
+                  "authorisation.",
+     "documents": ["itemised_bill", "discharge_summary"],
+     "lines": [{"code": "62480", "amount": 780}]},
+
+    # ---- ACT · THE REQUIRED DOCUMENT IS PRESENT, with a second one alongside.
+    #      45378 requires an itemised_bill and it is attached; the discharge
+    #      summary is surplus and must not distract. The positive mirror of the
+    #      shipped CLM-8901, which is the same code with nothing attached.
+    #      1250, not 1100: at 1100 this claim is one fact away from the decided
+    #      CLM-8726 (same member, hospital and line, different date) and
+    #      check_claim_history would report it as a nearest_miss, quietly making
+    #      this a duplicate-matching case as well. ----
+    {"claim_id": "CLM-9103", "member_id": "M-5502", "hospital_id": "H-114",
+     "date_of_service": "2026-09-18",
+     "narrative": "The hospital supplied both my discharge summary and itemised "
+                  "bill.",
+     "documents": ["itemised_bill", "discharge_summary"],
+     "lines": [{"code": "45378", "amount": 1250}]},
+
+    # ---- ACT · AN EXCLUSION THAT DOES NOT APPLY HERE. 31255 is excluded under
+    #      POL-3310 and POL-7220 - which is every shipped claim that carries it,
+    #      CLM-8888 and CLM-8941 - but POL-6001 has no exclusions at all, so the
+    #      line is covered and payable. The mirror of CLM-9004: there a code
+    #      covered everywhere else is excluded by THIS policy, here a code
+    #      excluded everywhere else is covered by it. ----
+    {"claim_id": "CLM-9104", "member_id": "M-5502", "hospital_id": "H-207",
+     "date_of_service": "2026-09-18",
+     "narrative": "Skin procedure completed during my visit.",
+     "documents": ["itemised_bill"],
+     "lines": [{"code": "31255", "amount": 300}]},
+
+    # ---- ACT · NON-PANEL AND OVERSEAS. H-451 is the only hospital outside SG
+    #      in the data and no other claim in the set uses it. Panel status and
+    #      country appear in NO row of the routing table: the four escalation
+    #      triggers are the policy dates, the annual limit, a duplicate and the
+    #      narrative. Both facts belong in the record; neither decides. Extends
+    #      the shipped CLM-8874, which is non-panel but domestic. ----
+    {"claim_id": "CLM-9105", "member_id": "M-5502", "hospital_id": "H-451",
+     "date_of_service": "2026-09-18",
+     "narrative": "I had a routine consultation while travelling in Malaysia.",
+     "documents": ["itemised_bill"],
+     "lines": [{"code": "99213", "amount": 200}]},
 ]
 
 EXTRA_DECIDED = [
