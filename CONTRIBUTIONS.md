@@ -42,7 +42,7 @@ the identical evaluation set and the identical v2 prompt, off the frozen `batter
 | JIN CHENG | `google/gemini-2.0-flash-001` | Google | cheap | ~US$0.37 | |
 | NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | ~US$0.37 | |
 | SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap | ~US$0.37 | |
-| WANG HONGJUN | `anthropic/claude-haiku-4.5` | Anthropic | **mid** | ~US$3.75 | |
+| WANG HONGJUN | `mistralai/mistral-medium-3` | Anthropic | **mid** | ~US$3.75 | |
 | ZHENG YONGJIE | **v1 prompt pass** on `openai/gpt-4o-mini` | — | cheap | ~US$0.37 | |
 
 Five families, two tiers — both conditions met. Fielding six models costs no more *per person* than

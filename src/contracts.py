@@ -124,10 +124,43 @@ class ExpectedOutcome(TypedDict, total=False):
     case_id: str
     expected_decision: Decision
     trigger: Optional[Trigger]       # escalations only
-    missing: Optional[MissingItem]   # requests only
+    missing: Optional[str]           # requests only — PROSE, not a MissingItem. See below.
     family: str                      # which case family this exercises
     must_record: List[str]           # what a full-marks record carries beyond the decision
     note: str                        # why this case is here
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# The one deliberate asymmetry in this file, and why the harness must know about it.
+#
+#   DecisionRecord.missing   is a MissingItem  — {item, for_line, must_be_valid_on}
+#   ExpectedOutcome.missing  is a str          — "pre-authorisation reference for
+#                                                 line 62480, valid on 2026-09-08"
+#
+# This is not an oversight and it is not fixable by changing one of them. They are written
+# by different authors for different readers:
+#
+#   The RECORD is emitted by the agent, and loop.py's validator reads its FIELDS — it
+#   rejects a record whose `item` is empty, and it cross-checks that a pre-auth ask was
+#   actually preceded by a get_preauthorisation call. Structure is what makes that check
+#   possible, so the record stays a dict.
+#
+#   The KEY is written by hand, by six people, from the Appendix A routing table, before
+#   any agent ever runs. All 15 instructor-shipped rows are prose. Rewriting them into
+#   dicts would mean editing shipped data, which check_my_data.py fingerprints and
+#   forbids. So the key stays prose.
+#
+# CONSEQUENCE FOR THE HARNESS (JIN CHENG, NIU TONG): `missing` cannot be graded by
+# equality. Do not write `record["missing"] == expected["missing"]` — it is False on every
+# case, including the correct ones. Grade it as a CODE check on containment instead:
+#
+#     for_line appears in the expected string, and the head noun of item does too
+#
+# e.g. record {"item": "pre-authorisation reference", "for_line": "62480"} against
+# "pre-authorisation reference for line 62480, valid on 2026-09-08" passes on both counts.
+# Seven cases in the current set carry a `missing`: CLM-8888, 8894, 8901, 9002, 9034,
+# 9046, 9062. If a containment rule passes all seven by hand, it is right.
+# ─────────────────────────────────────────────────────────────────────────────
 
 
 # ─────────────────────────────────────────────────────────────────────────────
