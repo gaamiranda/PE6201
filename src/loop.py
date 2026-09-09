@@ -129,7 +129,26 @@ def parse_response(text: str) -> Tuple[str, List[Tuple[str, tuple, dict]], Optio
         try:
             return " ".join(thought), [], json.loads(final_raw)
         except json.JSONDecodeError as exc:
-            raise ParseError(f"Final: must carry one JSON object. {exc}")
+            # The Action block and the Final block disagreed about what a literal is, and that
+            # was OUR bug, not the model's. _parse_call reads arguments with ast.literal_eval,
+            # which accepts Python's None/True/False and single quotes; this branch demanded
+            # strict JSON. A model that writes one dialect in an Action reasonably writes the
+            # same dialect in a Final — and three cases did exactly that, emitting
+            # "exclusion": None. Each was rejected, retried verbatim, and burned to the call
+            # cap: 36 wasted model calls on one token.
+            #
+            # No prompt instruction fixes this durably. "Write null, not None" is paid on
+            # every call of every run and dies at the next model. Accepting the same literal
+            # grammar in both places is paid once and holds. ast.literal_eval evaluates
+            # literals only — it is not eval, and it cannot execute model output.
+            try:
+                record = ast.literal_eval(final_raw)
+            except (ValueError, SyntaxError):
+                raise ParseError(f"Final: must carry one JSON object. {exc}")
+            if not isinstance(record, dict):
+                raise ParseError(
+                    f"Final: must carry one JSON object, not a {type(record).__name__}.")
+            return " ".join(thought), [], record
 
     return " ".join(thought), [_parse_call(l) for l in action_lines], None
 

@@ -35,7 +35,33 @@ MODEL_ID = "google/gemini-2.5-flash-lite"
 # First run: leave this as None to run all 42.
 # For retries, replace None with a set such as:
 # ONLY_CASES = {"CLM-8888", "CLM-9034"}
-ONLY_CASES = None
+# The five runs still stopped by a guard after the parser fix. Re-recorded under
+# RECORDING_GUARDS so we can see how long they actually wanted to be.
+# RESET THIS TO None once the recording is complete.
+ONLY_CASES = {
+    "CLM-8861",
+    "CLM-8971",
+    "CLM-9002",
+    "CLM-9005",
+    "CLM-9065",
+}
+
+# Caps used WHILE RECORDING — deliberately far above anything we intend to ship.
+#
+# The recording is keyed by (case_id, turn), so replay can only serve turns that were
+# recorded. A run truncated by a tight cap ends exactly where the cap stopped it, with no
+# spare turns — which means the shipped cap can never afterwards be raised and tested for
+# free, and the measured turn distribution is censored by the very number it is supposed to
+# inform. Record long, ship short: with headroom in the file, any cap at or below the
+# recorded length can be evaluated on the scripted backend at zero cost.
+#
+# budget_ceiling_usd stays the real backstop. It is the guard that caught the 60-call
+# runaway on CLM-8850, and it is the reason recording long is safe rather than reckless.
+RECORDING_GUARDS = loop.Guards(
+    step_cap=20,
+    call_cap=30,
+    budget_ceiling_usd=0.05,
+)
 
 
 def load_case_ids() -> list[str]:
@@ -148,6 +174,7 @@ def main() -> None:
                 case_id,
                 backend="openrouter",
                 model=MODEL_ID,
+                guards=RECORDING_GUARDS,
             )
 
             succeeded.append(case_id)
