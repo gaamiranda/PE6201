@@ -36,6 +36,17 @@ TRANSCRIPTS_PATH = (
 
 _RECORDED_TRANSCRIPTS: Optional[Dict[tuple[str, int], str]] = None
 
+# Recording is OPT-IN and must stay that way. evaluation/record_transcripts.py sets it True
+# for the one pass that builds the recording; nothing else may.
+#
+# WHY: _load_recorded_transcripts() refuses a file holding two replies for the same
+# (case_id, turn) — correctly, because a duplicate makes the replay ambiguous. If every live
+# call appended, the D5(b) battery on 11 September would append a second copy of all 380 rows
+# and the scripted backend would stop loading with "duplicate transcript response". D5(a),
+# D3(b) and D7 all replay through it, and six members run live that day: the repository would
+# break on the first one and stay broken through submission.
+RECORD_TRANSCRIPTS = False
+
 
 class BackendError(Exception):
     """The backend could not produce a response. Distinct from ToolError: this is the model
@@ -52,7 +63,9 @@ class BackendError(Exception):
 
 PRICES: Dict[str, tuple] = {
     "openai/gpt-4o-mini":                 (0.15, 0.60),
-    "google/gemini-2.5-flash-lite":       (0.10, 0.40),
+    "google/gemini-2.0-flash-001":        (0.10, 0.40),
+    "google/gemini-2.5-flash-lite":       (0.10, 0.40),   # the D5(a) recording model
+    "mistralai/mistral-medium-3":         (0.40, 2.00),
     "meta-llama/llama-3.3-70b-instruct":  (0.12, 0.30),
     "deepseek/deepseek-chat":             (0.14, 0.28),
     "anthropic/claude-haiku-4.5":         (1.00, 5.00),
@@ -95,6 +108,13 @@ def _append_transcript(case_id: str, turn: int, text: str) -> None:
     with TRANSCRIPTS_PATH.open("a", encoding="utf-8", newline="\n") as file:
         json.dump(record, file, ensure_ascii=False)
         file.write("\n")
+
+
+def _expected_case_count() -> int:
+    """How many cases the recording must cover — read from the answer key, never hard-coded,
+    so adding a case fails loudly here instead of quietly shrinking the evaluation."""
+    key = TRANSCRIPTS_PATH.parent.parent / "A2_reference_data" / "expected_outcomes_A.json"
+    return len({row["case_id"] for row in json.loads(key.read_text(encoding="utf-8"))})
 
 
 def _load_recorded_transcripts() -> Dict[tuple[str, int], str]:
@@ -151,10 +171,13 @@ def _load_recorded_transcripts() -> Dict[tuple[str, int], str]:
             # Preserve the provider response exactly, including empty strings.
             transcripts[key] = text
 
+    expected = _expected_case_count()
     case_count = len({case_id for case_id, _ in transcripts})
-    if case_count != 42:
+    if case_count != expected:
         raise BackendError(
-            f"expected transcripts for 42 cases, but found {case_count}"
+            f"the recording covers {case_count} cases but the answer key holds {expected}. "
+            f"Re-record the missing ones with evaluation/record_transcripts.py — a partial "
+            f"recording silently drops cases from every scripted number."
         )
     if not transcripts:
         raise BackendError("the recorded transcript file is empty")
@@ -273,12 +296,12 @@ def _openrouter_complete(
     usage = d.get("usage", {})
     text = d["choices"][0]["message"]["content"] or ""
 
-    if case_id is None or turn is None:
-        raise BackendError(
-            "live replies must include case_id and turn for transcript recording"
-        )
-
-    _append_transcript(case_id, turn, text)
+    if RECORD_TRANSCRIPTS:
+        if case_id is None or turn is None:
+            raise BackendError(
+                "live replies must include case_id and turn for transcript recording"
+            )
+        _append_transcript(case_id, turn, text)
 
     return {
         "text": text,

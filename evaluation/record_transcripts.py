@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
 import sys
 import traceback
+from datetime import datetime, timezone
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -15,12 +17,17 @@ SRC = ROOT / "src"
 sys.path.insert(0, str(SRC))
 load_dotenv(ROOT / ".env")
 
+import backends  # noqa: E402
 import loop  # noqa: E402
+
+# The ONLY place that may switch recording on. See backends.RECORD_TRANSCRIPTS for why.
+backends.RECORD_TRANSCRIPTS = True
 
 
 ANSWER_KEY = ROOT / "A2_reference_data" / "expected_outcomes_A.json"
 TRANSCRIPTS = ROOT / "evaluation" / "transcripts.jsonl"
 FAILURES = ROOT / "evaluation" / "recording_failures.json"
+META = ROOT / "evaluation" / "transcripts.meta.json"
 
 # Confirm this model with the team before spending credit.
 MODEL_ID = "google/gemini-2.5-flash-lite"
@@ -70,6 +77,36 @@ def remove_existing_transcript(case_id: str) -> None:
         text += "\n"
 
     TRANSCRIPTS.write_text(text, encoding="utf-8")
+
+
+def _write_provenance(recorded: list[str]) -> None:
+    """Say which model produced the recording, and when.
+
+    Without this the transcripts are anonymous, and every scripted number in the report — the
+    pass rate, the turn distribution, both D7 failures — rests on a file that cannot be
+    attributed to anything. The report has to name the model that generated them.
+    """
+    try:
+        commit = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
+            capture_output=True, text=True, check=True).stdout.strip()
+    except Exception:
+        commit = "unknown"
+
+    META.write_text(json.dumps({
+        "model": MODEL_ID,
+        "backend": "openrouter",
+        "temperature": 0,
+        "prompt_version": "v2",
+        "recorded_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "commit": commit,
+        "cases_recorded": len(recorded),
+        "note": (
+            "Replayed by backends._scripted_complete. These are real replies from the model "
+            "named above, including its mistakes - they are NOT written from the answer key, "
+            "which is what makes every scripted number a measurement and not a tautology."
+        ),
+    }, indent=2) + "\n", encoding="utf-8")
 
 
 def main() -> None:
@@ -131,6 +168,8 @@ def main() -> None:
         json.dumps(failed, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
+
+    _write_provenance(succeeded)
 
     print("\nRecording complete")
     print(f"Succeeded: {len(succeeded)}")

@@ -43,3 +43,7 @@ env/
 # Run output: the raw decision log is regenerated on every run and would churn every diff.
 # The RESULT TABLES in results/ are committed on purpose — the brief requires them in the repo.
 results/decisions.jsonl
+
+# Scratch decision logs written by evaluation/check_scripted_replay.py during its two passes.
+# The check exists to prove results/decisions.jsonl is NOT touched; its own scratch is not evidence.
+evaluation/step4_isolated_results/

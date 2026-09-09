@@ -42,7 +42,7 @@ the identical evaluation set and the identical v2 prompt, off the frozen `batter
 | JIN CHENG | `google/gemini-2.0-flash-001` | Google | cheap | ~US$0.37 | |
 | NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | ~US$0.37 | |
 | SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap | ~US$0.37 | |
-| WANG HONGJUN | `mistralai/mistral-medium-3` | Anthropic | **mid** | ~US$3.75 | |
+| WANG HONGJUN | `mistralai/mistral-medium-3` | Mistral | **mid** | ~US$1.10 | |
 | ZHENG YONGJIE | **v1 prompt pass** on `openai/gpt-4o-mini` | — | cheap | ~US$0.37 | |
 
 Five families, two tiers — both conditions met. Fielding six models costs no more *per person* than
@@ -51,12 +51,20 @@ fielding three; the price table is per member, per model.
 Budget rule: if any member's estimated live spend exceeds **US$3**, the battery is too large — cut
 trials or cases, or move a model down a tier, **and say so in the report**.
 
-> ⚠ **OPEN DECISION — owner JIN CHENG (D4), due before the 10 Sep freeze.** The set closed at
-> **42 cases with 17 negatives**, not the 40/10 planned in [`PLAN.md` §3](PLAN.md). At one trial
-> per ordinary case and three per negative that is **25 + 51 = 76 runs per model**, which puts
-> WANG HONGJUN's mid-tier battery at roughly **US$3.75 — over the US$3 rule**. Two ways out, and
-> it has to be a decision rather than an accident: trim the negative count, or move WANG HONGJUN
-> to the cheap tier and state that in the report. The brief permits the second explicitly.
+> ✅ **DECIDED, 8 Sep — and it goes in the report.** The set closed at **42 cases with 17
+> negatives**, not the 40/8 the brief prices. At one trial per ordinary case and three per
+> negative that is **25 + 51 = 76 runs per model**, against the brief's 56. On `claude-haiku-4.5`
+> that put WANG HONGJUN at roughly **US$3.75 — over our own US$3 rule**.
+>
+> We kept all 17 negatives and **changed the model instead**: WANG HONGJUN moves from
+> `anthropic/claude-haiku-4.5` to `mistralai/mistral-medium-3`, about **US$1.10** for the same
+> 76 runs. Two reasons. Negatives are where the brief says models diverge most, so cutting them
+> would remove the finding we are looking for. And dropping WANG HONGJUN to the *cheap* tier —
+> the obvious alternative — would leave all six of us on one tier and fail the brief's own
+> condition that the set span at least two price tiers.
+>
+> **Consequence to state with every pass rate: 76 runs, not 56.** The brief allows going above
+> its numbers and requires the trial count beside the figure.
 
 **Only D5(b) spends money.** D3(b), D5(a) and D7 all run on the scripted backend, free.
 
