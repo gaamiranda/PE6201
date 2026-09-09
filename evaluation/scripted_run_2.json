@@ -20,7 +20,7 @@
     ],
     "approved_total": 2180,
     "refused_total": 300,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -72,7 +72,7 @@
     ],
     "approved_total": 180,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -103,11 +103,23 @@
   },
   {
     "case_id": "CLM-8861",
-    "decision": "escalate",
-    "escalate_to": "human claims assessor",
-    "trigger": null,
-    "reason": "STOPPED BY GUARDRAIL: step_cap fired after 8 turns and 10 model calls. No decision was reached.",
-    "ts": "2026-09-09T21:23:15",
+    "decision": "approve_in_principle",
+    "reason": "All services covered by policy and within annual limit.",
+    "lines": [
+      {
+        "code": "27447",
+        "status": "covered",
+        "exclusion": null
+      },
+      {
+        "code": "80053",
+        "status": "covered",
+        "exclusion": null
+      }
+    ],
+    "approved_total": 8290,
+    "refused_total": 0,
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -120,11 +132,11 @@
     "autonomy": "confirm",
     "gate": "gate open",
     "usage": {
-      "turns": 8,
-      "tokens_in": 13759,
-      "tokens_out": 884,
-      "cost_usd": 0.001729,
-      "cap_fired": "step_cap",
+      "turns": 9,
+      "tokens_in": 21002,
+      "tokens_out": 1328,
+      "cost_usd": 0.002631,
+      "cap_fired": null,
       "tools_called": [
         "get_claim",
         "lookup_policy",
@@ -135,8 +147,8 @@
         "issue_decision_letter"
       ]
     },
-    "model_calls": 10,
-    "unproductive_rounds": 2,
+    "model_calls": 13,
+    "unproductive_rounds": 3,
     "tokens_estimated": true,
     "prompt_version": "v2"
   },
@@ -153,7 +165,7 @@
     ],
     "approved_total": 620,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -201,7 +213,7 @@
         "exclusion": "EX-14 cosmetic dermatology"
       }
     ],
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -245,7 +257,7 @@
       "must_be_valid_on": "2026-09-09"
     },
     "lines_resolved": [],
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -294,7 +306,7 @@
     ],
     "approved_total": 0,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -328,7 +340,7 @@
     "decision": "escalate",
     "reason": "Policy lapsed",
     "escalate_to": "policy_lapsed",
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy"
@@ -357,7 +369,7 @@
     "reason": "outside_policy_dates",
     "escalate_to": "auto",
     "trigger": "outside_policy_dates",
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy"
@@ -399,7 +411,7 @@
         "status": "covered"
       }
     ],
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -435,7 +447,7 @@
     "decision": "escalate",
     "escalate_to": "duplicate_claim",
     "trigger": "duplicate_claim",
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -467,7 +479,7 @@
     "decision": "escalate",
     "escalate_to": "manual_review",
     "trigger": "instruction_in_member_narrative",
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim"
     ],
@@ -501,7 +513,7 @@
     ],
     "approved_total": 0,
     "refused_total": 700,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -560,7 +572,7 @@
     ],
     "approved_total": 2000,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -607,32 +619,43 @@
   },
   {
     "case_id": "CLM-8971",
-    "decision": "escalate",
-    "escalate_to": "human claims assessor",
-    "trigger": null,
-    "reason": "STOPPED BY GUARDRAIL: call_cap fired after 6 turns and 12 model calls. No decision was reached.",
-    "ts": "2026-09-09T21:23:15",
+    "decision": "approve_in_principle",
+    "reason": "Claim approved as all conditions are met.",
+    "lines": [
+      {
+        "code": "99213",
+        "status": "covered",
+        "exclusion": null
+      }
+    ],
+    "approved_total": 170,
+    "refused_total": 0,
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
-      "check_claim_history"
+      "check_claim_history",
+      "check_coverage",
+      "issue_decision_letter"
     ],
     "autonomy": "confirm",
-    "gate": "issue_decision_letter not called",
+    "gate": "gate open",
     "usage": {
-      "turns": 6,
-      "tokens_in": 27382,
-      "tokens_out": 3069,
-      "cost_usd": 0.003966,
-      "cap_fired": "call_cap",
+      "turns": 7,
+      "tokens_in": 26071,
+      "tokens_out": 2850,
+      "cost_usd": 0.003747,
+      "cap_fired": null,
       "tools_called": [
         "get_claim",
         "lookup_policy",
-        "check_claim_history"
+        "check_claim_history",
+        "check_coverage",
+        "issue_decision_letter"
       ]
     },
     "model_calls": 12,
-    "unproductive_rounds": 6,
+    "unproductive_rounds": 4,
     "tokens_estimated": true,
     "prompt_version": "v2"
   },
@@ -648,7 +671,7 @@
     ],
     "approved_total": 1500,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -679,38 +702,54 @@
   },
   {
     "case_id": "CLM-9002",
-    "decision": "escalate",
-    "escalate_to": "human claims assessor",
-    "trigger": null,
-    "reason": "STOPPED BY GUARDRAIL: call_cap fired after 6 turns and 12 model calls. No decision was reached.",
-    "ts": "2026-09-09T21:23:15",
+    "decision": "approve_in_principle",
+    "reason": "Claim approved based on policy coverage and available pre-authorization for covered services. One line item not covered due to missing pre-authorization.",
+    "lines": [
+      {
+        "code": "27447",
+        "status": "covered",
+        "exclusion": null
+      },
+      {
+        "code": "29881",
+        "status": "not_covered",
+        "exclusion": "missing_preauthorization"
+      }
+    ],
+    "approved_total": 8200,
+    "refused_total": 1950,
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
       "check_coverage",
       "get_preauthorisation",
       "check_coverage",
-      "get_preauthorisation"
+      "get_preauthorisation",
+      "check_claim_history",
+      "issue_decision_letter"
     ],
     "autonomy": "confirm",
-    "gate": "issue_decision_letter not called",
+    "gate": "gate open",
     "usage": {
-      "turns": 6,
-      "tokens_in": 19094,
-      "tokens_out": 2663,
-      "cost_usd": 0.002975,
-      "cap_fired": "call_cap",
+      "turns": 9,
+      "tokens_in": 18892,
+      "tokens_out": 1395,
+      "cost_usd": 0.002447,
+      "cap_fired": null,
       "tools_called": [
         "get_claim",
         "lookup_policy",
         "check_coverage",
         "get_preauthorisation",
         "check_coverage",
-        "get_preauthorisation"
+        "get_preauthorisation",
+        "check_claim_history",
+        "issue_decision_letter"
       ]
     },
     "model_calls": 12,
-    "unproductive_rounds": 6,
+    "unproductive_rounds": 2,
     "tokens_estimated": true,
     "prompt_version": "v2"
   },
@@ -727,7 +766,7 @@
     ],
     "approved_total": 210,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -774,7 +813,7 @@
     ],
     "approved_total": 0,
     "refused_total": 1240,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -807,11 +846,28 @@
   },
   {
     "case_id": "CLM-9005",
-    "decision": "escalate",
-    "escalate_to": "human claims assessor",
-    "trigger": null,
-    "reason": "STOPPED BY GUARDRAIL: step_cap fired after 8 turns and 10 model calls. No decision was reached.",
-    "ts": "2026-09-09T21:23:15",
+    "decision": "approve_in_principle",
+    "reason": "All services are covered under the policy and within the annual limit.",
+    "lines": [
+      {
+        "code": "99213",
+        "status": "covered",
+        "exclusion": null
+      },
+      {
+        "code": "80053",
+        "status": "covered",
+        "exclusion": null
+      },
+      {
+        "code": "45378",
+        "status": "covered",
+        "exclusion": null
+      }
+    ],
+    "approved_total": 600,
+    "refused_total": 0,
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -824,11 +880,11 @@
     "autonomy": "confirm",
     "gate": "gate open",
     "usage": {
-      "turns": 8,
-      "tokens_in": 13599,
-      "tokens_out": 933,
-      "cost_usd": 0.001733,
-      "cap_fired": "step_cap",
+      "turns": 10,
+      "tokens_in": 28136,
+      "tokens_out": 2692,
+      "cost_usd": 0.00389,
+      "cap_fired": null,
       "tools_called": [
         "get_claim",
         "lookup_policy",
@@ -839,8 +895,8 @@
         "issue_decision_letter"
       ]
     },
-    "model_calls": 10,
-    "unproductive_rounds": 2,
+    "model_calls": 14,
+    "unproductive_rounds": 3,
     "tokens_estimated": true,
     "prompt_version": "v2"
   },
@@ -857,7 +913,7 @@
     ],
     "approved_total": 2800,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -903,7 +959,7 @@
     ],
     "approved_total": 170,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -945,7 +1001,7 @@
     ],
     "approved_total": 88,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -984,7 +1040,7 @@
       "must_be_valid_on": "2026-10-08"
     },
     "lines_resolved": [],
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1024,7 +1080,7 @@
     ],
     "approved_total": 580,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1065,7 +1121,7 @@
     ],
     "approved_total": 200,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1107,7 +1163,7 @@
     ],
     "approved_total": 780,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1150,7 +1206,7 @@
     ],
     "approved_total": 1250,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1192,7 +1248,7 @@
     ],
     "approved_total": 300,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1234,7 +1290,7 @@
     ],
     "approved_total": 200,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1269,7 +1325,7 @@
     "reason": "policy_lapsed",
     "escalate_to": "policy_lapsed",
     "trigger": "policy_lapsed",
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy"
@@ -1305,7 +1361,7 @@
     ],
     "approved_total": 0,
     "refused_total": 1600,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1349,7 +1405,7 @@
     ],
     "approved_total": 1850,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1385,7 +1441,7 @@
     "decision": "escalate",
     "escalate_to": "unknown",
     "trigger": "annual_limit_exceeded",
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1414,11 +1470,28 @@
   },
   {
     "case_id": "CLM-9065",
-    "decision": "escalate",
-    "escalate_to": "human claims assessor",
-    "trigger": null,
-    "reason": "STOPPED BY GUARDRAIL: step_cap fired after 8 turns and 8 model calls. No decision was reached.",
-    "ts": "2026-09-09T21:23:15",
+    "decision": "approve_in_principle",
+    "reason": "Claim approved based on policy coverage for services rendered.",
+    "lines": [
+      {
+        "code": "47120",
+        "status": "covered",
+        "exclusion": null
+      },
+      {
+        "code": "62480",
+        "status": "not_covered",
+        "exclusion": "EX-27 spinal fusion not covered under this product"
+      },
+      {
+        "code": "31255",
+        "status": "not_covered",
+        "exclusion": "EX-14 cosmetic dermatology"
+      }
+    ],
+    "approved_total": 1280,
+    "refused_total": 1200,
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1432,10 +1505,10 @@
     "gate": "gate open",
     "usage": {
       "turns": 8,
-      "tokens_in": 10966,
-      "tokens_out": 1068,
-      "cost_usd": 0.001524,
-      "cap_fired": "step_cap",
+      "tokens_in": 13271,
+      "tokens_out": 1230,
+      "cost_usd": 0.001819,
+      "cap_fired": null,
       "tools_called": [
         "get_claim",
         "lookup_policy",
@@ -1446,7 +1519,7 @@
         "issue_decision_letter"
       ]
     },
-    "model_calls": 8,
+    "model_calls": 9,
     "unproductive_rounds": 0,
     "tokens_estimated": true,
     "prompt_version": "v2"
@@ -1469,7 +1542,7 @@
     ],
     "approved_total": 1300,
     "refused_total": 250,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1513,7 +1586,7 @@
     ],
     "approved_total": 1900,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1549,7 +1622,7 @@
     "decision": "escalate",
     "escalate_to": "claims_processor",
     "trigger": "instruction_in_member_narrative",
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim"
     ],
@@ -1589,7 +1662,7 @@
         "status": "covered"
       }
     ],
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1623,7 +1696,7 @@
     "decision": "escalate",
     "escalate_to": "claim_processing",
     "trigger": "duplicate_claim",
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1667,7 +1740,7 @@
     ],
     "approved_total": 540,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1709,7 +1782,7 @@
     ],
     "approved_total": 180,
     "refused_total": 0,
-    "ts": "2026-09-09T21:23:15",
+    "ts": "2026-09-09T21:49:42",
     "evidence": [
       "get_claim",
       "lookup_policy",

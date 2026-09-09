@@ -35,16 +35,9 @@ MODEL_ID = "google/gemini-2.5-flash-lite"
 # First run: leave this as None to run all 42.
 # For retries, replace None with a set such as:
 # ONLY_CASES = {"CLM-8888", "CLM-9034"}
-# The five runs still stopped by a guard after the parser fix. Re-recorded under
-# RECORDING_GUARDS so we can see how long they actually wanted to be.
-# RESET THIS TO None once the recording is complete.
-ONLY_CASES = {
-    "CLM-8861",
-    "CLM-8971",
-    "CLM-9002",
-    "CLM-9005",
-    "CLM-9065",
-}
+# First run: leave this as None to run all 42.
+# For retries, replace None with a set such as: {"CLM-8888", "CLM-9034"}
+ONLY_CASES = None
 
 # Caps used WHILE RECORDING — deliberately far above anything we intend to ship.
 #
@@ -126,7 +119,17 @@ def _write_provenance(recorded: list[str]) -> None:
         "prompt_version": "v2",
         "recorded_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "commit": commit,
-        "cases_recorded": len(recorded),
+        # Count the FILE, not this run. A retry re-records a handful of cases, and reporting
+        # those as the coverage would understate a complete recording as a partial one.
+        "cases_recorded": len({
+            json.loads(line)["case_id"]
+            for line in TRANSCRIPTS.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        }),
+        "replies_recorded": sum(
+            1 for line in TRANSCRIPTS.read_text(encoding="utf-8").splitlines() if line.strip()
+        ),
+        "last_rerecorded": sorted(recorded),
         "note": (
             "Replayed by backends._scripted_complete. These are real replies from the model "
             "named above, including its mistakes - they are NOT written from the answer key, "

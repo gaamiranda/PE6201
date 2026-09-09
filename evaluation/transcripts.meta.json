@@ -3,10 +3,17 @@
   "backend": "openrouter",
   "temperature": 0,
   "prompt_version": "v2",
-  "recorded_utc": "2026-09-09T00:00:00Z",
-  "recorded_by": "JIN CHENG",
-  "commit": "570d6c6",
+  "recorded_utc": "2026-09-09T13:47:55Z",
+  "commit": "c187b2a",
   "cases_recorded": 42,
-  "replies_recorded": 380,
-  "note": "Replayed by backends._scripted_complete. These are real replies from the model named above, including its mistakes - they are NOT written from the answer key, which is what makes every scripted number a measurement and not a tautology."
+  "note": "Replayed by backends._scripted_complete. These are real replies from the model named above, including its mistakes - they are NOT written from the answer key, which is what makes every scripted number a measurement and not a tautology.",
+  "replies_recorded": 388,
+  "last_rerecorded": [
+    "CLM-8861",
+    "CLM-8971",
+    "CLM-9002",
+    "CLM-9005",
+    "CLM-9065"
+  ],
+  "recorded_by": "JIN CHENG (full set), Goncalo Miranda (5-case re-record under lifted caps)"
 }

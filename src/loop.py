@@ -62,7 +62,18 @@ MAX_REJECTIONS = 3
 
 @dataclass
 class Guards:
-    step_cap: int = 8                    # PLACEHOLDER — set from the measured distribution
+    # MEASURED, not chosen. Replaying all 42 cases with the caps lifted to 20/30 — so that
+    # nothing was truncated by the number being measured — gives:
+    #
+    #     turns        median 6   p90 7    max 10
+    #     model_calls  median 9   p90 11   max 14
+    #
+    # A cap has to sit above every legitimate run and still catch a runaway. 12 clears the
+    # longest honest run by 2 and is 1.7x the p90. The alternative reading — "the cap should
+    # be tight to save money" — is what the old placeholder 8 did: it stopped 8 of 42 runs
+    # mid-decision and cost accuracy, not money, because a truncated run still bills for every
+    # turn it took before it was cut.
+    step_cap: int = 12
 
     # MODEL CALLS, not tool-executing turns — and this one was learnt the hard way.
     # On a live run CLM-8850 made 60 model calls, burned 307,823 input tokens and $0.05 while
@@ -71,8 +82,14 @@ class Guards:
     # blind to it (no tools were executing) and de-duplication was blind to it (no action was
     # repeated — there were no actions). Only the budget ceiling stopped it, at 12x the cost
     # of a healthy run. A cap has to count the thing that is actually growing.
-    call_cap: int = 12
-    budget_ceiling_usd: float = 0.05     # PLACEHOLDER — D3(a)
+    # 18 clears the measured maximum of 14 by 4, and still catches the CLM-8850 runaway above
+    # more than three times earlier than it actually stopped. The old 12 sat ON the measured
+    # maximum, which is why it fired on live work.
+    call_cap: int = 18
+
+    # STILL A PLACEHOLDER — D3(a) owns this. Per-run cost data now exists in
+    # evaluation/scripted_run_1.json, so it can be set from measurement like the two above.
+    budget_ceiling_usd: float = 0.05
     dedup: bool = True                   # delete this to reproduce D7 failure 1
     autonomy: Autonomy = "confirm"       # D3(a) chooses and defends this
     parallel: bool = True                # D2(c): False executes one call per turn
