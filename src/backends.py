@@ -21,10 +21,20 @@ WHO OWNS WHAT
 from __future__ import annotations
 
 import os
+import json
+from pathlib import Path
+
 from typing import Dict, List, Optional
 
 from contracts import BACKEND, BASE_URL, MODEL  # noqa: F401  (re-exported: one config block)
-from dev_transcripts import DEV_TRANSCRIPTS
+
+TRANSCRIPTS_PATH = (
+    Path(__file__).resolve().parent.parent
+    / "evaluation"
+    / "transcripts.jsonl"
+)
+
+_RECORDED_TRANSCRIPTS: Optional[Dict[tuple[str, int], str]] = None
 
 
 class BackendError(Exception):
@@ -42,7 +52,7 @@ class BackendError(Exception):
 
 PRICES: Dict[str, tuple] = {
     "openai/gpt-4o-mini":                 (0.15, 0.60),
-    "google/gemini-2.0-flash-001":        (0.10, 0.40),
+    "google/gemini-2.5-flash-lite":       (0.10, 0.40),
     "meta-llama/llama-3.3-70b-instruct":  (0.12, 0.30),
     "deepseek/deepseek-chat":             (0.14, 0.28),
     "anthropic/claude-haiku-4.5":         (1.00, 5.00),
@@ -72,6 +82,85 @@ def estimate_tokens(text: str) -> int:
     """
     return max(1, len(text) // 4)
 
+def _append_transcript(case_id: str, turn: int, text: str) -> None:
+    """Append one exact model reply to the JSONL recording."""
+    TRANSCRIPTS_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+    record = {
+        "case_id": case_id,
+        "turn": turn,
+        "text": text,
+    }
+
+    with TRANSCRIPTS_PATH.open("a", encoding="utf-8", newline="\n") as file:
+        json.dump(record, file, ensure_ascii=False)
+        file.write("\n")
+
+
+def _load_recorded_transcripts() -> Dict[tuple[str, int], str]:
+    """Load and validate the recorded OpenRouter replies once."""
+    global _RECORDED_TRANSCRIPTS
+
+    if _RECORDED_TRANSCRIPTS is not None:
+        return _RECORDED_TRANSCRIPTS
+
+    if not TRANSCRIPTS_PATH.exists():
+        raise BackendError(
+            f"recorded transcript file not found: {TRANSCRIPTS_PATH}"
+        )
+
+    transcripts: Dict[tuple[str, int], str] = {}
+
+    with TRANSCRIPTS_PATH.open("r", encoding="utf-8") as file:
+        for line_number, line in enumerate(file, start=1):
+            if not line.strip():
+                continue
+
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError as error:
+                raise BackendError(
+                    f"invalid JSON in {TRANSCRIPTS_PATH} "
+                    f"at line {line_number}: {error}"
+                ) from error
+
+            case_id = record.get("case_id")
+            turn = record.get("turn")
+            text = record.get("text")
+
+            if not isinstance(case_id, str) or not case_id:
+                raise BackendError(
+                    f"invalid case_id at transcript line {line_number}"
+                )
+            if not isinstance(turn, int) or turn < 1:
+                raise BackendError(
+                    f"invalid turn at transcript line {line_number}"
+                )
+            if not isinstance(text, str):
+                raise BackendError(
+                    f"invalid text at transcript line {line_number}"
+                )
+
+            key = (case_id, turn)
+            if key in transcripts:
+                raise BackendError(
+                    f"duplicate transcript response for "
+                    f"case {case_id!r}, turn {turn}"
+                )
+
+            # Preserve the provider response exactly, including empty strings.
+            transcripts[key] = text
+
+    case_count = len({case_id for case_id, _ in transcripts})
+    if case_count != 42:
+        raise BackendError(
+            f"expected transcripts for 42 cases, but found {case_count}"
+        )
+    if not transcripts:
+        raise BackendError("the recorded transcript file is empty")
+
+    _RECORDED_TRANSCRIPTS = transcripts
+    return transcripts
 
 # ─────────────────────────────────────────────────────────────────────────────
 # The one function.
@@ -88,37 +177,70 @@ def complete(messages: List[Dict[str, str]], *, model: str = MODEL,
              measurement.
     """
     which = backend or BACKEND
+
     if which == "scripted":
-        return _scripted_complete(messages, case_id=case_id, turn=turn)
+        return _scripted_complete(
+            messages,
+            case_id=case_id,
+            turn=turn,
+        )
+
     if which == "openrouter":
-        return _openrouter_complete(messages, model=model)
+        return _openrouter_complete(
+            messages,
+            model=model,
+            case_id=case_id,
+            turn=turn,
+        )
+
     raise BackendError(f"unknown backend {which!r}")
 
 
-def _scripted_complete(messages: List[Dict[str, str]], *, case_id: Optional[str],
-                       turn: Optional[int]) -> Dict:
-    """Deterministic replay. No network, no key, same answer every time.
-
-    PLACEHOLDER — JIN CHENG / NIU TONG (D5a) replace this with a replay over the whole
-    evaluation set. It currently reads dev_transcripts.py, which covers three claims.
-    """
-    key = (case_id, turn)
-    if key not in DEV_TRANSCRIPTS:
+def _scripted_complete(
+    messages: List[Dict[str, str]],
+    *,
+    case_id: Optional[str],
+    turn: Optional[int],
+) -> Dict:
+    """Replay an exact recorded reply without network access."""
+    if case_id is None or turn is None:
         raise BackendError(
-            f"no scripted response for case {case_id!r} turn {turn}. "
-            f"dev_transcripts.py covers {sorted({c for c, _ in DEV_TRANSCRIPTS})} only — "
-            f"this is the dev stub, not D5(a)."
+            "scripted replay requires both case_id and turn"
         )
-    text = DEV_TRANSCRIPTS[key]
+
+    transcripts = _load_recorded_transcripts()
+    key = (case_id, turn)
+
+    if key not in transcripts:
+        available_turns = sorted(
+            recorded_turn
+            for recorded_case, recorded_turn in transcripts
+            if recorded_case == case_id
+        )
+        raise BackendError(
+            f"no recorded response for case {case_id!r}, turn {turn}. "
+            f"Available turns: {available_turns}"
+        )
+
+    text = transcripts[key]
     return {
         "text": text,
-        "tokens_in": sum(estimate_tokens(m["content"]) for m in messages),
+        "tokens_in": sum(
+            estimate_tokens(message["content"])
+            for message in messages
+        ),
         "tokens_out": estimate_tokens(text),
         "estimated": True,
     }
 
 
-def _openrouter_complete(messages: List[Dict[str, str]], *, model: str) -> Dict:
+def _openrouter_complete(
+    messages: List[Dict[str, str]],
+    *,
+    model: str,
+    case_id: Optional[str],
+    turn: Optional[int],
+) -> Dict:
     """The live path — the ONLY place in this repository that spends money.
 
     temperature=0 is not a preference: without it a passing case can flip between runs and the
@@ -142,11 +264,24 @@ def _openrouter_complete(messages: List[Dict[str, str]], *, model: str) -> Dict:
     if r.status_code != 200:
         raise BackendError(f"HTTP {r.status_code}: {r.text[:300]}")
     d = r.json()
+
     if "choices" not in d:
-        raise BackendError(f"no choices in response: {str(d)[:300]}")
+        raise BackendError(
+            f"no choices in response: {str(d)[:300]}"
+        )
+
     usage = d.get("usage", {})
+    text = d["choices"][0]["message"]["content"] or ""
+
+    if case_id is None or turn is None:
+        raise BackendError(
+            "live replies must include case_id and turn for transcript recording"
+        )
+
+    _append_transcript(case_id, turn, text)
+
     return {
-        "text": d["choices"][0]["message"]["content"] or "",
+        "text": text,
         "tokens_in": usage.get("prompt_tokens", 0),
         "tokens_out": usage.get("completion_tokens", 0),
         "estimated": False,
