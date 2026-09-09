@@ -265,7 +265,7 @@ TRIGGER_EVIDENCE = {
 }
 
 
-def unsupported(record: dict, tools_called: List[str], *, at_gate: bool = False) -> List[str]:
+def unsupported(record: Any, tools_called: List[str], *, at_gate: bool = False) -> List[str]:
     """Name every claim in the record that the evidence trail does not support. Empty = accept.
 
     at_gate=True is the check run BEFORE issue_decision_letter executes, and it must skip the
@@ -273,6 +273,13 @@ def unsupported(record: dict, tools_called: List[str], *, at_gate: bool = False)
     for the write demands the write, every approval is refused, and the run burns to the cap.
     (It did. That is why this parameter exists.)
     """
+    if not isinstance(record, dict):
+        return [
+            f"the decision record must be one object, not a "
+            f"{type(record).__name__}. Pass the object directly as "
+            f"record={{...}}, not as a quoted string or a list."
+        ]
+
     called = set(tools_called)
     gaps: List[str] = []
     decision = record.get("decision")
@@ -304,11 +311,21 @@ def unsupported(record: dict, tools_called: List[str], *, at_gate: bool = False)
             gaps.append("an approval is an ACT: call issue_decision_letter before concluding")
 
     elif decision == "request_document":
-        missing = record.get("missing") or {}
-        if not missing.get("item"):
-            gaps.append("a request must name the exact item missing; 'more information' is not one")
-        if "preauth" in str(missing.get("item", "")).lower() and "get_preauthorisation" not in called:
-            gaps.append("you are asking for a pre-authorisation you never looked for")
+        missing = record.get("missing")
+        if missing is None:
+            gaps.append(
+                "a request must name the exact item missing; 'more information' is not one")
+        elif not isinstance(missing, dict):
+            gaps.append(
+                "request_document missing must be one object with item, for_line and "
+                "must_be_valid_on; it must not be a list")
+        else:
+            if not missing.get("item"):
+                gaps.append(
+                    "a request must name the exact item missing; 'more information' is not one")
+            if ("preauth" in str(missing.get("item", "")).lower()
+                    and "get_preauthorisation" not in called):
+                gaps.append("you are asking for a pre-authorisation you never looked for")
 
     elif decision is None:
         gaps.append("no decision in the record")
