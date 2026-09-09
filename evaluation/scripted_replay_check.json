@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "backend": "scripted",
+  "network_forbidden": true,
+  "api_key_removed_from_process": true,
+  "expected_cases_per_run": 42,
+  "run_1_completed": 42,
+  "run_2_completed": 42,
+  "run_1_failures": {},
+  "run_2_failures": {},
+  "identical_excluding_runtime_ts": true,
+  "raw_records_identical": true,
+  "differing_case_ids_excluding_runtime_ts": [],
+  "original_results_unchanged": true
+}
