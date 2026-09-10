@@ -354,6 +354,27 @@ def issue_decision_letter(record: DecisionRecord) -> str:
 
 # The callable table the loop dispatches through. Names must match contracts.TOOL_NAMES,
 # because they are also the strings that appear in the record's evidence trail.
+# ─────────────────────────────────────────────────────────────────────────────
+# D2(b) · the v1 descriptors — SUN YUCONG owns the CONTENT of this dict.
+#
+# The v2 descriptor of a tool is its docstring above: loop.tool_manual() builds the manual
+# straight out of the signatures and docstrings, so the shipped interface and the prompt can
+# never drift apart. That leaves nowhere to put a SECOND version, which is why this exists.
+#
+# Map a tool name to the descriptor text it had BEFORE the rewrite. tool_manual("v1")
+# substitutes these; everything absent falls through to the docstring. The brief asks for one
+# tool rewritten, not seven — one honest entry here is the deliverable.
+#
+#     DESCRIPTORS_V1 = {
+#         "check_coverage": """Checks coverage. Returns coverage info.""",
+#     }
+#
+# Leave it empty until the real v1 text is written. tool_manual() refuses to build a v1
+# manual from an empty dict rather than silently handing back v2 — an unnoticed fallback
+# would make v1 and v2 identical and turn D2(b) into a measurement of nothing.
+DESCRIPTORS_V1: dict = {}
+
+
 TOOLS = {
     "get_claim": get_claim,
     "lookup_policy": lookup_policy,

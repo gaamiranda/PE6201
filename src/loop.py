@@ -36,7 +36,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import backends
 from contracts import DEPENDS_ON, GATED_TOOLS, Autonomy, DecisionRecord, Trigger, Usage
-from tools import TOOLS, ToolError
+from tools import DESCRIPTORS_V1, TOOLS, ToolError
 
 MAX_OBSERVATION_CHARS = 1200
 
@@ -207,12 +207,37 @@ def _fingerprint(name: str, args: tuple, kwargs: dict) -> str:
 # than of two separately edited prompts.
 # ─────────────────────────────────────────────────────────────────────────────
 
-def tool_manual() -> str:
+def tool_manual(prompt_version: str = "v2") -> str:
+    """Build the tool manual the model sees, for one descriptor version.
+
+    v2 is the shipped interface: signature plus docstring, read live off the functions, so the
+    manual cannot drift from the code. v1 substitutes tools.DESCRIPTORS_V1 where an entry
+    exists and falls through to the docstring where it does not — because D2(b) rewrites ONE
+    tool and holds the rest fixed, which is what makes the difference attributable.
+
+    Asking for v1 with no v1 descriptors written is an error, not a fallback. It used to be a
+    silent one: prompt_version was recorded on the record but never reached this function, so
+    v1 and v2 produced byte-identical prompts and byte-identical results. Anyone running the
+    D2(b) comparison would have measured their own wiring and reported "the rewrite changed
+    nothing" in good faith.
+    """
     import inspect
+    if prompt_version not in ("v1", "v2"):
+        raise ValueError(f"prompt_version must be 'v1' or 'v2', not {prompt_version!r}")
+    if prompt_version == "v1" and not DESCRIPTORS_V1:
+        raise ValueError(
+            "prompt_version='v1' but tools.DESCRIPTORS_V1 is empty, so a v1 manual would be "
+            "identical to v2 and the D2(b) comparison would measure nothing. Write the v1 "
+            "descriptor of the one tool being rewritten first — SUN YUCONG owns it."
+        )
+
     blocks = []
     for name, fn in TOOLS.items():
         sig = str(inspect.signature(fn))
-        doc = inspect.getdoc(fn) or ""
+        if prompt_version == "v1" and name in DESCRIPTORS_V1:
+            doc = DESCRIPTORS_V1[name]
+        else:
+            doc = inspect.getdoc(fn) or ""
         doc = "\n".join(l for l in doc.splitlines() if not l.strip().startswith("#"))
         blocks.append(f"{name}{sig}\n{doc.strip()}")
     return "\n\n".join(blocks)
@@ -385,7 +410,7 @@ def run_case(case_id: str, *, prompt_version: str = "v2",
     g = guards or Guards()
     messages = [
         {"role": "system", "content": SYSTEM.format(
-            manual=tool_manual(),
+            manual=tool_manual(prompt_version),
             triggers=", ".join(Trigger.__args__))},
         {"role": "user", "content": f"Decide claim {case_id}. Begin."},
     ]
