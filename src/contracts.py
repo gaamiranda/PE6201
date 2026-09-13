@@ -108,6 +108,13 @@ class DecisionRecord(TypedDict, total=False):
     escalate_to: str             # "human claims assessor"
     trigger: Trigger             # exactly one
 
+    # set ONLY when the evidence validator objected and the loop ran out of rejections and
+    # recorded the record anyway. Absent on a clean record. A harness should treat a present
+    # validator_overridden as a failure even where the decision happens to match the key:
+    # the loop is telling you the record was not supported by what the agent actually did.
+    validator_overridden: bool
+    validator_gaps: List[str]
+
     # always
     evidence: List[str]          # ["get_claim", "lookup_policy", "check_coverage x3", ...]
     autonomy: Autonomy

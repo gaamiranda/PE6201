@@ -477,6 +477,20 @@ def run_case(case_id: str, *, prompt_version: str = "v2",
                                  "Observation: that record is not supported by what you did.\n"
                                  + "\n".join(f"- {g}" for g in gaps)})
                 continue
+
+            # Out of rejections. The record gets written — losing the run entirely would be
+            # worse — but it is written WITH the objection attached.
+            #
+            # This used to fall straight through to break, and the surviving record carried no
+            # sign the validator had ever complained. CLM-8910 is what that costs: the model
+            # put the trigger in escalate_to instead of trigger, the validator said so three
+            # times, the loop gave up, and the log showed a clean escalation. A guard that
+            # gives up quietly is worse than no guard, because no guard at least does not imply
+            # the record was checked. Every other guard here announces itself through
+            # cap_fired; this one now does the same.
+            if gaps:
+                final["validator_overridden"] = True
+                final["validator_gaps"] = gaps
             trace.append(Turn(index=model_calls, thought=thought))
             break
         if not calls:
