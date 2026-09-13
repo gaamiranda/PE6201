@@ -14,6 +14,33 @@ against it now; the loop fills in behind you.
 > **Updated against the change notice of 1 September 2026** — trial arithmetic, grader names, and
 > the rule that every member runs a live model.
 
+## Running it
+
+```bash
+python -m unittest discover -s harness -p 'test_*.py'   # 26 tests, offline
+python -m harness.run_eval                              # scripted, free, no key
+```
+
+**A bare run reports `INCOMPLETE`, and that is correct.** It re-executes the cases, and fresh
+trials have no judgement verdicts attached yet, so the combined score cannot be computed. The
+harness refuses to print a number it cannot back up rather than quietly reporting the
+code-only rate as if it were the final one. To reproduce the committed figure, hand it the
+saved judgements:
+
+```bash
+python -m harness.run_eval \
+  --input-results results/evaluations/eval-scripted-v2-final.trials.jsonl \
+  --judgements   results/evaluations/eval-scripted-v2-final.judgements-reviewed.jsonl
+```
+
+That prints **49/76 (64.47%)** combined, against **38/42 (90.48%)** on decisions alone. The
+distance between those two numbers is the finding, not noise: the agent reaches the right
+outcome and then writes a reason that names none of the facts the outcome rests on.
+
+For a live battery, add `--backend openrouter` and the model. Scripted is the default, so it
+is entirely possible to follow every instruction, spend nothing, and hand in replayed output
+that looks like a real result.
+
 ## Requirements it must satisfy
 
 - **`BACKEND = "scripted"` is the default.** Deterministic canned responses, no network, no key, so

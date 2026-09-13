@@ -370,6 +370,26 @@ def grade_record(
             ),
         }
 
+    # The loop's evidence validator rejected this record and was overruled when it ran out of
+    # rejections (src/loop.py, MAX_REJECTIONS). The decision can still match the answer key —
+    # CLM-8910 does — but the loop is telling us the record is not supported by what the agent
+    # actually did, and a grader that ignores that reports a pass the system itself disowns.
+    # Checked after decision_ok so that field stays truthful; only the check outcome flips.
+    if record.get("validator_overridden"):
+        gaps = record.get("validator_gaps") or []
+        return {
+            "decision_ok": True,
+            "trigger_ok": None,
+            "missing_item_ok": None,
+            "missing_line_ok": None,
+            "code_check_passed": False,
+            "passed": False,
+            "grading_reason": (
+                "decision matches but the loop's evidence validator rejected this record "
+                "and was overruled: " + "; ".join(str(g) for g in gaps)
+            ),
+        }
+
     if expected_decision == "escalate":
         expected_trigger = expected.get("trigger")
         actual_trigger = record.get("trigger")

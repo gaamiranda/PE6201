@@ -32,6 +32,34 @@ class GraderTests(unittest.TestCase):
         self.assertFalse(grade["passed"])
         self.assertIn("decision mismatch", grade["grading_reason"])
 
+    def test_validator_overridden_fails_even_when_the_decision_matches(self) -> None:
+        """A record the loop's evidence validator disowned cannot count as a pass.
+
+        This is the CLM-8910 shape: the decision matches the answer key, so a grader that
+        looks only at `decision` scores it green, while the loop has already recorded that
+        nothing the agent did supports the record.
+        """
+        grade = run_eval.grade_record(
+            expected("escalate", trigger="policy_lapsed"),
+            {
+                "decision": "escalate",
+                "trigger": "policy_lapsed",
+                "validator_overridden": True,
+                "validator_gaps": ["an escalation must name exactly one trigger"],
+            },
+        )
+        self.assertFalse(grade["passed"])
+        self.assertFalse(grade["code_check_passed"])
+        self.assertTrue(grade["decision_ok"])          # stays truthful
+        self.assertIn("validator", grade["grading_reason"])
+
+    def test_clean_record_is_unaffected_by_the_validator_check(self) -> None:
+        grade = run_eval.grade_record(
+            expected("escalate", trigger="policy_lapsed"),
+            {"decision": "escalate", "trigger": "policy_lapsed"},
+        )
+        self.assertTrue(grade["passed"])
+
     def test_correct_escalation_trigger_passes(self) -> None:
         grade = run_eval.grade_record(
             expected("escalate", trigger="duplicate_claim"),
