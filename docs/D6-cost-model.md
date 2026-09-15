@@ -18,7 +18,7 @@
 | Measured pass rate `P` | | D4 |
 | Median turns `T` | | D7 |
 | Tokens in / out per run | | D5 |
-| Runs per model | 56 (40 cases: 32 ordinary × 1 trial + 8 negative × 3) | D4 |
+| Runs per model | **76** (42 cases: 25 ordinary × 1 trial + 17 negative × 3) | D4 — the set closed at 42/17, not the 40/8 the brief prices. State 76 beside every rate. |
 
 ## The three layers
 

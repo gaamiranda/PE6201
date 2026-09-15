@@ -116,7 +116,7 @@ The induced repeat, which is where the two arms separate at all:
 
 **The pass rate did not fall — and that is the finding, not a footnote.** Every aggregate number
 in the first table is identical across the two arms: same turns, same tool calls, same tokens,
-same cost, same 38/42. A guard that stops a runaway normally also truncates a legitimate long run,
+same cost, same 40/42. A guard that stops a runaway normally also truncates a legitimate long run,
 so the usual thing to show here is that the pass rate survived the guard. This guard does not cost
 even that. The fixed arm is US$0.00002 *more* expensive on the induced case, because answering the
 repeat with the earlier observation is slightly more text than executing it again.
@@ -190,7 +190,9 @@ what the tool layer does underneath them.
 
 That was verified rather than assumed: making `check_coverage` return a deliberately wrong object
 for every line — `{"code": "SABOTAGE", "coverage": {"status": "covered"}, "needed_next": []}` —
-leaves the harness output **byte-identical** at 52/76 code, 38/42 decision-only, 0 caps fired.
+leaves the harness output **byte-identical** at 63/76 code, 40/42 decision-only, 0 caps fired.
+(Re-verified after the tool-manual, parser and prompt fixes and after all 42 transcripts were
+re-recorded: the numbers moved, and the sabotage still changes nothing.)
 
 Two consequences, and both belong in the report:
 

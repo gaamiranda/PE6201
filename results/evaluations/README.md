@@ -1,3 +1,24 @@
+> ## ⚠️ The `eval-*-final.*` files are STALE as of 2026-09-15, and must not be quoted
+>
+> They were produced on 2026-09-12/13 and report **38/42 (90.48%) decisions and 49/76 (64.47%)
+> combined**. The current code reports **40/42 (95.24%) and 63/76 (82.89%)**.
+>
+> Three prompt and parser defects were fixed on 15 September and all 42 transcripts were
+> re-recorded, so every record in `eval-scripted-v2-final.trials.jsonl` is out of date.
+>
+> **The trials and summary can simply be regenerated. The judgements cannot.**
+> `eval-scripted-v2-final.judgements-reviewed.jsonl` holds 12 human judgement calls by NIU TONG.
+> The same 12 `(case_id, trial)` pairs are still queued and the `trial_id`s are unchanged, so the
+> file still *applies* — which is the hazard: regenerating the trials and leaving this file in place
+> would silently re-apply judgements to records that no longer say what was judged. **9 of the 12
+> records changed their `reason` text.** `CLM-8925` is the clearest: the reason went from a wrong
+> claim about pre-authorisation to the correct "exceeds the remaining annual limit", and all 12 of
+> the standing judgements are failures.
+>
+> Re-review is NIU TONG's call, not a mechanical regeneration. Until then this directory has no
+> authoritative combined pass rate, and `python -m harness.run_eval` correctly reports
+> **INCOMPLETE**.
+
 # results/evaluations — raw harness output
 
 **Owners:** JIN CHENG · NIU TONG. Written by `harness/run_eval.py`, never by hand.

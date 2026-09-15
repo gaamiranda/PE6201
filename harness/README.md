@@ -33,7 +33,7 @@ python -m harness.run_eval \
   --judgements   results/evaluations/eval-scripted-v2-final.judgements-reviewed.jsonl
 ```
 
-That prints **49/76 (64.47%)** combined, against **38/42 (90.48%)** on decisions alone. The
+That prints **63/76 (82.89%)** combined, against **40/42 (95.24%)** on decisions alone. The
 distance between those two numbers is the finding, not noise: the agent reaches the right
 outcome and then writes a reason that names none of the facts the outcome rests on.
 
