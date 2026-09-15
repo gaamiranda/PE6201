@@ -17,6 +17,15 @@ def expected(decision: str, **extra: object) -> dict[str, object]:
     return {"case_id": "CLM-TEST", "expected_decision": decision, **extra}
 
 
+
+# The summary is committed evidence; these four fields must never carry an absolute path.
+PATH_KEYS = (
+    "raw_results_path",
+    "summary_results_path",
+    "judgement_queue_path",
+    "judgements_applied_audit_path",
+)
+
 class GraderTests(unittest.TestCase):
     def test_matching_decision_passes(self) -> None:
         grade = run_eval.grade_record(
@@ -275,7 +284,29 @@ class DataAndSchedulerTests(unittest.TestCase):
             self.assertEqual(len(raw_path.read_text(encoding="utf-8").splitlines()), 1)
             saved = json.loads(summary_path.read_text(encoding="utf-8"))
             self.assertEqual(saved["total_trial_count"], 1)
-            self.assertEqual(saved["raw_results_path"], str(raw_path))
+            # The summary is committed evidence, so the paths it records must never be absolute:
+            # an absolute path bakes in whoever ran it and makes two identical runs differ.
+            # This output_dir is a temp directory outside the repository, so the contract is the
+            # bare filename; see test_summary_paths_are_repo_relative for the in-repo case.
+            for key in PATH_KEYS:
+                with self.subTest(location="outside-repo", key=key):
+                    self.assertFalse(Path(saved[key]).is_absolute())
+            self.assertEqual(saved["raw_results_path"], raw_path.name)
+
+        # Same summary written INSIDE the repository: the contract there is a repo-relative
+        # path, so the committed evidence names the file without naming the machine.
+        output_root = run_eval.ROOT / "results" / "evaluations"
+        with tempfile.TemporaryDirectory(dir=output_root) as directory:
+            _, summary_path, _, _ = run_eval.write_results(
+                [row], summary, output_dir=Path(directory)
+            )
+            saved = json.loads(summary_path.read_text(encoding="utf-8"))
+            for key in PATH_KEYS:
+                with self.subTest(location="in-repo", key=key):
+                    value = saved[key]
+                    self.assertFalse(Path(value).is_absolute())
+                    self.assertTrue(value.startswith("results/evaluations/"))
+                    self.assertNotIn(str(run_eval.ROOT), value)
 
     def test_runtime_error_is_recorded_and_next_isolated_trial_still_runs(self) -> None:
         import tools

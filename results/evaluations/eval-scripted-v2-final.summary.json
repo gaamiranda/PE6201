@@ -72,8 +72,8 @@
   "final_negative_trials_passed": 36,
   "final_passed_trial_count": 57,
   "finished_at_utc": "2026-09-15T09:25:08.086008Z",
-  "judgement_queue_path": "/Users/tong/Desktop/NTUer/PE6201-EMERGING AI TECHNOLOGIES/A2 assignment/PE6201-final-0915/results/evaluations/eval-scripted-v2-final.judgement-queue.jsonl",
-  "judgements_applied_audit_path": "/Users/tong/Desktop/NTUer/PE6201-EMERGING AI TECHNOLOGIES/A2 assignment/PE6201-final-0915/results/evaluations/eval-scripted-v2-final.judgements-applied.jsonl",
+  "judgement_queue_path": "results/evaluations/eval-scripted-v2-final.judgement-queue.jsonl",
+  "judgements_applied_audit_path": "results/evaluations/eval-scripted-v2-final.judgements-applied.jsonl",
   "median_turns": 5.0,
   "missing_judgement_trial_count": 0,
   "missing_judgement_trial_ids": [],
@@ -125,7 +125,7 @@
     "provisional_code_only_and_decision_only": "all scheduled trials",
     "provisional_negative_code_only": "negative trials (three per negative case)"
   },
-  "raw_results_path": "/Users/tong/Desktop/NTUer/PE6201-EMERGING AI TECHNOLOGIES/A2 assignment/PE6201-final-0915/results/evaluations/eval-scripted-v2-final.trials.jsonl",
+  "raw_results_path": "results/evaluations/eval-scripted-v2-final.trials.jsonl",
   "request_document_case_count": 7,
   "required_judgement_case_count": 6,
   "required_judgement_case_ids": [
@@ -140,7 +140,7 @@
   "run_id": "final2",
   "runtime_error_count": 0,
   "started_at_utc": "2026-09-15T09:25:08.021893Z",
-  "summary_results_path": "/Users/tong/Desktop/NTUer/PE6201-EMERGING AI TECHNOLOGIES/A2 assignment/PE6201-final-0915/results/evaluations/eval-scripted-v2-final.summary.json",
+  "summary_results_path": "results/evaluations/eval-scripted-v2-final.summary.json",
   "token_usage_source": "locally_estimated",
   "tokens_estimated": true,
   "total_input_tokens": 785906,

@@ -97,6 +97,9 @@ Append as work lands. One line per meaningful contribution; the commit is the ev
 | 2026-09-15 | Goncalo Miranda | `d5ac010` | **D7 failure 1** — the working agent minus action de-duplication: the same claim written four times, invisible in every aggregate metric |
 | 2026-09-15 | Goncalo Miranda | `2770118` | **D2(c)** — sequential vs parallel measured on identical calls; the dependency rule permits 17.6% fewer turns and the model captures 2.7% of it |
 | 2026-09-15 | Goncalo Miranda | `4d6015e`, `7026c17` | Three prompt/parser defects found and fixed: the tool manual taught a syntax the parser rejected (12.7% of replies lost), the prompt asked for JSON while the parser demanded Python, and two of the three outcomes had no tool without saying so. All 42 transcripts re-recorded; decisions 90.5% → **95.2%**, projected cost down 25% |
+| 2026-09-15 | SUN YUCONG | `07c89c7`, `c9d5088` | **D7 failure 2** — the v2 `check_coverage` shape, measured in three arms so the return shape is separated from the descriptor that shipped with it; the old shape's contradictory observation found on `CLM-9065` |
+| 2026-09-15 | NIU TONG | `7d3ddaa` | **D5(a)** — the judgement rule settled and written down: a `must_record` fact counts anywhere in the structured record, not only in `reason`. Harness and queue changed to match, 2 tests added, all 12 judgements re-reviewed against the re-recorded transcripts |
+| 2026-09-15 | Goncalo Miranda | | Summary paths made repo-relative — the regenerated evidence file had baked in an absolute local directory, which leaks a personal path and makes two identical runs differ byte-for-byte |
 
 **Evaluation set closed at 42 cases** — 15 shipped by the instructor plus 27 written by the team.
 Every case was labelled from the Appendix A routing table before any agent run, and every label was

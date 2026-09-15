@@ -1155,10 +1155,22 @@ def write_results(
             }
             file.write(json.dumps(audit_row, ensure_ascii=False, sort_keys=True) + "\n")
 
-    summary["raw_results_path"] = str(raw_path.resolve())
-    summary["summary_results_path"] = str(summary_path.resolve())
-    summary["judgement_queue_path"] = str(queue_path.resolve())
-    summary["judgements_applied_audit_path"] = str(audit_path.resolve())
+    # RELATIVE TO THE REPOSITORY ROOT, never absolute. The summary is committed evidence, so an
+    # absolute path bakes whichever machine happened to run it into the file: it leaks a personal
+    # directory into a public repo, and it makes the canonical file differ byte-for-byte between
+    # two runs that computed identical results. A path outside the repo falls back to the bare
+    # filename rather than escaping upward with ../../..
+    def _portable(path: Path) -> str:
+        resolved = path.resolve()
+        try:
+            return resolved.relative_to(ROOT).as_posix()
+        except ValueError:
+            return resolved.name
+
+    summary["raw_results_path"] = _portable(raw_path)
+    summary["summary_results_path"] = _portable(summary_path)
+    summary["judgement_queue_path"] = _portable(queue_path)
+    summary["judgements_applied_audit_path"] = _portable(audit_path)
     summary_path.write_text(
         json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
