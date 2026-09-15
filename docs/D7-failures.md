@@ -131,9 +131,7 @@ row 6 exists as a standing test.
 
 ---
 
-## Failure 2 · A different layer
-
-Must sit in the **tool interface** or the **prompt** — not loop control again.
+## Failure 2 · Tool interface — required, and a different layer
 
 **The deletion:** in `src/tools.py`, revert `check_coverage` from the v2 return shape back to
 the old separate branch fields:
@@ -149,24 +147,132 @@ behaviour:
 ```
 {"code": code,
  "coverage": {"status": "covered" | "not_covered", "exclusion": str},
- "needed_next": [...]}
+ "needed_next": [{"kind": "preauth"} and/or {"kind": "document", "item": str}]}
 ```
 
-**Symptom:** the old observation could say one line was excluded while also returning
-`requires_preauth` or `document_required` for that same line. The model then had two live branch
-signals for a line already refused, so it could chase paperwork for an excluded service and turn a
-partial approval into a document request. The scripted backend replays fixed replies, so it cannot
-measure the live pass-rate effect here; the deterministic evidence is the interface/guardrail case:
-an excluded line now returns `needed_next: []`.
+Reproduce with `python3 evaluation/reproduce_failure_2.py` — scripted backend, no API key,
+US$0.00, deterministic. Output is written to `evaluation/failure_2_run.json`.
 
-**The fix, and its layer:** tool interface. The fix belongs in the returned object, not in a prompt
-sentence, because the unsafe branch should be unrepresentable in the observation the model sees.
-The v2 descriptor explains the shape, but the safety property is carried by the data shape.
+**The symptom, in one observation.** Under the old shape a line could leave `check_coverage`
+refused *and* carrying two live demands for paperwork about the line just refused. `CLM-9065`
+is that observation, and it is real, not constructed:
 
-| | Tokens | Cost | Pass rate | Guardrail cases |
+```json
+{"code": "62480", "covered": false,
+ "exclusion": "EX-27 spinal fusion not covered under this product",
+ "requires_preauth": true, "document_required": "discharge_summary"}
+```
+
+The model is now holding three signals that do not agree. Two of them are actionable — chase a
+pre-authorisation, ask for a discharge summary — and the one that should have closed the line is
+just a string sitting beside them. The failure mode that follows is a partial approval turning
+into a document request, or a run spending turns chasing paperwork for a service the policy will
+never pay. Under the shipped shape the same line returns:
+
+```json
+{"code": "62480",
+ "coverage": {"status": "not_covered", "exclusion": "EX-27 spinal fusion not covered under this product"},
+ "needed_next": []}
+```
+
+There is nowhere left to put the contradiction.
+
+### 1 · The measurement that needs no model at all
+
+Every line of every evaluation case, and then every `policy × procedure` pair the tool could ever
+be asked about, put through both shapes and the contradictory results counted:
+
+| | Observations that refuse a line **and** demand paperwork for it |
+|---|---|
+| Old shape, across the 42 evaluation cases | **1** of 67 claim lines (`CLM-9065`) |
+| Old shape, across every `policy × procedure` pair | **1** of 168 pairs (0.6%) |
+| Shipped shape, either population | **0 — by construction** |
+
+The zero is the part worth being precise about. It is not a measured zero that might be one
+tomorrow; the early return for an excluded line hands back `needed_next: []` before either flag
+can be computed, so no input to this function produces the contradictory object. That is the
+difference between a rule that is obeyed and a state that cannot be written down.
+
+**And one is a small number — we are reporting it rather than rounding it up.** Our fixture is 168
+pairs; a live book of business is tens of thousands, and the rate is a property of how often an
+excluded procedure also happens to require pre-authorisation or a document, which is not a number
+we control. The honest claim is not "this defect was frequent". It is that the defect was
+*representable*, it was reachable from our own data, and the one case that reaches it —
+`CLM-9065`, a valid pre-authorisation sitting on an excluded line — is one a member of this team
+wrote from the routing table before any of this was measured.
+
+### 2 · The safer shape is also the cheaper one
+
+`check_coverage` is called once per claim line, so every character in its return is paid `n` times
+per run, and again on every subsequent turn that carries the history:
+
+| | Observations | Characters | Estimated tokens | Mean per observation |
 |---|---|---|---|---|
-| Broken | 833,198 input + 73,434 output estimated tokens in the committed scripted baseline | US$0.112697 projected for the 76-trial schedule | 52/76 code, 38/42 decision-only cases; pass-rate comparison not attributable on scripted replay | 9/10, and **not the same 9**: row 2 (`CLM-8952`) fails under both shapes, and the old shape additionally lets an excluded line carry `requires_preauth`/`document_required` — a contradiction the checklist has no row for, because after the rewrite it is unrepresentable |
-| Fixed | 999,474 input + 73,434 output estimated tokens after the v2 descriptor/shape | US$0.129324 projected for the 76-trial schedule | Unchanged on scripted replay, and *necessarily* so — see the note below; the live comparison belongs to the battery | 9/10: excluded lines return `needed_next: []`, so the contradictory observation is gone. Row 2 still fails, for an unrelated reason the shape change was never going to fix |
+| Old shape | 67 | 7,656 | 1,877 | 114.3 chars |
+| Shipped shape | 67 | 6,184 | 1,507 | 92.3 chars |
+
+**19.2% smaller.** Five flat fields must all be present on every call, including the two that are
+`null` most of the time; `needed_next` is an empty list when there is nothing to do. This is the
+ordinary case of D2(a)'s size bound, and it is worth noting that safety and size pointed the same
+way here. They do not always, and if they had disagreed the shape would still have been the right
+call.
+
+### 3 · Before and after — the whole evaluation set through the harness
+
+Three arms, because the rewrite changed two things at once and they have to be separated. Arm two
+holds the v2 descriptor fixed and swaps **only** the returned object, so its difference is
+attributable to the shape. Arm three reverts the descriptor as well — the repository exactly as it
+stood at `91da36f`.
+
+| Arm | Code check | Decision-only | Input tokens | Output tokens | Projected, 76-trial schedule | Guardrail |
+|---|---|---|---|---|---|---|
+| **Shipped** (v2 shape, v2 descriptor) | 63/76 | 40/42 | 785,906 | 46,280 | US$0.097096 | 9/10 |
+| **Broken** (v1 shape, v2 descriptor) | 63/76 | 40/42 | 787,657 | 46,280 | US$0.097274 | 9/10 |
+| **Broken** (v1 shape, v1 descriptor — the repo at `91da36f`) | 63/76 | 40/42 | 656,441 | 46,280 | US$0.084157 | 9/10 |
+
+Three things to read off it, in order of how easy they are to misread.
+
+**The pass rates are identical, and that is the instrument, not the fix.** `transcripts.jsonl` is
+keyed on `(case_id, turn)` alone, so replay reproduces the same model replies no matter what the
+tool layer returns underneath them. No pass-rate number from the scripted backend can be attributed
+to this failure in *either* direction. Reporting "the fix cost us nothing on the pass rate" would be
+reporting a blindfold as a clean bill of health.
+
+**Arm three is cheaper, and not for a reason that flatters the old shape.** The tool manual is
+re-sent on every model call, and reverting the descriptor shrinks it from **540 to 262 estimated
+tokens**. Three arms let that be separated arithmetically rather than argued about:
+
+| Change | Input tokens across the 76-trial schedule |
+|---|---|
+| The return shape alone (arm two − shipped) | **+1,751** |
+| The descriptor alone (arm three − arm two) | **−131,216** |
+| Both together (arm three − shipped) | −129,465 |
+
+So arm three's 656,441 is almost entirely D2(b)'s descriptor, measured a second way from the other
+end — `265 → 540` on the manual, re-sent on every model call. Quoting arm three against the shipped
+column would be pricing the wrong change.
+
+**The shape's actual cost is +1,751 input tokens, +US$0.000178 across 76 trials.** The defect is
+not expensive. It was never going to be expensive; what it was, was silent.
+
+**The guardrail checklist is 9/10 under every arm, and it is the same 9.** Row 2 (`CLM-8952`,
+narrative text imitating a tool result) fails under both shapes, for an unrelated reason the shape
+change was never going to fix. No row moves — and there is no row for the contradictory
+observation, because after the rewrite there is nothing left to write a row against. That is the
+uncomfortable symmetry with failure 1: one failure is invisible to every aggregate metric, the
+other is invisible to the checklist built to catch failures. Both were found by looking at what the
+layer *could* emit, not at what the scores said.
+
+### 4 · The fix, and why it belongs in the tool interface
+
+The fix belongs in the returned object, not in a prompt sentence and not in a validator, because
+the unsafe branch should be **unrepresentable in the observation the model sees**. A prompt line —
+"ignore paperwork for excluded lines" — is paid on every turn of every run and can still be missed
+on any one of them. A validator that rejects the wrong record catches the mistake after the model
+has already taken the wrong branch and spent the turns. Changing the shape is paid once, at
+`bb5ce16`, and costs 22 characters *less* per observation thereafter.
+
+The v2 descriptor explains the shape. It is not what makes it safe.
 
 ---
 
@@ -188,19 +294,23 @@ The v2 descriptor explains the shape, but the safety property is carried by the 
 or which tool-return shape produced each reply, so on replay the model's replies are fixed no matter
 what the tool layer does underneath them.
 
-That was verified rather than assumed: making `check_coverage` return a deliberately wrong object
-for every line — `{"code": "SABOTAGE", "coverage": {"status": "covered"}, "needed_next": []}` —
-leaves the harness output **byte-identical** at 63/76 code, 40/42 decision-only, 0 caps fired.
-(Re-verified after the tool-manual, parser and prompt fixes and after all 42 transcripts were
-re-recorded: the numbers moved, and the sabotage still changes nothing.)
+That was verified rather than assumed, twice over. First by sabotage: making `check_coverage`
+return a deliberately wrong object for every line — `{"code": "SABOTAGE", "coverage": {"status":
+"covered"}, "needed_next": []}` — leaves the harness output **byte-identical** at 63/76 code, 40/42
+decision-only, 0 caps fired. Second by the three arms in §3 above, which are not sabotage but two
+genuine historical versions of the tool, and which also move no pass rate at all.
 
 Two consequences, and both belong in the report:
 
 1. **No pass-rate number from the scripted backend can be attributed to failure 2, in either
-   direction.** The "unchanged" pass rate in the table above is not evidence the fix is harmless;
-   it is evidence the instrument is blind to it. The deterministic evidence for this failure is the
-   interface property itself — an excluded line returns `needed_next: []` — plus the guardrail row,
-   not the pass rate.
-2. **The transcripts must be re-recorded before the battery**, because they were recorded against
-   the pre-rewrite descriptors and the pre-rewrite return shape. Until then the scripted backend is
-   replaying a conversation the current tool layer would never have produced.
+   direction.** The identical pass rates in §3 are not evidence the fix is harmless; they are
+   evidence the instrument is blind to it. The deterministic evidence for this failure is the
+   interface property itself — an excluded line returns `needed_next: []`, so the contradictory
+   observation has no representation — plus the token and contradiction counts, not the pass rate.
+   The live comparison, if anyone wants one, belongs to the battery.
+2. **The transcripts had to be re-recorded before the battery, and were.** The original recording
+   was made against the pre-rewrite descriptors and the pre-rewrite return shape, so until it was
+   redone the scripted backend was replaying a conversation the current tool layer would never have
+   produced. All 42 were re-recorded at `4d6015e` and again at `7026c17`, after the tool-manual,
+   parser and prompt fixes. `evaluation/check_scripted_replay.py` is the standing check that the
+   committed transcript still reproduces the committed numbers.

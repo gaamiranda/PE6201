@@ -128,17 +128,29 @@ State what each makes **impossible** — not what it discourages.
 
 One tool, v1 vs v2 of its descriptor and return shape.
 
-| | Tokens returned per call | Eval pass rate | Guardrail cases passed |
+| | Manual size, re-sent on every model call | Eval pass rate | Guardrail cases passed |
 |---|---|---|---|
-| v1 | Manual: 265 estimated tokens; check_coverage block: 40 estimated tokens | Not measured here; scripted replay is keyed only by case and turn, so v1/v2 would replay the same model replies. | Not measured here for the same reason. |
-| v2 | Manual: 540 estimated tokens; check_coverage block: 318 estimated tokens | Not measured here; token delta only. | Not measured here; token delta only. |
+| v1 | Whole manual 265 estimated tokens; `check_coverage` block **32** | Not measured here; scripted replay is keyed only by case and turn, so v1/v2 replay the same model replies. | Not measured here for the same reason. |
+| v2 | Whole manual 540 estimated tokens; `check_coverage` block **307** | Not measured here; token delta only. | Not measured here; token delta only. |
 
-**v1 descriptor in `tools.DESCRIPTORS_V1`:**
+Both block figures were re-measured after the signature de-annotation below, which took ~8 tokens
+out of every block in both manuals. What the `+275` costs across a whole schedule is measured in
+[`D7-failures.md` §Failure 2.3](D7-failures.md), where three arms separate the descriptor from the
+return shape that shipped alongside it: **the descriptor alone is +131,216 input tokens over the
+76-trial schedule**, the shape alone is −1,751, and the two together take the schedule from
+US$0.084157 to US$0.097096. A 275-token block, re-sent on every model call, is 15% of what the
+whole battery costs.
+
+**v1 descriptor in `tools.DESCRIPTORS_V1`, as `tool_manual("v1")` renders it:**
 
 ```
-check_coverage(policy_id: 'str', procedure_code: 'str') -> 'CoverageResult'
+check_coverage(policy_id, procedure_code)
 Checks whether a procedure is covered by a policy and says if anything else is needed.
 ```
+
+The signature line is rendered by `tool_manual`, not stored, so the de-annotation below applies to
+**both** versions. That is deliberate: v1 and v2 must differ in the descriptor prose and nothing
+else, or the comparison measures our rendering bug instead of SUN YUCONG's rewrite.
 
 **v2 descriptor in the `check_coverage` docstring:** six fields: name/signature, what, input,
 returns with a size bound, fails when, irreversible. `loop.tool_manual("v1")` and
