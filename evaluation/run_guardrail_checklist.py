@@ -62,8 +62,11 @@ def fake_backend(replies):
     def complete(messages, *, model=backends.MODEL, backend=None, case_id=None, turn=None):
         text = replies[min(state["i"], len(replies) - 1)]
         state["i"] += 1
-        joined = "".join(m["content"] for m in messages)
-        return {"text": text, "tokens_in": backends.estimate_tokens(joined),
+        # Counted per message, exactly as _scripted_complete does: estimate_tokens floors at
+        # len//4, so summing per message and joining first give different totals. Matching the
+        # real backend is what lets this driver be checked against an ordinary scripted run.
+        return {"text": text,
+                "tokens_in": sum(backends.estimate_tokens(m["content"]) for m in messages),
                 "tokens_out": backends.estimate_tokens(text), "estimated": True}
     return complete
 

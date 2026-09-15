@@ -199,9 +199,12 @@ The change notice is explicit that this is ours to decide: *"Where the parallel 
 your design judgement, and D2(c) marks the reasoning, not the number… A team that parallelised
 less than we did and explained why is on stronger ground than one that copied this page."*
 
-### The honest limits — where parallelising costs us
+### The honest limits — predicted, before measuring
 
-The brief asks us to find these. Two, both measurable on the shipped set:
+The brief asks us to find these. We wrote these two down **before** running the measurement, and
+kept them here unedited so the prediction can be compared with the result — see *The two honest
+limits* below, where one of them turns out to be worth 45 tokens rather than the cost regression
+we expected:
 
 1. **Early exits pay for work they never use.** `CLM-8910` (lapsed policy) and `CLM-8925` (over the
    annual limit) both escalate the moment `lookup_policy` returns — the answer key's note on
@@ -215,16 +218,119 @@ The brief asks us to find these. Two, both measurable on the shipped set:
 
 ### The measurement
 
-Same evaluation set, sequential vs parallel.
+Reproduce with `python3 evaluation/measure_d2c.py` — scripted backend, no API key, US$0.00,
+deterministic. Output in `evaluation/d2c_run.json`.
 
-| | Turns (median) | Input tokens | Cost | Pass rate |
-|---|---|---|---|---|
-| Sequential | | | | |
-| Parallel | | | | |
+**How it was measured, because the obvious way does not work.** `Guards(parallel=False)` takes the
+first call of a reply and discards the rest (`batch = calls if g.parallel else calls[:1]`).
+Replaying the committed transcript that way runs off the end of the recording — the reply for turn 7
+assumes the calls dropped from turn 3 already happened — and the run dies with
+`BackendError: no recorded response`. That crash is D2(c)'s thesis arriving as an exception:
+sequential execution needs more round trips than parallel, and a recording made in parallel does not
+contain them.
 
-**Correctness did not move:** [same pass rate, or explain the difference].
+So all three arms below replay the **same tool calls, in the same order, from the same recording**,
+and differ only in how many calls may share one model round trip. Every observation is real, the
+tools genuinely execute, and the message history is rebuilt and re-sent exactly as the loop sends
+it. Every synthesised reply carries one fixed `Thought:` string — the control, because the model's
+own thoughts vary in length, land in the history, and would otherwise leak prose length into a
+measurement of grouping. The driver is checked against an ordinary scripted run before anything
+else runs: replaying the recording verbatim must reproduce 615,698 input tokens and 38/42, and it
+does.
+
+| | Turns (median) | Turns (total) | Input tokens | Output tokens | Cost | Pass rate |
+|---|---|---|---|---|---|---|
+| **Sequential** — one call per turn | 6 | 250 | 430,669 | 17,978 | US$0.07538 | **38/42** |
+| **As recorded** — the grouping the model chose | 6 | 233 | 403,961 | 17,869 | US$0.07131 | **38/42** |
+| **By rule** — the largest batches `DEPENDS_ON` permits | **5** | **208** | **367,579** | 17,703 | **US$0.06575** | **38/42** |
+
+| vs sequential | Turns | Input tokens | Cost |
+|---|---|---|---|
+| As recorded | −6.8% | −6.2% | −5.4% |
+| By rule | −16.8% | −14.6% | −12.8% |
+
+**Correctness did not move: 38/42 in all three arms, and not one case decided differently** —
+neither between sequential and as-recorded, nor between as-recorded and by-rule. That is the result
+that matters. Parallelism is a scheduling choice, and a scheduling choice that changed an answer
+would be a bug.
+
+Note that the saving is almost entirely on the **input** side: output tokens barely move
+(17,978 → 17,703), because the same Action text is emitted either way, merely distributed over
+fewer replies. What parallelising buys is re-sending the system prompt and the accumulated history
+fewer times. That is also why the saving is bounded by how long the prompt is, not by how many
+tools exist.
+
+### The gap between "as recorded" and "by rule" is the real finding
+
+Our loop has supported multi-call turns from the start. **The model barely uses them.** Across the
+whole recording:
+
+| Calls in one action-turn | Turns | Share |
+|---|---|---|
+| 1 | 227 | **97.0%** |
+| 2 | 4 | 1.7% |
+| 3 | 2 | 0.9% |
+| 10 | 1 | 0.4% |
+
+**Only 5 of 42 cases ever used a multi-call turn.** And the group this document predicted —
+`lookup_policy ‖ get_hospital_status ‖ check_claim_history` on turn 2 — **never occurs once**. What
+the model actually grouped was:
+
+```
+3 x  check_coverage | get_preauthorisation
+1 x  check_claim_history | check_coverage | get_preauthorisation
+1 x  check_coverage | get_hospital_status | get_preauthorisation
+1 x  check_coverage | issue_decision_letter
+1 x  ten calls at once
+```
+
+Every one of those pairs `check_coverage` with `get_preauthorisation`, which `DEPENDS_ON` says is
+the one grouping that is *not* allowed: which line needs a pre-authorisation is unknown until
+coverage answers. The model is not parallelising, it is **speculating** — issuing the pre-auth
+lookup before knowing whether it is needed. It gets away with it because the arguments
+(`member_id`, `procedure_code`, `date_of_service`) all come from the claim row, so the call is
+*expressible* even though it is logically premature. The dependency is a reasoning dependency, not
+a data dependency, and a signature cannot enforce it.
+
+So the honest reading of the three-arm table: **of the 16.8% of turns the dependency rule makes
+available, the model captured 6.8% and left 10 points on the table.** That is a prompt and model
+finding, not a loop limitation — and it is a concrete thing for the D5(b) battery to look for,
+because "does this model use multi-call turns" is exactly the kind of divergence six models should
+be expected to differ on.
 
 ### The two honest limits
 
-- Where a parallel call *raised* cost because it turned out to be unnecessary: [...]
-- The decision point parallelising removed: [...]
+**1 · Where a parallel call raises cost, and why it barely does.** The prediction above was that
+`CLM-8910` (lapsed policy) and `CLM-8925` (over the annual limit) would be cost regressions: both
+escalate the moment `lookup_policy` returns, so a speculative turn-2 group has already paid for
+`get_hospital_status` and `check_claim_history`.
+
+Measured, the regression is **45 input tokens** on each — 17 for the hospital status, 28 for the
+claim history. On `CLM-8910` that is 0.5% of the run. It did not appear in the table at all
+(`by rule` raised input tokens on **zero** of 42 cases) for a reason worth stating plainly: the
+by-rule arm regroups calls the model actually made, and on those two cases the model exited before
+making them. A genuinely parallel-first agent would pay the 45 tokens; ours never got the chance.
+
+That the penalty is 45 tokens rather than 450 is not luck. It is D2(a)'s bounded returns — *"4
+fields, ~30 tokens, never a list"* — cashing out. **Speculative parallelism is cheap exactly when
+tool returns are bounded**, which is the same design decision, measured from the other side.
+
+**2 · It removes a decision point.** Firing the three turn-2 lookups together means the model never
+sees `status: lapsed` before deciding whether to ask about the hospital. Sequentially it would have
+skipped both calls. This cannot be priced in tokens — the cost is that a cheap early exit stops
+being available, and the 45 tokens above are what that costs when it happens.
+
+**Why our saving is 14.6% where the brief's example shows 54%.** The brief's figure comes from a
+claim whose `check_coverage` calls fan out across several lines — that fan-out is where the saving
+lives. On our set **27 of 42 claims have a single line**, 6 have two, 8 have three and 1 has four.
+A one-line claim has nothing to fan out, so two thirds of our set cannot benefit from the move that
+produces the brief's number. We are reporting the figure our data supports rather than the one the
+example shows.
+
+### What this measurement cannot tell us
+
+It measures what the **identical work** costs under three scheduling strategies. It does not measure
+whether a live model *instructed* to work sequentially would choose the same calls — it might take
+a different path, or fewer. That needs a second live recording under a sequential prompt, which is
+a battery question, not a replay question. Stated here because the distinction is the difference
+between a measurement and an assumption.

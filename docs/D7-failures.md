@@ -85,7 +85,7 @@ induced repeat left to run unbounded:
 |---|---|---|
 | Action de-duplication | **Yes — prevents it.** The second attempt never executes | 4 write actions → **1** letter |
 | Step cap | No — it *bounds* it. The run is stopped, but only after the damage | unbounded repeat → **8** letters before `step_cap` fired at turn 12 |
-| Budget ceiling | No. Duplicate writes are cheap; this run cost US$0.00217 and never approached US$0.019 | never fired |
+| Budget ceiling | No. Duplicate writes are cheap; this run cost US$0.00216 and never approached US$0.019 | never fired |
 
 The step cap is the instructive one. It does end the run, so a team that measured only "did the
 loop stop?" would call it sufficient. It stopped this one after **eight** duplicate payment
@@ -105,14 +105,14 @@ The induced repeat, which is where the two arms separate at all:
 
 | | Letters written | Write actions attempted | Turns | Tokens in | Cost |
 |---|---|---|---|---|---|
-| Broken (`dedup=False`) | **4** | 4 | 8 | 12,814 | US$0.00217 |
-| Fixed (`dedup=True`) | **1** | 4 | 8 | 12,925 | US$0.00218 |
+| Broken (`dedup=False`) | **4** | 4 | 8 | 12,787 | US$0.00216 |
+| Fixed (`dedup=True`) | **1** | 4 | 8 | 12,895 | US$0.00218 |
 
 **The pass rate did not fall — and that is the finding, not a footnote.** Every aggregate number
 in the first table is identical across the two arms: same turns, same tool calls, same tokens,
 same cost, same 38/42. A guard that stops a runaway normally also truncates a legitimate long run,
 so the usual thing to show here is that the pass rate survived the guard. This guard does not cost
-even that. The fixed arm is US$0.00001 *more* expensive on the induced case, because answering the
+even that. The fixed arm is US$0.00002 *more* expensive on the induced case, because answering the
 repeat with the earlier observation is slightly more text than executing it again.
 
 So the honest statement of this failure is not "the pass rate held up". It is: **our reported

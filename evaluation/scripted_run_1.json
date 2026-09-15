@@ -20,7 +20,7 @@
     ],
     "approved_total": 2180,
     "refused_total": 300,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -72,7 +72,7 @@
     ],
     "approved_total": 180,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -119,7 +119,7 @@
     ],
     "approved_total": 8290,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -165,7 +165,7 @@
     ],
     "approved_total": 620,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -213,7 +213,7 @@
         "exclusion": "EX-14 cosmetic dermatology"
       }
     ],
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -257,7 +257,7 @@
       "must_be_valid_on": "2026-09-09"
     },
     "lines_resolved": [],
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -306,7 +306,7 @@
     ],
     "approved_total": 0,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -344,7 +344,7 @@
     "validator_gaps": [
       "an escalation must name exactly one trigger, and this record has none"
     ],
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy"
@@ -373,7 +373,7 @@
     "reason": "outside_policy_dates",
     "escalate_to": "auto",
     "trigger": "outside_policy_dates",
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy"
@@ -415,7 +415,7 @@
         "status": "covered"
       }
     ],
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -451,7 +451,7 @@
     "decision": "escalate",
     "escalate_to": "duplicate_claim",
     "trigger": "duplicate_claim",
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -483,7 +483,7 @@
     "decision": "escalate",
     "escalate_to": "manual_review",
     "trigger": "instruction_in_member_narrative",
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim"
     ],
@@ -517,7 +517,7 @@
     ],
     "approved_total": 0,
     "refused_total": 700,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -576,7 +576,7 @@
     ],
     "approved_total": 2000,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -634,7 +634,7 @@
     ],
     "approved_total": 170,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -675,7 +675,7 @@
     ],
     "approved_total": 1500,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -722,7 +722,7 @@
     ],
     "approved_total": 8200,
     "refused_total": 1950,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -770,7 +770,7 @@
     ],
     "approved_total": 210,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -817,7 +817,7 @@
     ],
     "approved_total": 0,
     "refused_total": 1240,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -871,7 +871,7 @@
     ],
     "approved_total": 600,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -917,7 +917,7 @@
     ],
     "approved_total": 2800,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -963,7 +963,7 @@
     ],
     "approved_total": 170,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1005,7 +1005,7 @@
     ],
     "approved_total": 88,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1044,7 +1044,7 @@
       "must_be_valid_on": "2026-10-08"
     },
     "lines_resolved": [],
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1084,7 +1084,7 @@
     ],
     "approved_total": 580,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1125,7 +1125,7 @@
     ],
     "approved_total": 200,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1167,7 +1167,7 @@
     ],
     "approved_total": 780,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1210,7 +1210,7 @@
     ],
     "approved_total": 1250,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1252,7 +1252,7 @@
     ],
     "approved_total": 300,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1294,7 +1294,7 @@
     ],
     "approved_total": 200,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1329,7 +1329,7 @@
     "reason": "policy_lapsed",
     "escalate_to": "policy_lapsed",
     "trigger": "policy_lapsed",
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy"
@@ -1365,7 +1365,7 @@
     ],
     "approved_total": 0,
     "refused_total": 1600,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1409,7 +1409,7 @@
     ],
     "approved_total": 1850,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1445,7 +1445,7 @@
     "decision": "escalate",
     "escalate_to": "unknown",
     "trigger": "annual_limit_exceeded",
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1495,7 +1495,7 @@
     ],
     "approved_total": 1280,
     "refused_total": 1200,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1546,7 +1546,7 @@
     ],
     "approved_total": 1300,
     "refused_total": 250,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1590,7 +1590,7 @@
     ],
     "approved_total": 1900,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1626,7 +1626,7 @@
     "decision": "escalate",
     "escalate_to": "claims_processor",
     "trigger": "instruction_in_member_narrative",
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim"
     ],
@@ -1666,7 +1666,7 @@
         "status": "covered"
       }
     ],
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1700,7 +1700,7 @@
     "decision": "escalate",
     "escalate_to": "claim_processing",
     "trigger": "duplicate_claim",
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1744,7 +1744,7 @@
     ],
     "approved_total": 540,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1786,7 +1786,7 @@
     ],
     "approved_total": 180,
     "refused_total": 0,
-    "ts": "2026-09-15T11:56:19",
+    "ts": "2026-09-15T12:02:21",
     "evidence": [
       "get_claim",
       "lookup_policy",
