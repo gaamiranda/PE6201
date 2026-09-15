@@ -172,12 +172,26 @@ def lookup_policy(member_id: str, date_of_service: str) -> PolicyStatus:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def check_coverage(policy_id: str, procedure_code: str) -> CoverageResult:
-    """Decide ONE line against ONE policy: covered, and what the line needs next.
+    """NAME + SIGNATURE   check_coverage(policy_id: str, procedure_code: str) -> CoverageResult
+    WHAT               Decides one claim line against one policy: covered/not covered, and the
+                       exact follow-up actions needed before a covered line can be approved.
+    INPUT              policy_id is a policy row id returned by lookup_policy; an unknown id
+                       raises ToolError. procedure_code is one line's procedure code; an unknown
+                       code raises ToolError. Pass one procedure code per call, never a claim id.
+    RETURNS            One object, bounded to 3 top-level fields plus at most two needed_next
+                       items: {"code": str, "coverage": {"status": "covered"} or {"status":
+                       "not_covered", "exclusion": str}, "needed_next": [{"kind": "preauth"}
+                       and/or {"kind": "document", "item": str}]}. needed_next is empty when
+                       the line is not covered.
+    FAILS WHEN         The policy id is unknown, the procedure code is unknown, or the caller
+                       tries to decide more than one line in one call.
+    IRREVERSIBLE?      No. This only reads fixture data; issue_decision_letter is the gated write.
 
-    # ── D2(b) DESCRIPTOR · SUN YUCONG ────────────────────────────────────────
+    # -- D2(b) DESCRIPTOR - SUN YUCONG ----------------------------------------
     # This is the tool to measure for D2(b)'s v1 -> v2 rewrite: it is called once per line, so
-    # every token in its return is paid n times per run.
-    # ─────────────────────────────────────────────────────────────────────────
+    # every token in its return is paid n times per run. v2 also changes the shape: an excluded
+    # line cannot simultaneously return branch flags that ask the agent to chase paperwork.
+    # -------------------------------------------------------------------------
     """
     # POKA-YOKE: takes a policy_id, not a member_id. A coverage check against a policy the
     # member does not hold cannot be expressed. Costs one turn — see docs/D2-tool-layer.md.
@@ -193,12 +207,24 @@ def check_coverage(policy_id: str, procedure_code: str) -> CoverageResult:
     # document_required rides along because required_documents.json is keyed on procedure_code,
     # which this call already holds. That is what removed check_required_documents before it
     # ever shipped — one fewer descriptor in the prompt prefix, zero extra calls.
+    if exclusion is not None:
+        return {
+            "code": procedure_code,
+            "coverage": {"status": "not_covered", "exclusion": exclusion},
+            "needed_next": [],
+        }
+
+    needed_next = []
+    if proc["requires_preauth"]:
+        needed_next.append({"kind": "preauth"})
+    required_document = _REQUIRED_DOCS.get(procedure_code)
+    if required_document:
+        needed_next.append({"kind": "document", "item": required_document})
+
     return {
         "code": procedure_code,
-        "covered": exclusion is None,
-        "exclusion": exclusion,
-        "requires_preauth": bool(proc["requires_preauth"]),
-        "document_required": _REQUIRED_DOCS.get(procedure_code),
+        "coverage": {"status": "covered"},
+        "needed_next": needed_next,
     }
 
 
@@ -307,14 +333,42 @@ def check_claim_history(member_id: str, hospital_id: str,
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _gate_open(record: DecisionRecord) -> Tuple[bool, str]:
-    """The autonomy gate. PLACEHOLDER — SUN YUCONG owns the real one (D3a).
+    """The autonomy gate for the one irreversible step.
 
-    suggest / confirm / act, with the gate in front of the irreversible step rather than in
-    front of the agent as a whole. Replaced by guardrails.py; this stub exists so the loop can
-    be built and tested before D3 lands, and it is deliberately permissive so that a missing
-    guardrail is visible in the record rather than silently blocking every run.
+    The shipped setting is confirm: the agent may assemble a decision record, but the write
+    opens only after the record is structurally complete for an approval. In this offline
+    harness the operator confirmation is represented by deterministic checks here and by the
+    evidence precondition in loop.py; a live deployment would replace the final "approved"
+    string with an actual human confirmation event.
     """
-    return True, "gate not yet implemented — D3(a), SUN YUCONG"
+    if not isinstance(record, dict):
+        return False, "operator confirmation requires one decision record object"
+
+    if record.get("decision") != "approve_in_principle":
+        return False, "only approve_in_principle is an irreversible write in this workflow"
+
+    missing = [field for field in ("case_id", "decision", "reason") if not record.get(field)]
+    if missing:
+        return False, "operator confirmation blocked incomplete record: " + ", ".join(missing)
+
+    lines = record.get("lines")
+    if not isinstance(lines, list) or not lines:
+        return False, "operator confirmation blocked approval with no per-line dispositions"
+
+    for index, line in enumerate(lines, start=1):
+        if not isinstance(line, dict):
+            return False, f"line disposition {index} is not an object"
+        if not line.get("code") or line.get("status") not in ("covered", "not_covered"):
+            return False, f"line disposition {index} is missing code or status"
+        if line.get("status") == "not_covered" and not line.get("exclusion"):
+            return False, f"line disposition {index} refuses cover without naming the exclusion"
+
+    for total in ("approved_total", "refused_total"):
+        value = record.get(total)
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            return False, f"{total} must be a non-negative integer"
+
+    return True, "operator confirmed structured approval record"
 
 
 def issue_decision_letter(record: DecisionRecord) -> str:
@@ -372,7 +426,9 @@ def issue_decision_letter(record: DecisionRecord) -> str:
 # Leave it empty until the real v1 text is written. tool_manual() refuses to build a v1
 # manual from an empty dict rather than silently handing back v2 — an unnoticed fallback
 # would make v1 and v2 identical and turn D2(b) into a measurement of nothing.
-DESCRIPTORS_V1: dict = {}
+DESCRIPTORS_V1: dict = {
+    "check_coverage": """Checks whether a procedure is covered by a policy and says if anything else is needed.""",
+}
 
 
 TOOLS = {

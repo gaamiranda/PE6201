@@ -87,9 +87,15 @@ class Guards:
     # maximum, which is why it fired on live work.
     call_cap: int = 18
 
-    # STILL A PLACEHOLDER — D3(a) owns this. Per-run cost data now exists in
-    # evaluation/scripted_run_1.json, so it can be set from measurement like the two above.
-    budget_ceiling_usd: float = 0.05
+    # MEASURED from the committed 76-trial scripted baseline in
+    # results/evaluations/eval-scripted-v2-final.trials.jsonl:
+    #
+    #     projected cost   median $0.001731   p90 $0.002689   max $0.004272
+    #
+    # $0.0044 clears the worst legitimate run by $0.000128 (3.0%) while still stopping the
+    # CLM-8850 live runaway described above more than 12x earlier than the old $0.05
+    # placeholder. The budget guard is last-resort cost containment, not a target spend.
+    budget_ceiling_usd: float = 0.0044
     dedup: bool = True                   # delete this to reproduce D7 failure 1
     autonomy: Autonomy = "confirm"       # D3(a) chooses and defends this
     parallel: bool = True                # D2(c): False executes one call per turn

@@ -258,22 +258,33 @@ class PolicyStatus(TypedDict, total=False):
                                       # tested against THIS, never against annual_limit
 
 
+class CoverageStatus(TypedDict, total=False):
+    """The mutually exclusive per-line coverage result."""
+    status: Literal["covered", "not_covered"]
+    exclusion: Optional[str]          # present only when status is not_covered
+
+
+class CoverageNextStep(TypedDict, total=False):
+    """One bounded follow-up action for a covered line."""
+    kind: Literal["preauth", "document"]
+    item: Optional[str]               # document name when kind is document
+
+
 class CoverageResult(TypedDict, total=False):
-    """What check_coverage returns for ONE line. Bounded: 4 fields, ~30 tokens, never a list.
+    """What check_coverage returns for ONE line. Bounded: 3 fields plus up to 2 next steps.
 
     Takes a policy_id and not a member_id on purpose — a coverage check against a policy the
     member does not hold cannot be expressed.
 
-    `requires_preauth` and `document_required` are the two branch fields. They are why this is
-    one call and not three: both are keyed on procedure_code, which this tool already holds.
-    Folding document_required in here is what removed check_required_documents before it
-    shipped — see docs/D2-tool-layer.md, move 2.
+    `needed_next` replaces separate branch flags. It is empty for not_covered lines, so an
+    excluded line cannot also ask the agent to chase pre-authorisation or documents. For covered
+    lines it holds at most two items, both keyed on procedure_code, which this tool already
+    holds. Folding document requirements in here is what removed check_required_documents before
+    it shipped — see docs/D2-tool-layer.md, move 2.
     """
     code: str
-    covered: bool
-    exclusion: Optional[str]          # e.g. "EX-14 cosmetic dermatology" — set iff covered is False
-    requires_preauth: bool            # True -> call get_preauthorisation for THIS line only
-    document_required: Optional[str]  # e.g. "itemised_bill" — compare against Claim.documents
+    coverage: CoverageStatus
+    needed_next: List[CoverageNextStep]
 
 
 class PreauthResult(TypedDict, total=False):
