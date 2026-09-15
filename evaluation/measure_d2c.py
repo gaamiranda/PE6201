@@ -177,11 +177,29 @@ def driven_by(replies):
             backends.complete, tools._RESULTS = real, original
 
 
+# Cases whose recording never reaches a Final cannot take part in this experiment. Their
+# synthesised script has no terminating reply, so every arm would spin to the step cap and the
+# comparison would measure the cap rather than the grouping. These are the document deadlocks
+# described in loop.Guards: the model burns every call available without concluding. They are
+# named here rather than silently dropped, and they are still counted in the pass rate the
+# harness reports — this exclusion is local to the sequential-vs-parallel measurement.
+NO_FINAL = sorted(c for c in REPLIES if not calls_in_order(c)[1])
+
+
 def arm(mode):
-    guards = loop.Guards(step_cap=40, call_cap=60, budget_ceiling_usd=10.0)
+    # The verbatim arm exists only to prove the driver reproduces an ordinary scripted run, so
+    # it must run under the SHIPPED guards — the run it is being compared against. The three
+    # synthesised arms run with the caps lifted, because the sequential arm deliberately needs
+    # more round trips than the shipped call cap allows and truncating it would measure the cap.
+    guards = loop.Guards() if mode == "verbatim" else loop.Guards(
+        step_cap=40, call_cap=60, budget_ceiling_usd=10.0)
     per_case, turns, tin, tout, cost, correct = {}, [], 0, 0, 0.0, 0
     for key in KEYS:
         case_id = key["case_id"]
+        # The verbatim arm must cover all 42: it is checked against an ordinary scripted run,
+        # which also runs all 42. Only the synthesised arms drop the non-terminating cases.
+        if mode != "verbatim" and case_id in NO_FINAL:
+            continue
         with driven_by(script_for(case_id, mode)):
             with contextlib.redirect_stdout(io.StringIO()):
                 record = loop.run_case(case_id, guards=guards)
@@ -199,7 +217,7 @@ def arm(mode):
     return {"turns_median": turns[len(turns) // 2], "turns_total": sum(turns),
             "turns_max": turns[-1], "tokens_in": tin, "tokens_out": tout,
             "cost_usd": round(cost, 6), "decisions_correct": correct,
-            "cases": len(KEYS), "per_case": per_case}
+            "cases": len(per_case), "per_case": per_case}
 
 
 SEQ = arm("sequential")
@@ -225,6 +243,8 @@ regressions = sorted(
     key=lambda r: -r[1])
 
 print("\nD2(c) · sequential vs parallel — identical calls, identical order, different grouping\n")
+print(f"excluded, no Final in the recording so no arm can terminate: {len(NO_FINAL)} "
+      f"{NO_FINAL}\nmeasured on the remaining {len(KEYS) - len(NO_FINAL)} cases\n")
 print(f"driver reproduces the ordinary scripted run: {'YES' if DRIVER_OK else 'NO — STOP'}")
 print(f"  verbatim replay {VERBATIM['tokens_in']} input tokens / {VERBATIM['decisions_correct']} correct"
       f"  vs ordinary scripted run {BASE_TOKENS} / {BASE_CORRECT}\n")
@@ -255,7 +275,8 @@ print(f"decisions that differ, by-rule vs as-recorded: {len(rule_disagree)} "
 out = os.path.join(_HERE, "d2c_run.json")
 with open(out, "w", encoding="utf-8") as fh:
     json.dump({"sequential": SEQ, "parallel": PAR, "driver_reproduces_baseline": DRIVER_OK,
-               "by_rule": RULE, "decisions_differing": disagree,
+               "by_rule": RULE, "excluded_no_final": NO_FINAL,
+               "decisions_differing": disagree,
                "parallel_regressions": [{"case_id": c, "extra_input_tokens": d}
                                         for c, d, _ in regressions]}, fh, indent=2)
 print(f"\nWritten to {out}")

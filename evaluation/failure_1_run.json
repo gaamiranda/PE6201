@@ -2,34 +2,34 @@
   "sweep": {
     "fixed": {
       "turns_median": 6,
-      "turns_max": 10,
-      "tool_calls": 225,
-      "tokens_in": 615698,
-      "tokens_out": 45444,
-      "cost_usd": 0.11962,
-      "decisions_correct": 38,
+      "turns_max": 9,
+      "tool_calls": 214,
+      "tokens_in": 1275907,
+      "tokens_out": 123787,
+      "cost_usd": 0.265658,
+      "decisions_correct": 36,
       "cases": 42,
-      "cap_fired": 0
+      "cap_fired": 5
     },
     "broken": {
       "turns_median": 6,
-      "turns_max": 10,
-      "tool_calls": 225,
-      "tokens_in": 615698,
-      "tokens_out": 45444,
-      "cost_usd": 0.11962,
-      "decisions_correct": 38,
+      "turns_max": 9,
+      "tool_calls": 217,
+      "tokens_in": 1275723,
+      "tokens_out": 123787,
+      "cost_usd": 0.26563,
+      "decisions_correct": 36,
       "cases": 42,
-      "cap_fired": 0
+      "cap_fired": 5
     },
-    "calls_suppressed_across_set": 0
+    "calls_suppressed_across_set": 3
   },
   "induced": {
     "fixed": {
       "letters_written": 1,
       "turns": 8,
-      "tokens_in": 12895,
-      "cost_usd": 0.002181,
+      "tokens_in": 12328,
+      "cost_usd": 0.002096,
       "decision": "approve_in_principle",
       "cap_fired": null,
       "letter_actions": 1
@@ -37,8 +37,8 @@
     "broken": {
       "letters_written": 4,
       "turns": 8,
-      "tokens_in": 12787,
-      "cost_usd": 0.002165,
+      "tokens_in": 12220,
+      "cost_usd": 0.00208,
       "decision": "approve_in_principle",
       "cap_fired": null,
       "letter_actions": 4
@@ -46,8 +46,8 @@
     "runaway_no_dedup": {
       "letters_written": 8,
       "turns": 12,
-      "tokens_in": 18688,
-      "cost_usd": 0.003169,
+      "tokens_in": 17932,
+      "cost_usd": 0.003055,
       "decision": "escalate",
       "cap_fired": "step_cap",
       "letter_actions": 8

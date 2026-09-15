@@ -149,7 +149,11 @@ for label, s in (("fixed", FIXED), ("broken", BROKEN)):
           f"{s['tokens_in']:>10d} {'$'+format(s['cost_usd'],'.5f'):>10s} "
           f"{str(s['decisions_correct'])+'/'+str(s['cases']):>10s}")
 print(f"\n  calls de-duplication suppressed across all {FIXED['cases']} cases: {SUPPRESSED}")
-print("  -> on the committed evaluation set the guard is indistinguishable from dead code.\n")
+if SUPPRESSED == 0:
+    print("  -> on the committed evaluation set the guard is indistinguishable from dead code.\n")
+else:
+    print(f"  -> {SUPPRESSED} repeat(s) caught, and not one of them changed a decision or a cost\n"
+          f"     figure: the guard's whole effect is on what reached decisions.jsonl.\n")
 
 print("B · induced repeat: the same approval action issued 4 times in one run")
 print(f"{'':10s} {'letters WRITTEN':>16s} {'write actions':>14s} {'turns':>6s} {'tokens in':>10s} {'cost':>10s}")

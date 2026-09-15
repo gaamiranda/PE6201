@@ -62,61 +62,53 @@ MAX_REJECTIONS = 3
 
 @dataclass
 class Guards:
-    # MEASURED, not chosen. Replaying all 42 cases with the caps lifted to 20/30 — so that
-    # nothing was truncated by the number being measured — gives:
+    # MEASURED, and re-measured after the tool-manual fix — see tool_manual() for why the old
+    # recording was not a clean measurement of anything. Replaying all 42 cases with the caps
+    # lifted to 40/30 splits the set cleanly in two:
     #
-    #     turns        median 6   p90 7    max 10
-    #     model_calls  median 9   p90 11   max 14
+    #   37 HEALTHY runs    turns  median 6   p90 7    max 9
+    #                      calls  median 7   p90 10   max 17
+    #    5 DEADLOCKS       burn every call available and never conclude. All five are
+    #                      document cases: CLM-8901, CLM-9002, CLM-9032, CLM-9062, CLM-9103.
     #
-    # A cap has to sit above every legitimate run and still catch a runaway. 12 clears the
-    # longest honest run by 2 and is 1.7x the p90. The alternative reading — "the cap should
-    # be tight to save money" — is what the old placeholder 8 did: it stopped 8 of 42 runs
-    # mid-decision and cost accuracy, not money, because a truncated run still bills for every
-    # turn it took before it was cut.
+    # The gap between 17 and "everything you will give it" is what makes these caps easy to
+    # place: any value between the healthy max and the recording ceiling separates the two
+    # populations, so the cap is not a judgement call about how long work should take.
     step_cap: int = 12
 
-    # MODEL CALLS, not tool-executing turns — and this one was learnt the hard way.
+    # MODEL CALLS, not tool-executing turns — this one was learnt the hard way.
     # On a live run CLM-8850 made 60 model calls, burned 307,823 input tokens and $0.05 while
     # `turns` sat at 4, because the model kept emitting responses carrying neither an Action
     # nor a Final and the recovery path did not advance the turn counter. The step cap was
     # blind to it (no tools were executing) and de-duplication was blind to it (no action was
-    # repeated — there were no actions). Only the budget ceiling stopped it, at 12x the cost
-    # of a healthy run. A cap has to count the thing that is actually growing.
-    # 18 clears the measured maximum of 14 by 4, and still catches the CLM-8850 runaway above
-    # more than three times earlier than it actually stopped. The old 12 sat ON the measured
-    # maximum, which is why it fired on live work.
-    call_cap: int = 18
+    # repeated — there were no actions). A cap has to count the thing that is actually growing.
+    #
+    # 22 clears the healthy maximum of 17 by 5. The previous 18 was set against an older
+    # distribution whose maximum was 14; after the manual fix a healthy run reached 17, which
+    # left one call of margin — the same censored-measurement trap we have now fallen into
+    # twice. Five is margin for the battery: six models will not agree on how many calls the
+    # same claim takes, and a cap that clips a healthy run on one model turns a model
+    # comparison into a comparison of our own guard.
+    call_cap: int = 22
 
-    # MEASURED — but measured across the WHOLE BATTERY, not one model, and that distinction
-    # is the whole point of this number.
+    # MEASURED across the WHOLE BATTERY, not one model, because cost is the one guard whose
+    # units are not set by the agent's behaviour: two runs with identical turns, tool calls and
+    # tokens cost different amounts purely because they were priced at a different model's rate.
+    # A ceiling calibrated on one model is a price filter wearing a guard's clothes.
     #
-    # Cost is the one guard whose units are not set by the agent's behaviour. Two runs that
-    # take identical turns, identical tool calls and identical tokens cost different amounts
-    # purely because they were priced at a different model's rate. So a ceiling calibrated on
-    # one model is not a guard on the others: it is a price filter wearing a guard's clothes.
+    # Worst HEALTHY run per model, caps lifted, priced at each battery model's rate:
     #
-    # Replaying all 42 cases at each battery model's rate with the ceiling lifted to $10 —
-    # so that nothing is truncated by the number being measured — gives, per run:
+    #     google/gemini-2.5-flash-lite      max 0.00777
+    #     meta-llama/llama-3.3-70b-instruct max 0.00841
+    #     deepseek/deepseek-chat            max 0.00946
+    #     openai/gpt-4o-mini                max 0.01166
+    #     mistralai/mistral-medium-3        max 0.03313   <- sets the number
     #
-    #     google/gemini-2.5-flash-lite      median 0.00183   p90 0.00279   max 0.00427
-    #     meta-llama/llama-3.3-70b-instruct median 0.00203   p90 0.00309   max 0.00464
-    #     deepseek/deepseek-chat            median 0.00230   p90 0.00351   max 0.00522
-    #     openai/gpt-4o-mini                median 0.00274   p90 0.00418   max 0.00640
-    #     mistralai/mistral-medium-3        median 0.00771   p90 0.01192   max 0.01814
-    #
-    # CLM-9005 is the worst case for every model, which is what you want to see: the ranking
-    # is set by price, not by any model-specific behaviour the replay could have introduced.
-    #
-    # 0.019 clears the worst legitimate run in the battery by 4.7%. It is still 2.6x tighter
-    # than the old 0.05 placeholder and stops the CLM-8850 runaway well before it ran.
-    #
-    # The rejected alternative was 0.0044, which clears gemini's max by 3%. On the scripted
-    # replay that ceiling aborts 34 of mistral-medium-3's 42 runs, 3 of gpt-4o-mini's and 1 of
-    # deepseek's, while leaving gemini and llama untouched — so WANG HONGJUN's battery would
-    # have reported a pass rate for a model that was killed mid-decision 81% of the time, and
-    # the D5(b) comparison would have measured our price table instead of the six models.
-    # A guard must fire on behaviour the agent controls. This one now does.
-    budget_ceiling_usd: float = 0.019
+    # 0.036 clears the worst healthy run in the battery by 8.7%, and one identical number
+    # serves all six runs. Comparability requires the guards be byte-identical across the
+    # battery: a per-model ceiling would make cap_fired counts incomparable, and cap_fired is
+    # the statistic that tells a reader whether a low pass rate is the model or the harness.
+    budget_ceiling_usd: float = 0.036
     dedup: bool = True                   # delete this to reproduce D7 failure 1
     autonomy: Autonomy = "confirm"       # D3(a) chooses and defends this
     parallel: bool = True                # D2(c): False executes one call per turn
@@ -260,7 +252,23 @@ def tool_manual(prompt_version: str = "v2") -> str:
 
     blocks = []
     for name, fn in TOOLS.items():
-        sig = str(inspect.signature(fn))
+        # PARAMETER NAMES ONLY — never str(inspect.signature(fn)).
+        #
+        # inspect renders "get_claim(claim_id: 'str') -> 'Claim'", and the model copied that
+        # COLON straight into its calls: get_claim(claim_id: 'CLM-9034'). _parse_call reads
+        # arguments with ast.literal_eval, so a colon is a syntax error, the model is told
+        # "invalid syntax", it cannot read this file to find out why, and it retries verbatim.
+        #
+        # Measured on the 42-case recording before this change: 48 of 378 replies (12.7%)
+        # carried a colon-style call, across 41 of 42 cases. CLM-9034 never escaped it —
+        # 18 model calls, 17 unproductive rounds, ZERO tools executed, and an escalation
+        # reached without ever having read the claim.
+        #
+        # This is the D2(b) thesis about our own prompt: the manual is paid on every call of
+        # every run, so a defect in how it renders is paid the same way. Fixing the rendering
+        # costs nothing per call. Telling the model "use = not :" would have cost tokens
+        # forever and could still be missed.
+        sig = "(" + ", ".join(inspect.signature(fn).parameters) + ")"
         if prompt_version == "v1" and name in DESCRIPTORS_V1:
             doc = DESCRIPTORS_V1[name]
         else:

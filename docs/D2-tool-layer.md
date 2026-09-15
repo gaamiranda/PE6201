@@ -130,8 +130,8 @@ One tool, v1 vs v2 of its descriptor and return shape.
 
 | | Tokens returned per call | Eval pass rate | Guardrail cases passed |
 |---|---|---|---|
-| v1 | Manual: 325 estimated tokens; check_coverage block: 40 estimated tokens | Not measured here; scripted replay is keyed only by case and turn, so v1/v2 would replay the same model replies. | Not measured here for the same reason. |
-| v2 | Manual: 602 estimated tokens; check_coverage block: 318 estimated tokens | Not measured here; token delta only. | Not measured here; token delta only. |
+| v1 | Manual: 265 estimated tokens; check_coverage block: 40 estimated tokens | Not measured here; scripted replay is keyed only by case and turn, so v1/v2 would replay the same model replies. | Not measured here for the same reason. |
+| v2 | Manual: 540 estimated tokens; check_coverage block: 318 estimated tokens | Not measured here; token delta only. | Not measured here; token delta only. |
 
 **v1 descriptor in `tools.DESCRIPTORS_V1`:**
 
@@ -143,7 +143,50 @@ Checks whether a procedure is covered by a policy and says if anything else is n
 **v2 descriptor in the `check_coverage` docstring:** six fields: name/signature, what, input,
 returns with a size bound, fails when, irreversible. `loop.tool_manual("v1")` and
 `loop.tool_manual("v2")` both build seven blocks and differ in exactly one block, the
-`check_coverage` block. The whole-manual token delta is `+277` estimated tokens (`325 -> 602`).
+`check_coverage` block. The whole-manual token delta is `+275` estimated tokens (`265 -> 540`).
+
+### The defect the rewrite uncovered — and the poka-yoke that fixed it
+
+Rewriting the descriptor meant reading the manual the model actually receives, and that exposed a
+defect in how `tool_manual()` rendered every tool, not just the one being rewritten.
+
+The manual was built with `str(inspect.signature(fn))`, which renders Python's annotation syntax:
+
+```
+get_claim(claim_id: 'str') -> 'Claim'
+```
+
+The model copied that **colon** into its calls — `get_claim(claim_id: 'CLM-9034')`. `_parse_call`
+reads arguments with `ast.literal_eval`, so a colon is a syntax error. The model was told "invalid
+syntax", could not read our source to learn why, and retried verbatim.
+
+| Recording | Replies carrying a colon-style call |
+|---|---|
+| Before the v2 rewrite | 35 / 388 — **9.0%** |
+| After the v2 rewrite | 48 / 378 — **12.7%** |
+| After rendering parameter names only | **0 / 426 — 0.0%** |
+
+The v2 descriptor made it *worse*, because its `NAME + SIGNATURE` line repeated the same annotation
+style and reinforced the pattern. On `CLM-9034` the model never escaped: 18 model calls, 17
+unproductive rounds, **zero tools executed**, and an escalation reached without ever having read the
+claim.
+
+The fix is one line — render `get_claim(claim_id)` — and it is the D2(b) thesis applied to our own
+prompt. The manual is paid on every call of every run, so a defect in how it renders is paid the
+same way. The alternative, a sentence saying "use `=` not `:`", would have cost tokens forever and
+could still be missed. **Changing what the model is shown costs nothing per call; telling it what to
+do costs something every call.**
+
+What the fix bought, measured on the harness:
+
+| | Code check | Negative code check | Decision |
+|---|---|---|---|
+| Annotated manual | 54/76 (71.1%) | 30/51 (58.8%) | 36/42 |
+| Parameter names only | **61/76 (80.3%)** | **39/51 (76.5%)** | 36/42 |
+
+Record *quality* rose nine points while the decision rate held. It also stopped masking a real
+problem: with the syntax loop gone, five document cases are now visibly deadlocking rather than
+dying early for the wrong reason — see `docs/D3-guardrails.md`.
 
 **Verdict:** v2 is longer, so it is not a cost win. It is a safety/interface win: the return
 shape now exposes a single coverage result and a bounded `needed_next` list. That makes an
@@ -235,27 +278,33 @@ tools genuinely execute, and the message history is rebuilt and re-sent exactly 
 it. Every synthesised reply carries one fixed `Thought:` string — the control, because the model's
 own thoughts vary in length, land in the history, and would otherwise leak prose length into a
 measurement of grouping. The driver is checked against an ordinary scripted run before anything
-else runs: replaying the recording verbatim must reproduce 615,698 input tokens and 38/42, and it
-does.
+else runs: replaying the recording verbatim must reproduce 1,275,907 input tokens and 36/42 across all 42
+cases, and it does.
+
+**Three cases are excluded and named:** `CLM-9002`, `CLM-9062` and `CLM-9103` never reach a
+`Final:` in the recording — they are document deadlocks (see `loop.Guards`). A synthesised script
+for them has no terminating reply, so every arm would spin to the step cap and the table would
+measure the cap rather than the grouping. They remain in the harness pass rate; the exclusion is
+local to this measurement. The remaining **39** cases are measured.
 
 | | Turns (median) | Turns (total) | Input tokens | Output tokens | Cost | Pass rate |
 |---|---|---|---|---|---|---|
-| **Sequential** — one call per turn | 6 | 250 | 430,669 | 17,978 | US$0.07538 | **38/42** |
-| **As recorded** — the grouping the model chose | 6 | 233 | 403,961 | 17,869 | US$0.07131 | **38/42** |
-| **By rule** — the largest batches `DEPENDS_ON` permits | **5** | **208** | **367,579** | 17,703 | **US$0.06575** | **38/42** |
+| **Sequential** — one call per turn | 6 | 213 | 381,983 | 20,589 | US$0.06965 | **37/39** |
+| **As recorded** — the grouping the model chose | 6 | 205 | 370,689 | 20,538 | US$0.06792 | **37/39** |
+| **By rule** — the largest batches `DEPENDS_ON` permits | **4** | **177** | **331,949** | 20,344 | **US$0.06200** | **37/39** |
 
 | vs sequential | Turns | Input tokens | Cost |
 |---|---|---|---|
-| As recorded | −6.8% | −6.2% | −5.4% |
-| By rule | −16.8% | −14.6% | −12.8% |
+| As recorded | −3.8% | −3.0% | −2.5% |
+| By rule | −16.9% | −13.1% | −11.0% |
 
-**Correctness did not move: 38/42 in all three arms, and not one case decided differently** —
+**Correctness did not move: 37/39 in all three arms, and not one case decided differently** —
 neither between sequential and as-recorded, nor between as-recorded and by-rule. That is the result
 that matters. Parallelism is a scheduling choice, and a scheduling choice that changed an answer
 would be a bug.
 
 Note that the saving is almost entirely on the **input** side: output tokens barely move
-(17,978 → 17,703), because the same Action text is emitted either way, merely distributed over
+(20,589 → 20,344), because the same Action text is emitted either way, merely distributed over
 fewer replies. What parallelising buys is re-sending the system prompt and the accumulated history
 fewer times. That is also why the saving is bounded by how long the prompt is, not by how many
 tools exist.
@@ -267,33 +316,32 @@ whole recording:
 
 | Calls in one action-turn | Turns | Share |
 |---|---|---|
-| 1 | 227 | **97.0%** |
+| 1 | 223 | **97.4%** |
 | 2 | 4 | 1.7% |
 | 3 | 2 | 0.9% |
-| 10 | 1 | 0.4% |
 
-**Only 5 of 42 cases ever used a multi-call turn.** And the group this document predicted —
+
+**Only 4 of 42 cases ever used a multi-call turn.** And the group this document predicted —
 `lookup_policy ‖ get_hospital_status ‖ check_claim_history` on turn 2 — **never occurs once**. What
 the model actually grouped was:
 
 ```
 3 x  check_coverage | get_preauthorisation
-1 x  check_claim_history | check_coverage | get_preauthorisation
-1 x  check_coverage | get_hospital_status | get_preauthorisation
-1 x  check_coverage | issue_decision_letter
-1 x  ten calls at once
+1 x  check_coverage | get_hospital_status | lookup_policy
+1 x  check_coverage | get_hospital_status
+1 x  check_claim_history | check_coverage | get_hospital_status
 ```
 
-Every one of those pairs `check_coverage` with `get_preauthorisation`, which `DEPENDS_ON` says is
-the one grouping that is *not* allowed: which line needs a pre-authorisation is unknown until
+Three of those pair `check_coverage` with `get_preauthorisation`, which `DEPENDS_ON` says is the
+one grouping that is *not* allowed: which line needs a pre-authorisation is unknown until
 coverage answers. The model is not parallelising, it is **speculating** — issuing the pre-auth
 lookup before knowing whether it is needed. It gets away with it because the arguments
 (`member_id`, `procedure_code`, `date_of_service`) all come from the claim row, so the call is
 *expressible* even though it is logically premature. The dependency is a reasoning dependency, not
 a data dependency, and a signature cannot enforce it.
 
-So the honest reading of the three-arm table: **of the 16.8% of turns the dependency rule makes
-available, the model captured 6.8% and left 10 points on the table.** That is a prompt and model
+So the honest reading of the three-arm table: **of the 16.9% of turns the dependency rule makes
+available, the model captured 3.8% and left 13 points on the table.** That is a prompt and model
 finding, not a loop limitation — and it is a concrete thing for the D5(b) battery to look for,
 because "does this model use multi-call turns" is exactly the kind of divergence six models should
 be expected to differ on.
@@ -320,7 +368,7 @@ sees `status: lapsed` before deciding whether to ask about the hospital. Sequent
 skipped both calls. This cannot be priced in tokens — the cost is that a cheap early exit stops
 being available, and the 45 tokens above are what that costs when it happens.
 
-**Why our saving is 14.6% where the brief's example shows 54%.** The brief's figure comes from a
+**Why our saving is 13.1% where the brief's example shows 54%.** The brief's figure comes from a
 claim whose `check_coverage` calls fan out across several lines — that fan-out is where the saving
 lives. On our set **27 of 42 claims have a single line**, 6 have two, 8 have three and 1 has four.
 A one-line claim has nothing to fan out, so two thirds of our set cannot benefit from the move that

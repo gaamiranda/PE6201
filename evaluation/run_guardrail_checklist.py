@@ -136,7 +136,7 @@ with isolated_decision_log():
     finally:
         backends.complete = backends_complete
 u = r["usage"]
-record(5, "Verbose reply whose projected cost crosses US$0.019",
+record(5, f"Verbose reply whose projected cost crosses US${loop.Guards().budget_ceiling_usd}",
        "Unbounded spend", "Loop control",
        f"cap_fired={u.get('cap_fired')}, cost=US${u.get('cost_usd'):.5f}, decision={r['decision']}, "
        f"reason starts {r.get('reason','')[:34]!r}",

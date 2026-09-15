@@ -172,7 +172,7 @@ def lookup_policy(member_id: str, date_of_service: str) -> PolicyStatus:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def check_coverage(policy_id: str, procedure_code: str) -> CoverageResult:
-    """NAME + SIGNATURE   check_coverage(policy_id: str, procedure_code: str) -> CoverageResult
+    """NAME + SIGNATURE   check_coverage(policy_id, procedure_code) -> CoverageResult
     WHAT               Decides one claim line against one policy: covered/not covered, and the
                        exact follow-up actions needed before a covered line can be approved.
     INPUT              policy_id is a policy row id returned by lookup_policy; an unknown id

@@ -50,26 +50,32 @@ measured, then re-checked under the shipped guards:
 
 | | Median | p90 | Worst case | Runs that hit a cap under shipped guards |
 |---|---|---|---|---|
-| Turns per run, all 42 cases | 6 | 7 | 10 | 0 (`step_cap` 12) |
-| Model calls per run, all 42 cases | 9 | 12 | 14 | 0 (`call_cap` 18) |
-| Unproductive rounds per run | 2 | 3 | 6 | not capped — only `call_cap` bounds it |
+| Turns per run, 37 healthy runs | 6 | 7 | 9 | 0 (`step_cap` 12) |
+| Model calls per run, 37 healthy runs | 7 | 10 | 17 | 0 (`call_cap` 22) |
+| Unproductive rounds, 37 healthy runs | 0 | 3 | 10 | not capped — only `call_cap` bounds it |
+| Unproductive rounds, 5 deadlocked runs | — | — | **24–27** | these are what the cap actually stops |
 
 And the measurement that actually matters here:
 
 | | Tool calls executed across all 42 cases |
 |---|---|
-| Shipped (`dedup=True`) | 225 |
-| Minus dedup (`dedup=False`) | 225 |
+| Shipped (`dedup=True`) | 214 |
+| Minus dedup (`dedup=False`) | 217 |
 
-**De-duplication suppressed zero calls across the entire evaluation set.** A suppressed call never
-reaches `tools_called`, so equal totals mean the guard never fired once. Turns, tokens, cost and
-the 38/42 decision rate are identical in both arms.
+**De-duplication suppressed three calls across the entire evaluation set, and not one of them
+changed a decision.** A suppressed call never reaches `tools_called`, so the difference between 214
+and 217 is exactly the guard firing. Turns, the 36/42 decision rate and cost to five decimal places
+are the same in both arms.
 
 That is the uncomfortable part of this deliverable and we are reporting it rather than hiding it:
-**on our own evaluation set this guard is indistinguishable from dead code.** A team measuring only
-pass rate would have deleted it as unused. It is insurance against a behaviour our recorded model
-never exhibits — and the moment a model does exhibit it, the cost is paid in duplicate approvals,
-not in a failed test.
+**on our own evaluation set this guard is almost invisible.** Three suppressions in 42 runs, none of
+which moved a number we report. A team measuring only pass rate would have deleted it as unused. It
+is insurance against a behaviour our recorded model barely exhibits — and the moment a model does
+exhibit it, the cost is paid in duplicate approvals, not in a failed test.
+
+An earlier recording, made before the tool-manual fix described in `loop.tool_manual`, gave zero
+suppressions. The guard's apparent deadness was itself an artefact of a broken prompt: the model was
+losing 12.7% of its replies to a syntax error and never got far enough to repeat itself.
 
 ### 3 · The fix, in the code layer
 
@@ -85,7 +91,7 @@ induced repeat left to run unbounded:
 |---|---|---|
 | Action de-duplication | **Yes — prevents it.** The second attempt never executes | 4 write actions → **1** letter |
 | Step cap | No — it *bounds* it. The run is stopped, but only after the damage | unbounded repeat → **8** letters before `step_cap` fired at turn 12 |
-| Budget ceiling | No. Duplicate writes are cheap; this run cost US$0.00216 and never approached US$0.019 | never fired |
+| Budget ceiling | No. Duplicate writes are cheap; this run cost US$0.00208 and never approached US$0.036 | never fired |
 
 The step cap is the instructive one. It does end the run, so a team that measured only "did the
 loop stop?" would call it sufficient. It stopped this one after **eight** duplicate payment
@@ -98,15 +104,15 @@ Whole evaluation set, both arms:
 
 | | Turns (median/max) | Tool calls | Tokens in | Cost | Pass rate |
 |---|---|---|---|---|---|
-| Broken (`dedup=False`) | 6 / 10 | 225 | 615,698 | US$0.11962 | 38/42 |
-| Fixed (`dedup=True`) | 6 / 10 | 225 | 615,698 | US$0.11962 | 38/42 |
+| Broken (`dedup=False`) | 6 / 9 | 217 | 1,275,723 | US$0.26563 | 36/42 |
+| Fixed (`dedup=True`) | 6 / 9 | 214 | 1,275,907 | US$0.26566 | 36/42 |
 
 The induced repeat, which is where the two arms separate at all:
 
 | | Letters written | Write actions attempted | Turns | Tokens in | Cost |
 |---|---|---|---|---|---|
-| Broken (`dedup=False`) | **4** | 4 | 8 | 12,787 | US$0.00216 |
-| Fixed (`dedup=True`) | **1** | 4 | 8 | 12,895 | US$0.00218 |
+| Broken (`dedup=False`) | **4** | 4 | 8 | 12,220 | US$0.00208 |
+| Fixed (`dedup=True`) | **1** | 4 | 8 | 12,328 | US$0.00210 |
 
 **The pass rate did not fall — and that is the finding, not a footnote.** Every aggregate number
 in the first table is identical across the two arms: same turns, same tool calls, same tokens,

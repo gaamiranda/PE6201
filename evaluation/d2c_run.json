@@ -1,305 +1,284 @@
 {
   "sequential": {
     "turns_median": 6,
-    "turns_total": 250,
-    "turns_max": 13,
-    "tokens_in": 430669,
-    "tokens_out": 17978,
-    "cost_usd": 0.075384,
-    "decisions_correct": 38,
-    "cases": 42,
+    "turns_total": 213,
+    "turns_max": 11,
+    "tokens_in": 381983,
+    "tokens_out": 20589,
+    "cost_usd": 0.06965,
+    "decisions_correct": 37,
+    "cases": 39,
     "per_case": {
       "CLM-8842": {
-        "turns": 10,
-        "tokens_in": 16764,
-        "cost_usd": 0.002801,
+        "turns": 9,
+        "tokens_in": 14528,
+        "cost_usd": 0.002503,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-8850": {
-        "turns": 5,
-        "tokens_in": 8006,
-        "cost_usd": 0.001402,
+        "turns": 6,
+        "tokens_in": 9265,
+        "cost_usd": 0.001605,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-8861": {
-        "turns": 9,
-        "tokens_in": 15208,
-        "cost_usd": 0.002605,
+        "turns": 8,
+        "tokens_in": 12623,
+        "cost_usd": 0.002175,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-8874": {
-        "turns": 6,
-        "tokens_in": 9699,
-        "cost_usd": 0.001688,
+        "turns": 7,
+        "tokens_in": 10843,
+        "cost_usd": 0.001869,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-8888": {
         "turns": 6,
-        "tokens_in": 9636,
-        "cost_usd": 0.001769,
+        "tokens_in": 9195,
+        "cost_usd": 0.001671,
         "decision": "request_document",
         "matches_key": true
       },
       "CLM-8894": {
         "turns": 6,
-        "tokens_in": 9667,
-        "cost_usd": 0.001707,
+        "tokens_in": 9202,
+        "cost_usd": 0.002013,
         "decision": "request_document",
         "matches_key": true
       },
       "CLM-8901": {
-        "turns": 5,
-        "tokens_in": 8075,
-        "cost_usd": 0.001437,
-        "decision": "request_document",
-        "matches_key": true
+        "turns": 3,
+        "tokens_in": 9774,
+        "cost_usd": 0.001888,
+        "decision": "escalate",
+        "matches_key": false
       },
       "CLM-8910": {
         "turns": 2,
-        "tokens_in": 8337,
-        "cost_usd": 0.001458,
+        "tokens_in": 3528,
+        "cost_usd": 0.000592,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-8917": {
         "turns": 2,
-        "tokens_in": 3665,
-        "cost_usd": 0.000615,
+        "tokens_in": 3476,
+        "cost_usd": 0.000587,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-8925": {
-        "turns": 6,
-        "tokens_in": 9628,
-        "cost_usd": 0.001582,
-        "decision": "request_document",
-        "matches_key": false
+        "turns": 7,
+        "tokens_in": 17035,
+        "cost_usd": 0.003216,
+        "decision": "escalate",
+        "matches_key": true
       },
       "CLM-8933": {
-        "turns": 5,
-        "tokens_in": 8100,
-        "cost_usd": 0.001374,
+        "turns": 2,
+        "tokens_in": 3529,
+        "cost_usd": 0.00061,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-8941": {
         "turns": 1,
-        "tokens_in": 2399,
-        "cost_usd": 0.000447,
+        "tokens_in": 2273,
+        "cost_usd": 0.000429,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-8952": {
         "turns": 6,
-        "tokens_in": 9652,
-        "cost_usd": 0.001625,
+        "tokens_in": 9372,
+        "cost_usd": 0.001621,
         "decision": "approve_in_principle",
         "matches_key": false
       },
       "CLM-8960": {
-        "turns": 13,
-        "tokens_in": 22121,
-        "cost_usd": 0.003672,
+        "turns": 8,
+        "tokens_in": 12383,
+        "cost_usd": 0.002109,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-8971": {
-        "turns": 8,
-        "tokens_in": 13572,
-        "cost_usd": 0.002328,
+        "turns": 6,
+        "tokens_in": 9202,
+        "cost_usd": 0.001593,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9001": {
-        "turns": 6,
-        "tokens_in": 9861,
-        "cost_usd": 0.001752,
+        "turns": 5,
+        "tokens_in": 7730,
+        "cost_usd": 0.001362,
         "decision": "approve_in_principle",
         "matches_key": true
       },
-      "CLM-9002": {
-        "turns": 9,
-        "tokens_in": 15186,
-        "cost_usd": 0.002625,
-        "decision": "approve_in_principle",
-        "matches_key": false
-      },
       "CLM-9003": {
         "turns": 6,
-        "tokens_in": 9787,
-        "cost_usd": 0.001737,
+        "tokens_in": 9314,
+        "cost_usd": 0.001656,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9004": {
-        "turns": 7,
-        "tokens_in": 11586,
-        "cost_usd": 0.002046,
+        "turns": 4,
+        "tokens_in": 11467,
+        "cost_usd": 0.002112,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9005": {
-        "turns": 10,
-        "tokens_in": 17508,
-        "cost_usd": 0.003064,
+        "turns": 7,
+        "tokens_in": 10743,
+        "cost_usd": 0.00183,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9031": {
-        "turns": 6,
-        "tokens_in": 15335,
-        "cost_usd": 0.002755,
+        "turns": 9,
+        "tokens_in": 13951,
+        "cost_usd": 0.002363,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9032": {
-        "turns": 5,
-        "tokens_in": 7985,
-        "cost_usd": 0.00136,
+        "turns": 4,
+        "tokens_in": 11384,
+        "cost_usd": 0.002153,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9033": {
         "turns": 6,
-        "tokens_in": 9768,
-        "cost_usd": 0.001697,
+        "tokens_in": 9327,
+        "cost_usd": 0.001621,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9034": {
-        "turns": 4,
-        "tokens_in": 13568,
-        "cost_usd": 0.003089,
+        "turns": 6,
+        "tokens_in": 9249,
+        "cost_usd": 0.001649,
         "decision": "request_document",
         "matches_key": true
       },
       "CLM-9035": {
         "turns": 6,
-        "tokens_in": 9802,
-        "cost_usd": 0.001734,
+        "tokens_in": 9307,
+        "cost_usd": 0.001634,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9101": {
-        "turns": 6,
-        "tokens_in": 9744,
-        "cost_usd": 0.001709,
+        "turns": 4,
+        "tokens_in": 11225,
+        "cost_usd": 0.002058,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9102": {
-        "turns": 6,
-        "tokens_in": 9679,
-        "cost_usd": 0.001628,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9103": {
-        "turns": 6,
-        "tokens_in": 9762,
-        "cost_usd": 0.001677,
+        "turns": 7,
+        "tokens_in": 10957,
+        "cost_usd": 0.001875,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9104": {
-        "turns": 7,
-        "tokens_in": 11662,
-        "cost_usd": 0.002066,
+        "turns": 6,
+        "tokens_in": 9261,
+        "cost_usd": 0.001614,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9105": {
         "turns": 6,
-        "tokens_in": 9800,
-        "cost_usd": 0.00173,
+        "tokens_in": 9298,
+        "cost_usd": 0.001626,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9061": {
         "turns": 2,
-        "tokens_in": 3687,
-        "cost_usd": 0.000635,
+        "tokens_in": 3498,
+        "cost_usd": 0.000594,
         "decision": "escalate",
         "matches_key": true
       },
-      "CLM-9062": {
-        "turns": 6,
-        "tokens_in": 9715,
-        "cost_usd": 0.001666,
-        "decision": "approve_in_principle",
-        "matches_key": false
-      },
       "CLM-9063": {
-        "turns": 7,
-        "tokens_in": 11254,
-        "cost_usd": 0.001924,
+        "turns": 11,
+        "tokens_in": 17967,
+        "cost_usd": 0.003035,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9064": {
         "turns": 4,
-        "tokens_in": 6471,
-        "cost_usd": 0.001085,
+        "tokens_in": 6156,
+        "cost_usd": 0.001045,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-9065": {
-        "turns": 8,
-        "tokens_in": 13378,
-        "cost_usd": 0.002352,
+        "turns": 5,
+        "tokens_in": 14130,
+        "cost_usd": 0.002923,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9041": {
         "turns": 6,
-        "tokens_in": 9647,
-        "cost_usd": 0.001647,
+        "tokens_in": 9218,
+        "cost_usd": 0.001585,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9042": {
-        "turns": 6,
-        "tokens_in": 9608,
-        "cost_usd": 0.001631,
+        "turns": 5,
+        "tokens_in": 16545,
+        "cost_usd": 0.004355,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9044": {
         "turns": 1,
-        "tokens_in": 2415,
-        "cost_usd": 0.000422,
+        "tokens_in": 2289,
+        "cost_usd": 0.000421,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-9046": {
-        "turns": 5,
-        "tokens_in": 8046,
-        "cost_usd": 0.00145,
+        "turns": 6,
+        "tokens_in": 9234,
+        "cost_usd": 0.001682,
         "decision": "request_document",
         "matches_key": true
       },
       "CLM-9047": {
         "turns": 7,
-        "tokens_in": 11288,
-        "cost_usd": 0.001907,
+        "tokens_in": 10778,
+        "cost_usd": 0.001827,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-9081": {
         "turns": 6,
-        "tokens_in": 9782,
-        "cost_usd": 0.001732,
+        "tokens_in": 9257,
+        "cost_usd": 0.001597,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9082": {
-        "turns": 6,
-        "tokens_in": 9816,
-        "cost_usd": 0.001754,
+        "turns": 5,
+        "tokens_in": 13470,
+        "cost_usd": 0.002552,
         "decision": "approve_in_principle",
         "matches_key": true
       }
@@ -307,305 +286,284 @@
   },
   "parallel": {
     "turns_median": 6,
-    "turns_total": 233,
-    "turns_max": 10,
-    "tokens_in": 403961,
-    "tokens_out": 17869,
-    "cost_usd": 0.071313,
-    "decisions_correct": 38,
-    "cases": 42,
+    "turns_total": 205,
+    "turns_max": 9,
+    "tokens_in": 370689,
+    "tokens_out": 20538,
+    "cost_usd": 0.067924,
+    "decisions_correct": 37,
+    "cases": 39,
     "per_case": {
       "CLM-8842": {
-        "turns": 7,
-        "tokens_in": 12118,
-        "cost_usd": 0.002093,
+        "turns": 9,
+        "tokens_in": 14528,
+        "cost_usd": 0.002503,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-8850": {
-        "turns": 5,
-        "tokens_in": 8006,
-        "cost_usd": 0.001402,
+        "turns": 6,
+        "tokens_in": 9265,
+        "cost_usd": 0.001605,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-8861": {
-        "turns": 9,
-        "tokens_in": 15208,
-        "cost_usd": 0.002605,
+        "turns": 7,
+        "tokens_in": 11203,
+        "cost_usd": 0.001958,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-8874": {
-        "turns": 6,
-        "tokens_in": 9699,
-        "cost_usd": 0.001688,
+        "turns": 7,
+        "tokens_in": 10843,
+        "cost_usd": 0.001869,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-8888": {
         "turns": 6,
-        "tokens_in": 9636,
-        "cost_usd": 0.001769,
+        "tokens_in": 9195,
+        "cost_usd": 0.001671,
         "decision": "request_document",
         "matches_key": true
       },
       "CLM-8894": {
         "turns": 6,
-        "tokens_in": 9667,
-        "cost_usd": 0.001707,
+        "tokens_in": 9202,
+        "cost_usd": 0.002013,
         "decision": "request_document",
         "matches_key": true
       },
       "CLM-8901": {
-        "turns": 5,
-        "tokens_in": 8075,
-        "cost_usd": 0.001437,
-        "decision": "request_document",
-        "matches_key": true
+        "turns": 3,
+        "tokens_in": 9774,
+        "cost_usd": 0.001888,
+        "decision": "escalate",
+        "matches_key": false
       },
       "CLM-8910": {
         "turns": 2,
-        "tokens_in": 8337,
-        "cost_usd": 0.001458,
+        "tokens_in": 3528,
+        "cost_usd": 0.000592,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-8917": {
         "turns": 2,
-        "tokens_in": 3665,
-        "cost_usd": 0.000615,
+        "tokens_in": 3476,
+        "cost_usd": 0.000587,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-8925": {
-        "turns": 6,
-        "tokens_in": 9628,
-        "cost_usd": 0.001582,
-        "decision": "request_document",
-        "matches_key": false
+        "turns": 7,
+        "tokens_in": 17035,
+        "cost_usd": 0.003216,
+        "decision": "escalate",
+        "matches_key": true
       },
       "CLM-8933": {
-        "turns": 5,
-        "tokens_in": 8100,
-        "cost_usd": 0.001374,
+        "turns": 2,
+        "tokens_in": 3529,
+        "cost_usd": 0.00061,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-8941": {
         "turns": 1,
-        "tokens_in": 2399,
-        "cost_usd": 0.000447,
+        "tokens_in": 2273,
+        "cost_usd": 0.000429,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-8952": {
-        "turns": 4,
-        "tokens_in": 6807,
-        "cost_usd": 0.001191,
+        "turns": 6,
+        "tokens_in": 9372,
+        "cost_usd": 0.001621,
         "decision": "approve_in_principle",
         "matches_key": false
       },
       "CLM-8960": {
-        "turns": 4,
-        "tokens_in": 7592,
-        "cost_usd": 0.001458,
+        "turns": 8,
+        "tokens_in": 12383,
+        "cost_usd": 0.002109,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-8971": {
-        "turns": 7,
-        "tokens_in": 11791,
-        "cost_usd": 0.002057,
+        "turns": 6,
+        "tokens_in": 9202,
+        "cost_usd": 0.001593,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9001": {
-        "turns": 6,
-        "tokens_in": 9861,
-        "cost_usd": 0.001752,
+        "turns": 5,
+        "tokens_in": 7730,
+        "cost_usd": 0.001362,
         "decision": "approve_in_principle",
         "matches_key": true
       },
-      "CLM-9002": {
-        "turns": 9,
-        "tokens_in": 15186,
-        "cost_usd": 0.002625,
-        "decision": "approve_in_principle",
-        "matches_key": false
-      },
       "CLM-9003": {
         "turns": 6,
-        "tokens_in": 9787,
-        "cost_usd": 0.001737,
+        "tokens_in": 9314,
+        "cost_usd": 0.001656,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9004": {
-        "turns": 7,
-        "tokens_in": 11586,
-        "cost_usd": 0.002046,
+        "turns": 4,
+        "tokens_in": 11467,
+        "cost_usd": 0.002112,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9005": {
-        "turns": 10,
-        "tokens_in": 17508,
-        "cost_usd": 0.003064,
+        "turns": 7,
+        "tokens_in": 10743,
+        "cost_usd": 0.00183,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9031": {
-        "turns": 4,
-        "tokens_in": 12428,
-        "cost_usd": 0.002311,
+        "turns": 6,
+        "tokens_in": 9905,
+        "cost_usd": 0.001744,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9032": {
-        "turns": 5,
-        "tokens_in": 7985,
-        "cost_usd": 0.00136,
+        "turns": 4,
+        "tokens_in": 11384,
+        "cost_usd": 0.002153,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9033": {
         "turns": 6,
-        "tokens_in": 9768,
-        "cost_usd": 0.001697,
+        "tokens_in": 9327,
+        "cost_usd": 0.001621,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9034": {
-        "turns": 4,
-        "tokens_in": 13568,
-        "cost_usd": 0.003089,
+        "turns": 6,
+        "tokens_in": 9249,
+        "cost_usd": 0.001649,
         "decision": "request_document",
         "matches_key": true
       },
       "CLM-9035": {
         "turns": 6,
-        "tokens_in": 9802,
-        "cost_usd": 0.001734,
+        "tokens_in": 9307,
+        "cost_usd": 0.001634,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9101": {
-        "turns": 6,
-        "tokens_in": 9744,
-        "cost_usd": 0.001709,
+        "turns": 4,
+        "tokens_in": 11225,
+        "cost_usd": 0.002058,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9102": {
-        "turns": 6,
-        "tokens_in": 9679,
-        "cost_usd": 0.001628,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9103": {
-        "turns": 6,
-        "tokens_in": 9762,
-        "cost_usd": 0.001677,
+        "turns": 7,
+        "tokens_in": 10957,
+        "cost_usd": 0.001875,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9104": {
-        "turns": 7,
-        "tokens_in": 11662,
-        "cost_usd": 0.002066,
+        "turns": 6,
+        "tokens_in": 9261,
+        "cost_usd": 0.001614,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9105": {
         "turns": 6,
-        "tokens_in": 9800,
-        "cost_usd": 0.00173,
+        "tokens_in": 9298,
+        "cost_usd": 0.001626,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9061": {
         "turns": 2,
-        "tokens_in": 3687,
-        "cost_usd": 0.000635,
+        "tokens_in": 3498,
+        "cost_usd": 0.000594,
         "decision": "escalate",
         "matches_key": true
       },
-      "CLM-9062": {
-        "turns": 6,
-        "tokens_in": 9715,
-        "cost_usd": 0.001666,
-        "decision": "approve_in_principle",
-        "matches_key": false
-      },
       "CLM-9063": {
-        "turns": 7,
-        "tokens_in": 11254,
-        "cost_usd": 0.001924,
+        "turns": 8,
+        "tokens_in": 13439,
+        "cost_usd": 0.002344,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9064": {
         "turns": 4,
-        "tokens_in": 6471,
-        "cost_usd": 0.001085,
+        "tokens_in": 6156,
+        "cost_usd": 0.001045,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-9065": {
-        "turns": 8,
-        "tokens_in": 13378,
-        "cost_usd": 0.002352,
+        "turns": 5,
+        "tokens_in": 14130,
+        "cost_usd": 0.002923,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9041": {
         "turns": 6,
-        "tokens_in": 9647,
-        "cost_usd": 0.001647,
+        "tokens_in": 9218,
+        "cost_usd": 0.001585,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9042": {
-        "turns": 6,
-        "tokens_in": 9608,
-        "cost_usd": 0.001631,
+        "turns": 4,
+        "tokens_in": 15245,
+        "cost_usd": 0.004156,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9044": {
         "turns": 1,
-        "tokens_in": 2415,
-        "cost_usd": 0.000422,
+        "tokens_in": 2289,
+        "cost_usd": 0.000421,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-9046": {
-        "turns": 5,
-        "tokens_in": 8046,
-        "cost_usd": 0.00145,
+        "turns": 6,
+        "tokens_in": 9234,
+        "cost_usd": 0.001682,
         "decision": "request_document",
         "matches_key": true
       },
       "CLM-9047": {
         "turns": 7,
-        "tokens_in": 11288,
-        "cost_usd": 0.001907,
+        "tokens_in": 10778,
+        "cost_usd": 0.001827,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-9081": {
         "turns": 6,
-        "tokens_in": 9782,
-        "cost_usd": 0.001732,
+        "tokens_in": 9257,
+        "cost_usd": 0.001597,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9082": {
-        "turns": 6,
-        "tokens_in": 9816,
-        "cost_usd": 0.001754,
+        "turns": 5,
+        "tokens_in": 13470,
+        "cost_usd": 0.002552,
         "decision": "approve_in_principle",
         "matches_key": true
       }
@@ -613,311 +571,295 @@
   },
   "driver_reproduces_baseline": true,
   "by_rule": {
-    "turns_median": 5,
-    "turns_total": 208,
+    "turns_median": 4,
+    "turns_total": 177,
     "turns_max": 8,
-    "tokens_in": 367579,
-    "tokens_out": 17703,
-    "cost_usd": 0.065755,
-    "decisions_correct": 38,
-    "cases": 42,
+    "tokens_in": 331949,
+    "tokens_out": 20344,
+    "cost_usd": 0.061998,
+    "decisions_correct": 37,
+    "cases": 39,
     "per_case": {
       "CLM-8842": {
-        "turns": 5,
-        "tokens_in": 8785,
-        "cost_usd": 0.001585,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-8850": {
-        "turns": 4,
-        "tokens_in": 6638,
-        "cost_usd": 0.001193,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-8861": {
-        "turns": 8,
-        "tokens_in": 13716,
-        "cost_usd": 0.002378,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-8874": {
-        "turns": 6,
-        "tokens_in": 9699,
-        "cost_usd": 0.001688,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-8888": {
-        "turns": 4,
-        "tokens_in": 6721,
-        "cost_usd": 0.001324,
-        "decision": "request_document",
-        "matches_key": true
-      },
-      "CLM-8894": {
-        "turns": 6,
-        "tokens_in": 9667,
-        "cost_usd": 0.001707,
-        "decision": "request_document",
-        "matches_key": true
-      },
-      "CLM-8901": {
-        "turns": 5,
-        "tokens_in": 8075,
-        "cost_usd": 0.001437,
-        "decision": "request_document",
-        "matches_key": true
-      },
-      "CLM-8910": {
-        "turns": 2,
-        "tokens_in": 8337,
-        "cost_usd": 0.001458,
-        "decision": "escalate",
-        "matches_key": true
-      },
-      "CLM-8917": {
-        "turns": 2,
-        "tokens_in": 3665,
-        "cost_usd": 0.000615,
-        "decision": "escalate",
-        "matches_key": true
-      },
-      "CLM-8925": {
-        "turns": 4,
-        "tokens_in": 6652,
-        "cost_usd": 0.001127,
-        "decision": "request_document",
-        "matches_key": false
-      },
-      "CLM-8933": {
-        "turns": 5,
-        "tokens_in": 8100,
-        "cost_usd": 0.001374,
-        "decision": "escalate",
-        "matches_key": true
-      },
-      "CLM-8941": {
-        "turns": 1,
-        "tokens_in": 2399,
-        "cost_usd": 0.000447,
-        "decision": "escalate",
-        "matches_key": true
-      },
-      "CLM-8952": {
-        "turns": 5,
-        "tokens_in": 8198,
-        "cost_usd": 0.001404,
-        "decision": "approve_in_principle",
-        "matches_key": false
-      },
-      "CLM-8960": {
-        "turns": 5,
-        "tokens_in": 9111,
-        "cost_usd": 0.00169,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-8971": {
-        "turns": 8,
-        "tokens_in": 13572,
-        "cost_usd": 0.002328,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9001": {
-        "turns": 6,
-        "tokens_in": 9861,
-        "cost_usd": 0.001752,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9002": {
-        "turns": 6,
-        "tokens_in": 10545,
-        "cost_usd": 0.001917,
-        "decision": "approve_in_principle",
-        "matches_key": false
-      },
-      "CLM-9003": {
-        "turns": 6,
-        "tokens_in": 9787,
-        "cost_usd": 0.001737,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9004": {
-        "turns": 6,
-        "tokens_in": 10173,
-        "cost_usd": 0.00183,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9005": {
-        "turns": 8,
-        "tokens_in": 14601,
-        "cost_usd": 0.002619,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9031": {
-        "turns": 4,
-        "tokens_in": 12336,
-        "cost_usd": 0.002297,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9032": {
-        "turns": 4,
-        "tokens_in": 6616,
-        "cost_usd": 0.001151,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9033": {
-        "turns": 6,
-        "tokens_in": 9768,
-        "cost_usd": 0.001697,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9034": {
-        "turns": 4,
-        "tokens_in": 13568,
-        "cost_usd": 0.003089,
-        "decision": "request_document",
-        "matches_key": true
-      },
-      "CLM-9035": {
-        "turns": 6,
-        "tokens_in": 9802,
-        "cost_usd": 0.001734,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9101": {
-        "turns": 6,
-        "tokens_in": 9744,
-        "cost_usd": 0.001709,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9102": {
-        "turns": 5,
-        "tokens_in": 8215,
-        "cost_usd": 0.001405,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9103": {
-        "turns": 6,
-        "tokens_in": 9762,
-        "cost_usd": 0.001677,
-        "decision": "approve_in_principle",
-        "matches_key": true
-      },
-      "CLM-9104": {
         "turns": 7,
         "tokens_in": 11662,
         "cost_usd": 0.002066,
         "decision": "approve_in_principle",
         "matches_key": true
       },
+      "CLM-8850": {
+        "turns": 6,
+        "tokens_in": 9265,
+        "cost_usd": 0.001605,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-8861": {
+        "turns": 7,
+        "tokens_in": 11203,
+        "cost_usd": 0.001958,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-8874": {
+        "turns": 6,
+        "tokens_in": 9362,
+        "cost_usd": 0.001642,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-8888": {
+        "turns": 4,
+        "tokens_in": 6406,
+        "cost_usd": 0.001245,
+        "decision": "request_document",
+        "matches_key": true
+      },
+      "CLM-8894": {
+        "turns": 6,
+        "tokens_in": 9202,
+        "cost_usd": 0.002013,
+        "decision": "request_document",
+        "matches_key": true
+      },
+      "CLM-8901": {
+        "turns": 3,
+        "tokens_in": 9774,
+        "cost_usd": 0.001888,
+        "decision": "escalate",
+        "matches_key": false
+      },
+      "CLM-8910": {
+        "turns": 2,
+        "tokens_in": 3528,
+        "cost_usd": 0.000592,
+        "decision": "escalate",
+        "matches_key": true
+      },
+      "CLM-8917": {
+        "turns": 2,
+        "tokens_in": 3476,
+        "cost_usd": 0.000587,
+        "decision": "escalate",
+        "matches_key": true
+      },
+      "CLM-8925": {
+        "turns": 4,
+        "tokens_in": 12708,
+        "cost_usd": 0.002555,
+        "decision": "escalate",
+        "matches_key": true
+      },
+      "CLM-8933": {
+        "turns": 2,
+        "tokens_in": 3529,
+        "cost_usd": 0.00061,
+        "decision": "escalate",
+        "matches_key": true
+      },
+      "CLM-8941": {
+        "turns": 1,
+        "tokens_in": 2273,
+        "cost_usd": 0.000429,
+        "decision": "escalate",
+        "matches_key": true
+      },
+      "CLM-8952": {
+        "turns": 6,
+        "tokens_in": 9372,
+        "cost_usd": 0.001621,
+        "decision": "approve_in_principle",
+        "matches_key": false
+      },
+      "CLM-8960": {
+        "turns": 4,
+        "tokens_in": 6760,
+        "cost_usd": 0.00125,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-8971": {
+        "turns": 6,
+        "tokens_in": 9202,
+        "cost_usd": 0.001593,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-9001": {
+        "turns": 4,
+        "tokens_in": 6412,
+        "cost_usd": 0.00116,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-9003": {
+        "turns": 6,
+        "tokens_in": 9314,
+        "cost_usd": 0.001656,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-9004": {
+        "turns": 3,
+        "tokens_in": 10117,
+        "cost_usd": 0.001905,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-9005": {
+        "turns": 4,
+        "tokens_in": 6610,
+        "cost_usd": 0.001197,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-9031": {
+        "turns": 7,
+        "tokens_in": 11289,
+        "cost_usd": 0.001956,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-9032": {
+        "turns": 3,
+        "tokens_in": 10058,
+        "cost_usd": 0.00195,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-9033": {
+        "turns": 6,
+        "tokens_in": 9327,
+        "cost_usd": 0.001621,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-9034": {
+        "turns": 6,
+        "tokens_in": 9249,
+        "cost_usd": 0.001649,
+        "decision": "request_document",
+        "matches_key": true
+      },
+      "CLM-9035": {
+        "turns": 6,
+        "tokens_in": 9307,
+        "cost_usd": 0.001634,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-9101": {
+        "turns": 3,
+        "tokens_in": 9896,
+        "cost_usd": 0.001854,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-9102": {
+        "turns": 7,
+        "tokens_in": 10957,
+        "cost_usd": 0.001875,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
+      "CLM-9104": {
+        "turns": 6,
+        "tokens_in": 9261,
+        "cost_usd": 0.001614,
+        "decision": "approve_in_principle",
+        "matches_key": true
+      },
       "CLM-9105": {
         "turns": 6,
-        "tokens_in": 9800,
-        "cost_usd": 0.00173,
+        "tokens_in": 9298,
+        "cost_usd": 0.001626,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9061": {
         "turns": 2,
-        "tokens_in": 3687,
-        "cost_usd": 0.000635,
+        "tokens_in": 3498,
+        "cost_usd": 0.000594,
         "decision": "escalate",
         "matches_key": true
       },
-      "CLM-9062": {
-        "turns": 5,
-        "tokens_in": 8250,
-        "cost_usd": 0.001443,
-        "decision": "approve_in_principle",
-        "matches_key": false
-      },
       "CLM-9063": {
-        "turns": 6,
-        "tokens_in": 9856,
-        "cost_usd": 0.00171,
+        "turns": 8,
+        "tokens_in": 13472,
+        "cost_usd": 0.002349,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9064": {
         "turns": 3,
-        "tokens_in": 5100,
-        "cost_usd": 0.000875,
+        "tokens_in": 4848,
+        "cost_usd": 0.000844,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-9065": {
-        "turns": 6,
-        "tokens_in": 10482,
-        "cost_usd": 0.001909,
+        "turns": 3,
+        "tokens_in": 11360,
+        "cost_usd": 0.002499,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9041": {
         "turns": 4,
-        "tokens_in": 6819,
-        "cost_usd": 0.001215,
+        "tokens_in": 6514,
+        "cost_usd": 0.001171,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9042": {
-        "turns": 5,
-        "tokens_in": 8161,
-        "cost_usd": 0.00141,
+        "turns": 4,
+        "tokens_in": 15219,
+        "cost_usd": 0.004152,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9044": {
         "turns": 1,
-        "tokens_in": 2415,
-        "cost_usd": 0.000422,
+        "tokens_in": 2289,
+        "cost_usd": 0.000421,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-9046": {
-        "turns": 3,
-        "tokens_in": 5199,
-        "cost_usd": 0.001014,
+        "turns": 4,
+        "tokens_in": 6494,
+        "cost_usd": 0.001263,
         "decision": "request_document",
         "matches_key": true
       },
       "CLM-9047": {
         "turns": 5,
-        "tokens_in": 8437,
-        "cost_usd": 0.001471,
+        "tokens_in": 8053,
+        "cost_usd": 0.00141,
         "decision": "escalate",
         "matches_key": true
       },
       "CLM-9081": {
         "turns": 6,
-        "tokens_in": 9782,
-        "cost_usd": 0.001732,
+        "tokens_in": 9257,
+        "cost_usd": 0.001597,
         "decision": "approve_in_principle",
         "matches_key": true
       },
       "CLM-9082": {
-        "turns": 6,
-        "tokens_in": 9816,
-        "cost_usd": 0.001754,
+        "turns": 4,
+        "tokens_in": 12128,
+        "cost_usd": 0.002347,
         "decision": "approve_in_principle",
         "matches_key": true
       }
     }
   },
+  "excluded_no_final": [
+    "CLM-9002",
+    "CLM-9062",
+    "CLM-9103"
+  ],
   "decisions_differing": [],
   "parallel_regressions": []
 }

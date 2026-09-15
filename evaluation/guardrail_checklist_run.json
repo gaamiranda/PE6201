@@ -2,7 +2,7 @@
   "passed": 9,
   "total": 10,
   "backend": "scripted",
-  "budget_ceiling_usd": 0.019,
+  "budget_ceiling_usd": 0.036,
   "rows": [
     {
       "row": 1,
@@ -38,10 +38,10 @@
     },
     {
       "row": 5,
-      "case": "Verbose reply whose projected cost crosses US$0.019",
+      "case": "Verbose reply whose projected cost crosses US$0.036",
       "catches": "Unbounded spend",
       "category": "Loop control",
-      "observed": "cap_fired=budget_ceiling, cost=US$0.02478, decision=escalate, reason starts 'STOPPED BY GUARDRAIL: budget_ceili'",
+      "observed": "cap_fired=budget_ceiling, cost=US$0.05569, decision=escalate, reason starts 'STOPPED BY GUARDRAIL: budget_ceili'",
       "passed": true
     },
     {
