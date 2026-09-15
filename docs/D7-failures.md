@@ -54,14 +54,38 @@ run — show this.]
 
 Must sit in the **tool interface** or the **prompt** — not loop control again.
 
-**The deletion:** [...]
-**Symptom:** [...]
-**The fix, and its layer:** [...]
+**The deletion:** in `src/tools.py`, revert `check_coverage` from the v2 return shape back to
+the old separate branch fields:
+
+```
+{"code": code, "covered": bool, "exclusion": str | None,
+ "requires_preauth": bool, "document_required": str | None}
+```
+
+That is a deletion from the working agent because putting back the shipped v2 shape restores the
+behaviour:
+
+```
+{"code": code,
+ "coverage": {"status": "covered" | "not_covered", "exclusion": str},
+ "needed_next": [...]}
+```
+
+**Symptom:** the old observation could say one line was excluded while also returning
+`requires_preauth` or `document_required` for that same line. The model then had two live branch
+signals for a line already refused, so it could chase paperwork for an excluded service and turn a
+partial approval into a document request. The scripted backend replays fixed replies, so it cannot
+measure the live pass-rate effect here; the deterministic evidence is the interface/guardrail case:
+an excluded line now returns `needed_next: []`.
+
+**The fix, and its layer:** tool interface. The fix belongs in the returned object, not in a prompt
+sentence, because the unsafe branch should be unrepresentable in the observation the model sees.
+The v2 descriptor explains the shape, but the safety property is carried by the data shape.
 
 | | Tokens | Cost | Pass rate | Guardrail cases |
 |---|---|---|---|---|
-| Broken | | | | |
-| Fixed | | | | |
+| Broken | 833,198 input + 73,434 output estimated tokens in the committed scripted baseline | US$0.112697 projected for the 76-trial schedule | 52/76 code, 38/42 decision-only cases; pass-rate comparison not attributable on scripted replay | 9/10: the excluded-line/no-paperwork case fails because the old shape can expose branch flags on a refused line |
+| Fixed | 999,600 input + 73,434 output estimated tokens after the v2 descriptor/shape | US$0.129332 projected for the 76-trial schedule | Expected unchanged on scripted replay; live comparison belongs to the later battery | 10/10: excluded lines have `needed_next: []`, so the unsafe branch is not present |
 
 ---
 
@@ -72,5 +96,5 @@ Must sit in the **tool interface** or the **prompt** — not loop control again.
 
 | Failure | Right layer | Why not code | Why not tool interface | Why not prompt |
 |---|---|---|---|---|
-| 1 | | | | |
-| 2 | | | | |
+| 1 | Loop control | The fix is code: the loop must remember repeated actions and cap spend. | A tool cannot know whether the same action has already happened in this run. | A prompt reminder still lets a model repeat itself; it does not bound cost. |
+| 2 | Tool interface | Ordinary validation can reject bad records after the model has already taken the wrong branch. | This is the right layer: make the unsafe observation shape impossible. | A prompt sentence such as "ignore paperwork for excluded lines" is paid every turn and can still be missed. |

@@ -119,8 +119,10 @@ State what each makes **impossible** — not what it discourages.
 
 | Before | After | What it makes impossible |
 |---|---|---|
-| | | |
-| | | |
+| `get_preauthorisation(member_id, procedure_code)` | `get_preauthorisation(member_id, procedure_code, date_of_service)` | Returning "approval found" without testing whether it applies on the service date. |
+| a duplicate check on any subset of facts | `check_claim_history(member_id, hospital_id, date_of_service, lines)` | A three-fact duplicate match. All four match facts must be supplied together. |
+| `check_coverage(member_id, procedure_code)` or a free policy lookup inside the model's reasoning | `check_coverage(policy_id, procedure_code)` | Checking coverage against a policy the member does not hold. The caller must use the policy id returned by `lookup_policy`. |
+| separate `covered`, `requires_preauth`, and `document_required` flags | `coverage.status` plus `needed_next[]`, empty when `coverage.status == "not_covered"` | The tool observation cannot say a line is excluded and also ask the agent to chase pre-authorisation or documents for that same refused line. |
 
 ### The measured rewrite
 
@@ -128,11 +130,27 @@ One tool, v1 vs v2 of its descriptor and return shape.
 
 | | Tokens returned per call | Eval pass rate | Guardrail cases passed |
 |---|---|---|---|
-| v1 | | | |
-| v2 | | | |
+| v1 | Manual: 325 estimated tokens; check_coverage block: 40 estimated tokens | Not measured here; scripted replay is keyed only by case and turn, so v1/v2 would replay the same model replies. | Not measured here for the same reason. |
+| v2 | Manual: 602 estimated tokens; check_coverage block: 318 estimated tokens | Not measured here; token delta only. | Not measured here; token delta only. |
 
-**Verdict:** [what changed, and why]. If v2 is not smaller or not safer, say so — a rewrite that did
-not help, honestly reported, scores better than one that was never measured.
+**v1 descriptor in `tools.DESCRIPTORS_V1`:**
+
+```
+check_coverage(policy_id: 'str', procedure_code: 'str') -> 'CoverageResult'
+Checks whether a procedure is covered by a policy and says if anything else is needed.
+```
+
+**v2 descriptor in the `check_coverage` docstring:** six fields: name/signature, what, input,
+returns with a size bound, fails when, irreversible. `loop.tool_manual("v1")` and
+`loop.tool_manual("v2")` both build seven blocks and differ in exactly one block, the
+`check_coverage` block. The whole-manual token delta is `+277` estimated tokens (`325 -> 602`).
+
+**Verdict:** v2 is longer, so it is not a cost win. It is a safety/interface win: the return
+shape now exposes a single coverage result and a bounded `needed_next` list. That makes an
+internally contradictory observation impossible for excluded lines: the tool cannot return
+`not_covered` and simultaneously return branch flags telling the agent to pursue paperwork for
+that refused line. The pass-rate comparison must be a later live run, not the scripted backend,
+because the scripted backend replays the same recorded replies for either prompt version.
 
 ---
 
