@@ -1,0 +1,131 @@
+{
+  "census_evaluation_set": {
+    "lines_checked": 67,
+    "contradictory_observations": 1,
+    "cases_affected": [
+      "CLM-9065"
+    ],
+    "examples": [
+      {
+        "case_id": "CLM-9065",
+        "code": "62480",
+        "old": {
+          "code": "62480",
+          "covered": false,
+          "exclusion": "EX-27 spinal fusion not covered under this product",
+          "requires_preauth": true,
+          "document_required": "discharge_summary"
+        },
+        "new": {
+          "code": "62480",
+          "coverage": {
+            "status": "not_covered",
+            "exclusion": "EX-27 spinal fusion not covered under this product"
+          },
+          "needed_next": []
+        }
+      }
+    ]
+  },
+  "census_all_pairs": {
+    "pairs": 168,
+    "contradictory_pairs": 1,
+    "percent": 0.6
+  },
+  "observation_size": {
+    "fixed_v2_shape": {
+      "observations": 67,
+      "chars": 6184,
+      "estimated_tokens": 1507,
+      "mean_chars": 92.3
+    },
+    "broken_shape_only": {
+      "observations": 67,
+      "chars": 7656,
+      "estimated_tokens": 1877,
+      "mean_chars": 114.3
+    }
+  },
+  "manual_tokens": {
+    "fixed_v2_shape": 540,
+    "broken_shape_only": 540,
+    "broken_full_v1": 262
+  },
+  "arms": {
+    "fixed_v2_shape": {
+      "harness": {
+        "code_pass": 63,
+        "trials": 76,
+        "decision_cases_pass": 40,
+        "cases": 42,
+        "tokens_in": 785906,
+        "tokens_out": 46280,
+        "projected_schedule_usd": 0.097096,
+        "code_failed_cases": [
+          "CLM-8888",
+          "CLM-8894",
+          "CLM-8952",
+          "CLM-8960",
+          "CLM-9002"
+        ]
+      },
+      "guardrail": {
+        "passed": 9,
+        "total": 10,
+        "failed_rows": [
+          2
+        ]
+      }
+    },
+    "broken_shape_only": {
+      "harness": {
+        "code_pass": 63,
+        "trials": 76,
+        "decision_cases_pass": 40,
+        "cases": 42,
+        "tokens_in": 787657,
+        "tokens_out": 46280,
+        "projected_schedule_usd": 0.097274,
+        "code_failed_cases": [
+          "CLM-8888",
+          "CLM-8894",
+          "CLM-8952",
+          "CLM-8960",
+          "CLM-9002"
+        ]
+      },
+      "guardrail": {
+        "passed": 9,
+        "total": 10,
+        "failed_rows": [
+          2
+        ]
+      }
+    },
+    "broken_full_v1": {
+      "harness": {
+        "code_pass": 63,
+        "trials": 76,
+        "decision_cases_pass": 40,
+        "cases": 42,
+        "tokens_in": 656441,
+        "tokens_out": 46280,
+        "projected_schedule_usd": 0.084157,
+        "code_failed_cases": [
+          "CLM-8888",
+          "CLM-8894",
+          "CLM-8952",
+          "CLM-8960",
+          "CLM-9002"
+        ]
+      },
+      "guardrail": {
+        "passed": 9,
+        "total": 10,
+        "failed_rows": [
+          2
+        ]
+      }
+    }
+  }
+}
