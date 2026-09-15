@@ -84,8 +84,8 @@ The v2 descriptor explains the shape, but the safety property is carried by the 
 
 | | Tokens | Cost | Pass rate | Guardrail cases |
 |---|---|---|---|---|
-| Broken | 833,198 input + 73,434 output estimated tokens in the committed scripted baseline | US$0.112697 projected for the 76-trial schedule | 52/76 code, 38/42 decision-only cases; pass-rate comparison not attributable on scripted replay | 9/10: the excluded-line/no-paperwork case fails because the old shape can expose branch flags on a refused line |
-| Fixed | 999,600 input + 73,434 output estimated tokens after the v2 descriptor/shape | US$0.129332 projected for the 76-trial schedule | Expected unchanged on scripted replay; live comparison belongs to the later battery | 10/10: excluded lines have `needed_next: []`, so the unsafe branch is not present |
+| Broken | 833,198 input + 73,434 output estimated tokens in the committed scripted baseline | US$0.112697 projected for the 76-trial schedule | 52/76 code, 38/42 decision-only cases; pass-rate comparison not attributable on scripted replay | 9/10, and **not the same 9**: row 2 (`CLM-8952`) fails under both shapes, and the old shape additionally lets an excluded line carry `requires_preauth`/`document_required` — a contradiction the checklist has no row for, because after the rewrite it is unrepresentable |
+| Fixed | 999,474 input + 73,434 output estimated tokens after the v2 descriptor/shape | US$0.129324 projected for the 76-trial schedule | Unchanged on scripted replay, and *necessarily* so — see the note below; the live comparison belongs to the battery | 9/10: excluded lines return `needed_next: []`, so the contradictory observation is gone. Row 2 still fails, for an unrelated reason the shape change was never going to fix |
 
 ---
 
@@ -98,3 +98,26 @@ The v2 descriptor explains the shape, but the safety property is carried by the 
 |---|---|---|---|---|
 | 1 | Loop control | The fix is code: the loop must remember repeated actions and cap spend. | A tool cannot know whether the same action has already happened in this run. | A prompt reminder still lets a model repeat itself; it does not bound cost. |
 | 2 | Tool interface | Ordinary validation can reject bad records after the model has already taken the wrong branch. | This is the right layer: make the unsafe observation shape impossible. | A prompt sentence such as "ignore paperwork for excluded lines" is paid every turn and can still be missed. |
+
+---
+
+## A note on what the scripted backend can and cannot show for failure 2
+
+`evaluation/transcripts.jsonl` is keyed on `(case_id, turn)` alone. It does not record which prompt
+or which tool-return shape produced each reply, so on replay the model's replies are fixed no matter
+what the tool layer does underneath them.
+
+That was verified rather than assumed: making `check_coverage` return a deliberately wrong object
+for every line — `{"code": "SABOTAGE", "coverage": {"status": "covered"}, "needed_next": []}` —
+leaves the harness output **byte-identical** at 52/76 code, 38/42 decision-only, 0 caps fired.
+
+Two consequences, and both belong in the report:
+
+1. **No pass-rate number from the scripted backend can be attributed to failure 2, in either
+   direction.** The "unchanged" pass rate in the table above is not evidence the fix is harmless;
+   it is evidence the instrument is blind to it. The deterministic evidence for this failure is the
+   interface property itself — an excluded line returns `needed_next: []` — plus the guardrail row,
+   not the pass rate.
+2. **The transcripts must be re-recorded before the battery**, because they were recorded against
+   the pre-rewrite descriptors and the pre-rewrite return shape. Until then the scripted backend is
+   replaying a conversation the current tool layer would never have produced.

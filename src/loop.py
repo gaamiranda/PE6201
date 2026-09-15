@@ -87,15 +87,36 @@ class Guards:
     # maximum, which is why it fired on live work.
     call_cap: int = 18
 
-    # MEASURED from the committed 76-trial scripted baseline in
-    # results/evaluations/eval-scripted-v2-final.trials.jsonl:
+    # MEASURED — but measured across the WHOLE BATTERY, not one model, and that distinction
+    # is the whole point of this number.
     #
-    #     projected cost   median $0.001731   p90 $0.002689   max $0.004272
+    # Cost is the one guard whose units are not set by the agent's behaviour. Two runs that
+    # take identical turns, identical tool calls and identical tokens cost different amounts
+    # purely because they were priced at a different model's rate. So a ceiling calibrated on
+    # one model is not a guard on the others: it is a price filter wearing a guard's clothes.
     #
-    # $0.0044 clears the worst legitimate run by $0.000128 (3.0%) while still stopping the
-    # CLM-8850 live runaway described above more than 12x earlier than the old $0.05
-    # placeholder. The budget guard is last-resort cost containment, not a target spend.
-    budget_ceiling_usd: float = 0.0044
+    # Replaying all 42 cases at each battery model's rate with the ceiling lifted to $10 —
+    # so that nothing is truncated by the number being measured — gives, per run:
+    #
+    #     google/gemini-2.5-flash-lite      median 0.00183   p90 0.00279   max 0.00427
+    #     meta-llama/llama-3.3-70b-instruct median 0.00203   p90 0.00309   max 0.00464
+    #     deepseek/deepseek-chat            median 0.00230   p90 0.00351   max 0.00522
+    #     openai/gpt-4o-mini                median 0.00274   p90 0.00418   max 0.00640
+    #     mistralai/mistral-medium-3        median 0.00771   p90 0.01192   max 0.01814
+    #
+    # CLM-9005 is the worst case for every model, which is what you want to see: the ranking
+    # is set by price, not by any model-specific behaviour the replay could have introduced.
+    #
+    # 0.019 clears the worst legitimate run in the battery by 4.7%. It is still 2.6x tighter
+    # than the old 0.05 placeholder and stops the CLM-8850 runaway well before it ran.
+    #
+    # The rejected alternative was 0.0044, which clears gemini's max by 3%. On the scripted
+    # replay that ceiling aborts 34 of mistral-medium-3's 42 runs, 3 of gpt-4o-mini's and 1 of
+    # deepseek's, while leaving gemini and llama untouched — so WANG HONGJUN's battery would
+    # have reported a pass rate for a model that was killed mid-decision 81% of the time, and
+    # the D5(b) comparison would have measured our price table instead of the six models.
+    # A guard must fire on behaviour the agent controls. This one now does.
+    budget_ceiling_usd: float = 0.019
     dedup: bool = True                   # delete this to reproduce D7 failure 1
     autonomy: Autonomy = "confirm"       # D3(a) chooses and defends this
     parallel: bool = True                # D2(c): False executes one call per turn

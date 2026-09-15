@@ -222,7 +222,8 @@ class Claim(TypedDict, total=False):
     member_id: str
     hospital_id: str
     date_of_service: str
-    documents: List[str]              # what is ATTACHED. Compare with CoverageResult.document_required
+    documents: List[str]              # what is ATTACHED. Compare with the {"kind": "document"}
+                                      # entries in CoverageResult.needed_next
     lines: List[ClaimLine]
     narrative: str                    # ⚠ UNTRUSTED — see below
 
@@ -256,6 +257,22 @@ class PolicyStatus(TypedDict, total=False):
                                       # misses it."
     headroom_remaining: int           # COMPUTED: annual_limit - used_to_date. The claim total is
                                       # tested against THIS, never against annual_limit
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# THE ONE BREAKING CHANGE TO THIS FROZEN FILE, AND WHY IT WAS ALLOWED
+#
+# This file is additive-only: four people wrote code against it. CoverageResult is the single
+# exception. D2(b)'s v1 -> v2 rewrite changed what check_coverage RETURNS — `covered`,
+# `exclusion`, `requires_preauth` and `document_required` became `coverage` plus `needed_next` —
+# and a contract that still described the old four fields would document a tool that no longer
+# exists. A stale contract is worse than a changed one.
+#
+# Checked before making it: nothing outside tools.py read the removed fields. The loop, the
+# harness and the fixtures never touched them, so the change is breaking on paper and inert in
+# practice. Recorded here rather than done quietly, because "frozen" is only worth something if
+# the exceptions are written down.
+# ─────────────────────────────────────────────────────────────────────────────
 
 
 class CoverageStatus(TypedDict, total=False):

@@ -204,9 +204,14 @@ def check_coverage(policy_id: str, procedure_code: str) -> CoverageResult:
 
     exclusion = next((e["rule"] for e in pol["exclusions"] if e["code"] == procedure_code), None)
 
-    # document_required rides along because required_documents.json is keyed on procedure_code,
-    # which this call already holds. That is what removed check_required_documents before it
-    # ever shipped — one fewer descriptor in the prompt prefix, zero extra calls.
+    # The document requirement rides along in needed_next because required_documents.json is
+    # keyed on procedure_code, which this call already holds. That is what removed
+    # check_required_documents before it ever shipped — one fewer descriptor in the prompt
+    # prefix, zero extra calls.
+    #
+    # The early return below is the v2 safety property: a not_covered line leaves with an EMPTY
+    # needed_next, so the observation cannot simultaneously refuse a line and tell the agent to
+    # chase pre-authorisation or documents for it. Under v1 both could be set at once.
     if exclusion is not None:
         return {
             "code": procedure_code,
@@ -229,7 +234,7 @@ def check_coverage(policy_id: str, procedure_code: str) -> CoverageResult:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 4 · get_preauthorisation — only for lines whose coverage said requires_preauth.
+# 4 · get_preauthorisation — only for lines whose needed_next carried {"kind": "preauth"}.
 # ─────────────────────────────────────────────────────────────────────────────
 
 def get_preauthorisation(member_id: str, procedure_code: str, date_of_service: str) -> PreauthResult:

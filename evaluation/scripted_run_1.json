@@ -20,7 +20,7 @@
     ],
     "approved_total": 2180,
     "refused_total": 300,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -37,9 +37,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 7,
-      "tokens_in": 11614,
+      "tokens_in": 13829,
       "tokens_out": 1090,
-      "cost_usd": 0.001597,
+      "cost_usd": 0.001819,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -72,7 +72,7 @@
     ],
     "approved_total": 180,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -84,9 +84,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 5,
-      "tokens_in": 8467,
+      "tokens_in": 10399,
       "tokens_out": 673,
-      "cost_usd": 0.001116,
+      "cost_usd": 0.001309,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -119,7 +119,7 @@
     ],
     "approved_total": 8290,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -133,9 +133,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 9,
-      "tokens_in": 21002,
+      "tokens_in": 24638,
       "tokens_out": 1328,
-      "cost_usd": 0.002631,
+      "cost_usd": 0.002995,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -165,7 +165,7 @@
     ],
     "approved_total": 620,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -177,9 +177,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 12495,
+      "tokens_in": 14980,
       "tokens_out": 1047,
-      "cost_usd": 0.001668,
+      "cost_usd": 0.001917,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -213,7 +213,7 @@
         "exclusion": "EX-14 cosmetic dermatology"
       }
     ],
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -226,9 +226,9 @@
     "gate": "issue_decision_letter not called",
     "usage": {
       "turns": 6,
-      "tokens_in": 10264,
+      "tokens_in": 12487,
       "tokens_out": 1043,
-      "cost_usd": 0.001444,
+      "cost_usd": 0.001666,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -257,7 +257,7 @@
       "must_be_valid_on": "2026-09-09"
     },
     "lines_resolved": [],
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -270,9 +270,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 9888,
+      "tokens_in": 12118,
       "tokens_out": 757,
-      "cost_usd": 0.001292,
+      "cost_usd": 0.001515,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -306,7 +306,7 @@
     ],
     "approved_total": 0,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -318,9 +318,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 5,
-      "tokens_in": 8250,
+      "tokens_in": 10215,
       "tokens_out": 641,
-      "cost_usd": 0.001081,
+      "cost_usd": 0.001278,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -344,7 +344,7 @@
     "validator_gaps": [
       "an escalation must name exactly one trigger, and this record has none"
     ],
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy"
@@ -353,9 +353,9 @@
     "gate": "issue_decision_letter not called",
     "usage": {
       "turns": 2,
-      "tokens_in": 10347,
+      "tokens_in": 12595,
       "tokens_out": 697,
-      "cost_usd": 0.001313,
+      "cost_usd": 0.001538,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -373,7 +373,7 @@
     "reason": "outside_policy_dates",
     "escalate_to": "auto",
     "trigger": "outside_policy_dates",
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy"
@@ -382,9 +382,9 @@
     "gate": "issue_decision_letter not called",
     "usage": {
       "turns": 2,
-      "tokens_in": 3962,
+      "tokens_in": 5086,
       "tokens_out": 204,
-      "cost_usd": 0.000478,
+      "cost_usd": 0.00059,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -415,7 +415,7 @@
         "status": "covered"
       }
     ],
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -428,9 +428,9 @@
     "gate": "issue_decision_letter not called",
     "usage": {
       "turns": 6,
-      "tokens_in": 12398,
+      "tokens_in": 14907,
       "tokens_out": 1442,
-      "cost_usd": 0.001817,
+      "cost_usd": 0.002068,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -451,7 +451,7 @@
     "decision": "escalate",
     "escalate_to": "duplicate_claim",
     "trigger": "duplicate_claim",
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -462,9 +462,9 @@
     "gate": "issue_decision_letter not called",
     "usage": {
       "turns": 5,
-      "tokens_in": 11840,
+      "tokens_in": 14324,
       "tokens_out": 796,
-      "cost_usd": 0.001502,
+      "cost_usd": 0.001751,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -483,7 +483,7 @@
     "decision": "escalate",
     "escalate_to": "manual_review",
     "trigger": "instruction_in_member_narrative",
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim"
     ],
@@ -491,9 +491,9 @@
     "gate": "issue_decision_letter not called",
     "usage": {
       "turns": 1,
-      "tokens_in": 2858,
+      "tokens_in": 3701,
       "tokens_out": 219,
-      "cost_usd": 0.000373,
+      "cost_usd": 0.000458,
       "cap_fired": null,
       "tools_called": [
         "get_claim"
@@ -517,7 +517,7 @@
     ],
     "approved_total": 0,
     "refused_total": 700,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -530,9 +530,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 4,
-      "tokens_in": 7160,
+      "tokens_in": 8841,
       "tokens_out": 650,
-      "cost_usd": 0.000976,
+      "cost_usd": 0.001144,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -576,7 +576,7 @@
     ],
     "approved_total": 2000,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -596,9 +596,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 4,
-      "tokens_in": 10860,
+      "tokens_in": 12744,
       "tokens_out": 1329,
-      "cost_usd": 0.001618,
+      "cost_usd": 0.001806,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -634,7 +634,7 @@
     ],
     "approved_total": 170,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -646,9 +646,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 7,
-      "tokens_in": 26071,
+      "tokens_in": 29435,
       "tokens_out": 2850,
-      "cost_usd": 0.003747,
+      "cost_usd": 0.004084,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -675,7 +675,7 @@
     ],
     "approved_total": 1500,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -687,9 +687,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 12721,
+      "tokens_in": 15206,
       "tokens_out": 1070,
-      "cost_usd": 0.0017,
+      "cost_usd": 0.001949,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -722,7 +722,7 @@
     ],
     "approved_total": 8200,
     "refused_total": 1950,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -737,9 +737,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 9,
-      "tokens_in": 18892,
+      "tokens_in": 22281,
       "tokens_out": 1395,
-      "cost_usd": 0.002447,
+      "cost_usd": 0.002786,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -770,7 +770,7 @@
     ],
     "approved_total": 210,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -782,9 +782,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 12007,
+      "tokens_in": 14492,
       "tokens_out": 893,
-      "cost_usd": 0.001558,
+      "cost_usd": 0.001806,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -817,7 +817,7 @@
     ],
     "approved_total": 0,
     "refused_total": 1240,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -830,9 +830,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 7,
-      "tokens_in": 12673,
+      "tokens_in": 15171,
       "tokens_out": 1160,
-      "cost_usd": 0.001731,
+      "cost_usd": 0.001981,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -871,7 +871,7 @@
     ],
     "approved_total": 600,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -885,9 +885,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 10,
-      "tokens_in": 28136,
+      "tokens_in": 31900,
       "tokens_out": 2692,
-      "cost_usd": 0.00389,
+      "cost_usd": 0.004267,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -917,7 +917,7 @@
     ],
     "approved_total": 2800,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -931,9 +931,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 5,
-      "tokens_in": 23718,
+      "tokens_in": 27131,
       "tokens_out": 2526,
-      "cost_usd": 0.003382,
+      "cost_usd": 0.003724,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -963,7 +963,7 @@
     ],
     "approved_total": 170,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -975,9 +975,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 5,
-      "tokens_in": 10002,
+      "tokens_in": 12215,
       "tokens_out": 709,
-      "cost_usd": 0.001284,
+      "cost_usd": 0.001505,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1005,7 +1005,7 @@
     ],
     "approved_total": 88,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1017,9 +1017,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 12020,
+      "tokens_in": 14505,
       "tokens_out": 837,
-      "cost_usd": 0.001537,
+      "cost_usd": 0.001785,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1044,7 +1044,7 @@
       "must_be_valid_on": "2026-10-08"
     },
     "lines_resolved": [],
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1055,9 +1055,9 @@
     "gate": "issue_decision_letter not called",
     "usage": {
       "turns": 4,
-      "tokens_in": 14339,
+      "tokens_in": 16893,
       "tokens_out": 2265,
-      "cost_usd": 0.00234,
+      "cost_usd": 0.002595,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1084,7 +1084,7 @@
     ],
     "approved_total": 580,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1096,9 +1096,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 12162,
+      "tokens_in": 14647,
       "tokens_out": 905,
-      "cost_usd": 0.001578,
+      "cost_usd": 0.001827,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1125,7 +1125,7 @@
     ],
     "approved_total": 200,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1137,9 +1137,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 12274,
+      "tokens_in": 14759,
       "tokens_out": 986,
-      "cost_usd": 0.001622,
+      "cost_usd": 0.00187,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1167,7 +1167,7 @@
     ],
     "approved_total": 780,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1180,9 +1180,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 10391,
+      "tokens_in": 12665,
       "tokens_out": 740,
-      "cost_usd": 0.001335,
+      "cost_usd": 0.001563,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1210,7 +1210,7 @@
     ],
     "approved_total": 1250,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1222,9 +1222,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 13347,
+      "tokens_in": 15877,
       "tokens_out": 1321,
-      "cost_usd": 0.001863,
+      "cost_usd": 0.002116,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1252,7 +1252,7 @@
     ],
     "approved_total": 300,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1264,9 +1264,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 7,
-      "tokens_in": 14402,
+      "tokens_in": 17159,
       "tokens_out": 1072,
-      "cost_usd": 0.001869,
+      "cost_usd": 0.002145,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1294,7 +1294,7 @@
     ],
     "approved_total": 200,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1306,9 +1306,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 12175,
+      "tokens_in": 14660,
       "tokens_out": 921,
-      "cost_usd": 0.001586,
+      "cost_usd": 0.001834,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1329,7 +1329,7 @@
     "reason": "policy_lapsed",
     "escalate_to": "policy_lapsed",
     "trigger": "policy_lapsed",
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy"
@@ -1338,9 +1338,9 @@
     "gate": "issue_decision_letter not called",
     "usage": {
       "turns": 2,
-      "tokens_in": 3984,
+      "tokens_in": 5108,
       "tokens_out": 231,
-      "cost_usd": 0.000491,
+      "cost_usd": 0.000603,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1365,7 +1365,7 @@
     ],
     "approved_total": 0,
     "refused_total": 1600,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1378,9 +1378,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 13652,
+      "tokens_in": 16207,
       "tokens_out": 1704,
-      "cost_usd": 0.002047,
+      "cost_usd": 0.002302,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1409,7 +1409,7 @@
     ],
     "approved_total": 1850,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1422,9 +1422,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 7,
-      "tokens_in": 16895,
+      "tokens_in": 19924,
       "tokens_out": 1336,
-      "cost_usd": 0.002224,
+      "cost_usd": 0.002527,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1445,7 +1445,7 @@
     "decision": "escalate",
     "escalate_to": "unknown",
     "trigger": "annual_limit_exceeded",
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1456,9 +1456,9 @@
     "gate": "issue_decision_letter not called",
     "usage": {
       "turns": 4,
-      "tokens_in": 8153,
+      "tokens_in": 10075,
       "tokens_out": 471,
-      "cost_usd": 0.001004,
+      "cost_usd": 0.001196,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1495,7 +1495,7 @@
     ],
     "approved_total": 1280,
     "refused_total": 1200,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1509,9 +1509,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 8,
-      "tokens_in": 13271,
+      "tokens_in": 15696,
       "tokens_out": 1230,
-      "cost_usd": 0.001819,
+      "cost_usd": 0.002062,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1546,7 +1546,7 @@
     ],
     "approved_total": 1300,
     "refused_total": 250,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1559,9 +1559,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 10465,
+      "tokens_in": 12653,
       "tokens_out": 834,
-      "cost_usd": 0.00138,
+      "cost_usd": 0.001599,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1590,7 +1590,7 @@
     ],
     "approved_total": 1900,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1603,9 +1603,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 11570,
+      "tokens_in": 14080,
       "tokens_out": 750,
-      "cost_usd": 0.001457,
+      "cost_usd": 0.001708,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1626,7 +1626,7 @@
     "decision": "escalate",
     "escalate_to": "claims_processor",
     "trigger": "instruction_in_member_narrative",
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim"
     ],
@@ -1634,9 +1634,9 @@
     "gate": "issue_decision_letter not called",
     "usage": {
       "turns": 1,
-      "tokens_in": 1865,
+      "tokens_in": 2427,
       "tokens_out": 112,
-      "cost_usd": 0.000231,
+      "cost_usd": 0.000287,
       "cap_fired": null,
       "tools_called": [
         "get_claim"
@@ -1666,7 +1666,7 @@
         "status": "covered"
       }
     ],
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1678,9 +1678,9 @@
     "gate": "issue_decision_letter not called",
     "usage": {
       "turns": 5,
-      "tokens_in": 6806,
+      "tokens_in": 8475,
       "tokens_out": 556,
-      "cost_usd": 0.000903,
+      "cost_usd": 0.00107,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1700,7 +1700,7 @@
     "decision": "escalate",
     "escalate_to": "claim_processing",
     "trigger": "duplicate_claim",
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1713,9 +1713,9 @@
     "gate": "issue_decision_letter not called",
     "usage": {
       "turns": 7,
-      "tokens_in": 13473,
+      "tokens_in": 16148,
       "tokens_out": 812,
-      "cost_usd": 0.001672,
+      "cost_usd": 0.00194,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1744,7 +1744,7 @@
     ],
     "approved_total": 540,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1756,9 +1756,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 17069,
+      "tokens_in": 19826,
       "tokens_out": 1993,
-      "cost_usd": 0.002504,
+      "cost_usd": 0.00278,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
@@ -1786,7 +1786,7 @@
     ],
     "approved_total": 180,
     "refused_total": 0,
-    "ts": "2026-09-13T12:06:38",
+    "ts": "2026-09-15T11:52:31",
     "evidence": [
       "get_claim",
       "lookup_policy",
@@ -1798,9 +1798,9 @@
     "gate": "gate open",
     "usage": {
       "turns": 6,
-      "tokens_in": 12734,
+      "tokens_in": 15219,
       "tokens_out": 1157,
-      "cost_usd": 0.001736,
+      "cost_usd": 0.001985,
       "cap_fired": null,
       "tools_called": [
         "get_claim",
