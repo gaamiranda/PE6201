@@ -429,6 +429,66 @@ class JudgementWorkflowTests(unittest.TestCase):
         self.assertEqual(len(queue), 12)
         self.assertEqual({row["case_id"] for row in queue}, set(run_eval.JUDGEMENT_CASE_IDS))
 
+    def test_judgement_queue_exposes_complete_structured_final_record(self) -> None:
+        row = self.make_result("CLM-8888", negative=True)
+        structured_record = {
+            "decision": "request_document",
+            "reason": None,
+            "missing": {
+                "item": "pre-authorisation reference",
+                "for_line": "62480",
+                "must_be_valid_on": "2026-09-08",
+            },
+            "lines_resolved": [
+                {"code": "47120", "status": "covered"},
+                {
+                    "code": "31255",
+                    "status": "not_covered",
+                    "exclusion": "EX-14 cosmetic dermatology",
+                },
+            ],
+            "trigger": "annual_limit_exceeded",
+            "escalate_to": "claims_adjuster",
+            "approved_total": 2180,
+            "refused_total": 300,
+        }
+        row["record"] = structured_record
+
+        queued = run_eval.build_judgement_queue([row])[0]
+
+        self.assertEqual(queued["structured_final_record"], structured_record)
+        for field in (
+            "missing",
+            "lines_resolved",
+            "trigger",
+            "escalate_to",
+            "approved_total",
+            "refused_total",
+        ):
+            with self.subTest(field=field):
+                self.assertEqual(
+                    queued["structured_final_record"][field], structured_record[field]
+                )
+
+    def test_judgement_queue_does_not_infer_external_or_hidden_facts(self) -> None:
+        row = self.make_result("CLM-9041")
+        row["record"] = {
+            "decision": "approve_in_principle",
+            "lines": [{"code": "47120", "status": "covered"}],
+        }
+
+        queued = run_eval.build_judgement_queue([row])[0]
+
+        self.assertEqual(
+            queued["structured_final_record"],
+            {"decision": "approve_in_principle", "lines": [{"code": "47120", "status": "covered"}]},
+        )
+        self.assertNotIn("POL-3310", json.dumps(queued["structured_final_record"]))
+        self.assertNotIn("transcript", queued)
+        self.assertNotIn("thought", {key.casefold() for key in queued})
+        self.assertIn("complete structured final record", queued["judgement_question"])
+        self.assertEqual(queued["judgement_rule"], run_eval.JUDGEMENT_RULE)
+
     def test_required_judgement_cannot_silently_default_to_pass(self) -> None:
         row = self.make_result("CLM-8842")
         joined = run_eval.apply_human_judgements([row])

@@ -1,23 +1,11 @@
-> ## ⚠️ The `eval-*-final.*` files are STALE as of 2026-09-15, and must not be quoted
+> ## Final scripted baseline — reviewed 15 September 2026
 >
-> They were produced on 2026-09-12/13 and report **38/42 (90.48%) decisions and 49/76 (64.47%)
-> combined**. The current code reports **40/42 (95.24%) and 63/76 (82.89%)**.
+> The `eval-scripted-v2-final.*` files were regenerated from all 42 transcripts re-recorded on
+> 15 September 2026. NIU TONG reviewed all 12 required judgement trials against their complete
+> structured final records: 3 passed judgement and 9 failed. No judgements are missing.
 >
-> Three prompt and parser defects were fixed on 15 September and all 42 transcripts were
-> re-recorded, so every record in `eval-scripted-v2-final.trials.jsonl` is out of date.
->
-> **The trials and summary can simply be regenerated. The judgements cannot.**
-> `eval-scripted-v2-final.judgements-reviewed.jsonl` holds 12 human judgement calls by NIU TONG.
-> The same 12 `(case_id, trial)` pairs are still queued and the `trial_id`s are unchanged, so the
-> file still *applies* — which is the hazard: regenerating the trials and leaving this file in place
-> would silently re-apply judgements to records that no longer say what was judged. **9 of the 12
-> records changed their `reason` text.** `CLM-8925` is the clearest: the reason went from a wrong
-> claim about pre-authorisation to the correct "exceeds the remaining annual limit", and all 12 of
-> the standing judgements are failures.
->
-> Re-review is NIU TONG's call, not a mechanical regeneration. Until then this directory has no
-> authoritative combined pass rate, and `python -m harness.run_eval` correctly reports
-> **INCOMPLETE**.
+> The authoritative combined result is **57/76 (75.00%)**. Scripted replay made no provider
+> request and actual spend was **US$0.00**.
 
 # results/evaluations — raw harness output
 
@@ -37,6 +25,15 @@ report can be traced back to the individual trials that produced it.
 | `.judgements-applied.jsonl` | Audit trail of which judgement landed on which trial |
 | `.summary.json` | The computed rates, costs, token totals and failure reasons |
 
+The canonical final artifacts use the `eval-scripted-v2-final.*` prefix. The trials file contains
+all 76 trial-level Agent outputs, code-check results, and run metadata; the summary contains the
+aggregate scripted metrics, judgement status, token estimates, and projected costs. The judgement
+queue is the blank human-review form and the audit record of exactly what evidence was shown to the
+reviewer, so its `judgement_pass` and `reviewer` fields are intentionally null. Completed reviewer
+decisions are stored separately in `eval-scripted-v2-final.judgements-reviewed.jsonl`, while
+`eval-scripted-v2-final.judgements-applied.jsonl` records exactly which completed judgement was
+applied to each stable trial identity.
+
 ## Naming
 
 ```
@@ -53,16 +50,35 @@ Renaming a run to `-final` is the act of saying "this is the number we stand beh
 prompt, 42 cases / 76 trials. Reproduce it with no network and no API key:
 
 ```bash
-python -m harness.run_eval
+python3 harness/run_eval.py \
+  --backend scripted \
+  --judgements results/evaluations/eval-scripted-v2-final.judgements-reviewed.jsonl \
+  --output-dir results/evaluations \
+  --run-id final2
 ```
 
-Two rates matter and they are far apart, which is the point:
+The final metrics are:
 
-- **90.48%** (38/42) of decisions match the answer key
-- **64.47%** (49/76) survive once the judgement checks ask whether the record justifies the
-  decision it reached
+- **40/42 (95.24%)** decisions match the answer key across unique cases
+- **63/76 (82.89%)** pass the provisional code-only check
+- **57/76 (75.00%)** pass the complete code-plus-judgement check
+- **36/51 (70.59%)** negative trials pass the complete check
+- **3/12** required judgement trials pass; **9/12** fail; **0** are missing
 
-The gap is the finding, not a rounding difference. The agent decides well and explains badly.
+The final run reports projected costs of **US$0.058572** for one 42-case pass and
+**US$0.097096** for the formal 76-trial schedule. These are estimates derived from replayed token
+usage, not measured API expenditure.
+
+## Human judgement rule
+
+> A must_record fact counts if it appears anywhere in the Agent’s complete structured final
+> record. Facts appearing only in hidden transcript Thought content do not count. Rule confirmed
+> 15 September 2026.
+
+The reviewer may use structured fields such as `missing`, `lines_resolved`, `trigger`,
+`escalate_to`, `approved_total`, and `refused_total`. Facts must not be inferred from fixtures,
+case IDs, transcripts, or hidden Thought content. The review queue preserves the complete
+structured final record used for each decision.
 
 ## The rule
 

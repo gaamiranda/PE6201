@@ -55,9 +55,14 @@ JUDGEMENT_CASE_IDS = frozenset(
         "CLM-9041",
     }
 )
+JUDGEMENT_RULE = (
+    "A must_record fact counts if it appears anywhere in the Agent’s complete structured "
+    "final record. Facts appearing only in hidden transcript Thought content do not count. "
+    "Rule confirmed 15 September 2026."
+)
 JUDGEMENT_QUESTION = (
-    "Does the Agent's reason contain the material facts required by this case's "
-    "must_record list?"
+    "Does the Agent's complete structured final record contain all material facts required "
+    "by this case's must_record list?"
 )
 
 ALLOWED_DECISIONS = {"approve_in_principle", "request_document", "escalate"}
@@ -555,11 +560,17 @@ def build_trial_result(
 def build_judgement_queue(
     results: Sequence[Mapping[str, Any]],
 ) -> list[dict[str, Any]]:
-    """Build the reproducible human-review queue for every required trial."""
+    """Build the reproducible human-review queue for every required trial.
+
+    Reviewers receive the complete structured final record, not only its prose ``reason``.
+    Fixture data, case metadata, transcripts, and hidden Thought content are intentionally not
+    added: a required fact must be auditable in the Agent's final record itself.
+    """
     queue: list[dict[str, Any]] = []
     for row in results:
         if not row.get("judgement_required"):
             continue
+        structured_record = row.get("record")
         queue.append(
             {
                 "trial_id": row["trial_id"],
@@ -569,6 +580,10 @@ def build_judgement_queue(
                 "case_id": row["case_id"],
                 "trial": row["trial"],
                 "judgement_question": JUDGEMENT_QUESTION,
+                "judgement_rule": JUDGEMENT_RULE,
+                "structured_final_record": (
+                    dict(structured_record) if isinstance(structured_record, Mapping) else None
+                ),
                 "agent_reason": row.get("actual_reason"),
                 "must_record": list(row.get("must_record") or []),
                 "judgement_pass": None,

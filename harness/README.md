@@ -17,7 +17,7 @@ against it now; the loop fills in behind you.
 ## Running it
 
 ```bash
-python -m unittest discover -s harness -p 'test_*.py'   # 26 tests, offline
+python -m unittest discover -s harness -p 'test_*.py'   # 28 tests, offline
 python -m harness.run_eval                              # scripted, free, no key
 ```
 
@@ -28,14 +28,24 @@ code-only rate as if it were the final one. To reproduce the committed figure, h
 saved judgements:
 
 ```bash
-python -m harness.run_eval \
-  --input-results results/evaluations/eval-scripted-v2-final.trials.jsonl \
-  --judgements   results/evaluations/eval-scripted-v2-final.judgements-reviewed.jsonl
+python3 harness/run_eval.py \
+  --backend scripted \
+  --judgements results/evaluations/eval-scripted-v2-final.judgements-reviewed.jsonl \
+  --output-dir results/evaluations \
+  --run-id final2
 ```
 
-That prints **63/76 (82.89%)** combined, against **40/42 (95.24%)** on decisions alone. The
-distance between those two numbers is the finding, not noise: the agent reaches the right
-outcome and then writes a reason that names none of the facts the outcome rests on.
+That prints **57/76 (75.00%)** combined, against **40/42 (95.24%)** on decisions alone.
+
+The human judgement rule is:
+
+> A must_record fact counts if it appears anywhere in the Agent’s complete structured final
+> record. Facts appearing only in hidden transcript Thought content do not count. Rule confirmed
+> 15 September 2026.
+
+The review queue therefore includes the complete structured final record, including fields such
+as `missing`, `lines_resolved`, `trigger`, `escalate_to`, `approved_total`, and `refused_total`.
+Reviewers must not fill gaps from fixtures, case IDs, transcripts, or hidden Thought content.
 
 For a live battery, add `--backend openrouter` and the model. Scripted is the default, so it
 is entirely possible to follow every instruction, spend nothing, and hand in replayed output
