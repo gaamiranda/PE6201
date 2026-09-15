@@ -3,10 +3,10 @@
   "backend": "openrouter",
   "temperature": 0,
   "prompt_version": "v2",
-  "recorded_utc": "2026-09-15T04:37:57Z",
-  "commit": "2770118",
+  "recorded_utc": "2026-09-15T05:01:04Z",
+  "commit": "4d6015e",
   "cases_recorded": 42,
-  "replies_recorded": 426,
+  "replies_recorded": 284,
   "last_rerecorded": [
     "CLM-8842",
     "CLM-8850",

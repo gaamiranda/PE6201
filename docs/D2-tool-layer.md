@@ -182,11 +182,20 @@ What the fix bought, measured on the harness:
 | | Code check | Negative code check | Decision |
 |---|---|---|---|
 | Annotated manual | 54/76 (71.1%) | 30/51 (58.8%) | 36/42 |
-| Parameter names only | **61/76 (80.3%)** | **39/51 (76.5%)** | 36/42 |
+| Parameter names only | 61/76 (80.3%) | **39/51 (76.5%)** | 36/42 |
+| + JSON literals accepted, and the prompt saying which outcomes have no tool | **63/76 (82.9%)** | **39/51 (76.5%)** | **40/42** |
 
 Record *quality* rose nine points while the decision rate held. It also stopped masking a real
-problem: with the syntax loop gone, five document cases are now visibly deadlocking rather than
-dying early for the wrong reason — see `docs/D3-guardrails.md`.
+problem: with the syntax loop gone, five document cases became visibly deadlocked rather than dying
+early for the wrong reason, which exposed two further defects of the same kind — our prompt asking
+for "a JSON decision record" while the Action parser rejected JSON's `null`, and the prompt never
+saying that `escalate` and `request_document` have no tool to call. Fixing those took the set to
+**63/76 code, 40/42 decisions, no caps fired anywhere, and a projected 76-trial cost of US$0.097**
+— down from US$0.367 at the worst point. See `docs/D3-guardrails.md`.
+
+**The pattern across all three defects is the same, and it is this document's thesis.** Every one
+was a place where what we *showed* the model contradicted what we *accepted* from it. None was
+fixed by telling the model to try harder, and each fix was paid once rather than on every call.
 
 **Verdict:** v2 is longer, so it is not a cost win. It is a safety/interface win: the return
 shape now exposes a single coverage result and a bounded `needed_next` list. That makes an
@@ -278,33 +287,32 @@ tools genuinely execute, and the message history is rebuilt and re-sent exactly 
 it. Every synthesised reply carries one fixed `Thought:` string — the control, because the model's
 own thoughts vary in length, land in the history, and would otherwise leak prose length into a
 measurement of grouping. The driver is checked against an ordinary scripted run before anything
-else runs: replaying the recording verbatim must reproduce 1,275,907 input tokens and 36/42 across all 42
-cases, and it does.
+else runs: replaying the recording verbatim must reproduce 473,596 input tokens and 40/42, and it does.
 
-**Three cases are excluded and named:** `CLM-9002`, `CLM-9062` and `CLM-9103` never reach a
-`Final:` in the recording — they are document deadlocks (see `loop.Guards`). A synthesised script
-for them has no terminating reply, so every arm would spin to the step cap and the table would
-measure the cap rather than the grouping. They remain in the harness pass rate; the exclusion is
-local to this measurement. The remaining **39** cases are measured.
+**All 42 cases are measured.** An earlier recording had three that never reached a `Final:` and had
+to be excluded, because a synthesised script with no terminating reply spins to the step cap and the
+table measures the cap rather than the grouping. Those deadlocks were prompt defects, not model
+limits, and they are fixed — `evaluation/measure_d2c.py` still prints the exclusion list, and it is
+now empty.
 
 | | Turns (median) | Turns (total) | Input tokens | Output tokens | Cost | Pass rate |
 |---|---|---|---|---|---|---|
-| **Sequential** — one call per turn | 6 | 213 | 381,983 | 20,589 | US$0.06965 | **37/39** |
-| **As recorded** — the grouping the model chose | 6 | 205 | 370,689 | 20,538 | US$0.06792 | **37/39** |
-| **By rule** — the largest batches `DEPENDS_ON` permits | **4** | **177** | **331,949** | 20,344 | **US$0.06200** | **37/39** |
+| **Sequential** — one call per turn | 5 | 222 | 413,515 | 15,012 | US$0.07103 | **40/42** |
+| **As recorded** — the grouping the model chose | 5 | 216 | 404,188 | 14,974 | US$0.06961 | **40/42** |
+| **By rule** — the largest batches `DEPENDS_ON` permits | **4** | **183** | **353,481** | 14,746 | **US$0.06187** | **40/42** |
 
 | vs sequential | Turns | Input tokens | Cost |
 |---|---|---|---|
-| As recorded | −3.8% | −3.0% | −2.5% |
-| By rule | −16.9% | −13.1% | −11.0% |
+| As recorded | −2.7% | −2.3% | −2.0% |
+| By rule | −17.6% | −14.5% | −12.9% |
 
-**Correctness did not move: 37/39 in all three arms, and not one case decided differently** —
+**Correctness did not move: 40/42 in all three arms, and not one case decided differently** —
 neither between sequential and as-recorded, nor between as-recorded and by-rule. That is the result
 that matters. Parallelism is a scheduling choice, and a scheduling choice that changed an answer
 would be a bug.
 
 Note that the saving is almost entirely on the **input** side: output tokens barely move
-(20,589 → 20,344), because the same Action text is emitted either way, merely distributed over
+(15,012 → 14,746), because the same Action text is emitted either way, merely distributed over
 fewer replies. What parallelising buys is re-sending the system prompt and the accumulated history
 fewer times. That is also why the saving is bounded by how long the prompt is, not by how many
 tools exist.
@@ -316,9 +324,9 @@ whole recording:
 
 | Calls in one action-turn | Turns | Share |
 |---|---|---|
-| 1 | 223 | **97.4%** |
-| 2 | 4 | 1.7% |
-| 3 | 2 | 0.9% |
+| 1 | 215 | **97.7%** |
+| 2 | 4 | 1.8% |
+| 4 | 1 | 0.5% |
 
 
 **Only 4 of 42 cases ever used a multi-call turn.** And the group this document predicted —
@@ -327,9 +335,8 @@ the model actually grouped was:
 
 ```
 3 x  check_coverage | get_preauthorisation
-1 x  check_coverage | get_hospital_status | lookup_policy
-1 x  check_coverage | get_hospital_status
-1 x  check_claim_history | check_coverage | get_hospital_status
+1 x  check_claim_history | issue_decision_letter
+1 x  check_claim_history | check_coverage | get_hospital_status | get_preauthorisation
 ```
 
 Three of those pair `check_coverage` with `get_preauthorisation`, which `DEPENDS_ON` says is the
@@ -340,8 +347,8 @@ lookup before knowing whether it is needed. It gets away with it because the arg
 *expressible* even though it is logically premature. The dependency is a reasoning dependency, not
 a data dependency, and a signature cannot enforce it.
 
-So the honest reading of the three-arm table: **of the 16.9% of turns the dependency rule makes
-available, the model captured 3.8% and left 13 points on the table.** That is a prompt and model
+So the honest reading of the three-arm table: **of the 17.6% of turns the dependency rule makes
+available, the model captured 2.7% and left 15 points on the table.** That is a prompt and model
 finding, not a loop limitation — and it is a concrete thing for the D5(b) battery to look for,
 because "does this model use multi-call turns" is exactly the kind of divergence six models should
 be expected to differ on.
@@ -368,7 +375,7 @@ sees `status: lapsed` before deciding whether to ask about the hospital. Sequent
 skipped both calls. This cannot be priced in tokens — the cost is that a cheap early exit stops
 being available, and the 45 tokens above are what that costs when it happens.
 
-**Why our saving is 13.1% where the brief's example shows 54%.** The brief's figure comes from a
+**Why our saving is 14.5% where the brief's example shows 54%.** The brief's figure comes from a
 claim whose `check_coverage` calls fan out across several lines — that fan-out is where the saving
 lives. On our set **27 of 42 claims have a single line**, 6 have two, 8 have three and 1 has four.
 A one-line claim has nothing to fan out, so two thirds of our set cannot benefit from the move that

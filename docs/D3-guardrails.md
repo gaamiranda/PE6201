@@ -13,9 +13,9 @@
 
 | Guard | Value | Where the number came from |
 |---|---|---|
-| Step cap | `12` tool-executing turns | Measured with caps lifted to 40/30 after the tool-manual fix: healthy runs median 6, p90 7, max 9. Cap 12 clears the longest healthy run by 3. |
-| Call cap | `22` model calls | Healthy runs median 7, p90 10, **max 17**. 22 clears it by 5. The previous 18 was set against an older distribution whose max was 14; after the manual fix a healthy run reached 17, leaving one call of margin. Five is margin for six models. |
-| Budget ceiling | `US$0.036` projected per run | Measured **across the whole battery**, healthy runs only, caps lifted. Worst healthy run is US$0.03313 (`mistralai/mistral-medium-3`). 0.036 clears it by 8.7%. |
+| Step cap | `12` tool-executing turns | Measured with caps lifted to 40/60: turns median 5, p90 8, max 9. Cap 12 clears the longest run by 3. |
+| Call cap | `22` model calls | Model calls median 7, p90 9, max 12. 22 is deliberately loose, and the looseness is for the battery: NIU TONG's `llama-3.3-70b` smoke test used 15 calls on an easy case where gemini's median is 7. A cap that clips a healthy run on one model turns a six-model comparison into a comparison of our own guard. |
+| Budget ceiling | `US$0.016` projected per run | Measured **across the whole battery**, caps lifted. Worst run is US$0.01441 (`mistralai/mistral-medium-3`). 0.016 clears it by 11%. |
 | Action de-duplication | On | The loop fingerprints tool name, args and kwargs. A repeat returns the earlier observation instead of executing the action again, so a repeated write cannot append twice. |
 | Monthly limit per user | Outside this repo | This student harness has no identity or billing account boundary. The production control belongs at the OpenRouter/account layer; this repo records per-run cost so that layer has an enforceable number. |
 
@@ -33,7 +33,7 @@ at US$0.0044, and on the scripted replay that number aborted **34 of `mistral-me
 HONGJUN's D5(b) row would then have reported a pass rate for a model killed mid-decision 81% of the
 time, and the six-model comparison would have measured our price table instead of the six models.
 
-US$0.036 is set from the most expensive model in the battery so that one identical number can be
+US$0.016 is set from the most expensive model in the battery so that one identical number can be
 used for all six runs. Comparability requires the guards be byte-identical across the battery; a
 per-model ceiling would make `cap_fired` counts incomparable, which is the one statistic that tells
 a reader whether a low pass rate is the model or the harness.
@@ -53,28 +53,31 @@ after the loop's evidence precondition and `_gate_open()`'s structural confirmat
 the offline harness that confirmation is deterministic; in production the final gate reason would
 be replaced by a human approval event.
 
-### The guard this measurement says we are missing
+### The deadlocks this measurement found, and what caused them
 
-Replaying all 42 cases with the caps lifted splits the set into two populations that do not
-overlap:
+An earlier recording split the set into two populations that did not overlap: 37 healthy runs, and
+5 document cases — `CLM-8901`, `CLM-9002`, `CLM-9032`, `CLM-9062`, `CLM-9103` — that burned every
+call available and never concluded. Three never reached a `Final:` at all.
 
-| | Runs | Unproductive rounds (median / max) |
-|---|---|---|
-| Healthy | 37 | 0 / **10** |
-| Deadlocked | 5 | — / **24–27** |
+**Both causes were ours, and neither was a guardrail problem.**
 
-The five are all document cases — `CLM-8901`, `CLM-9002`, `CLM-9032`, `CLM-9062`, `CLM-9103` — and
-they never conclude: they emit reply after reply carrying neither an Action nor a Final until
-something stops them. Three of them never reach a `Final:` at all.
+1. `tool_manual()` rendered `get_claim(claim_id: 'str')`, Python's annotation syntax. The model
+   copied the colon into its calls, `ast.literal_eval` rejected it, and the model retried verbatim.
+2. Our prompt asks for "a JSON decision record", so the model wrote `"exclusion": null` — which
+   `ast.literal_eval` also rejects, because JSON's `null` is Python's `None`. `CLM-9032` assembled a
+   correct approval, could not write it, and concluded it was deadlocked.
+3. Two of the three outcomes have no tool, and the prompt never said so. `CLM-9103`: *"I cannot
+   escalate because there is no `escalate` tool. I also cannot request a document because there is
+   no `request_document` tool."*
 
-The loop already counts `unproductive_rounds` and records it on every decision record. **It does not
-cap it.** Because the two populations do not overlap, a cap at 12–14 unproductive rounds would stop
-every one of these deadlocks early while never touching a healthy run — where the call cap, which is
-the only thing bounding them today, lets each one burn 22 model calls first.
+With all three fixed the second population is gone: every case finishes inside 12 model calls, no
+cap fires anywhere in the set, and the projected 76-trial cost fell from US$0.367 to US$0.097.
 
-This is recorded as a measured gap rather than shipped, because the freeze is the honest boundary
-and a guard added after the battery starts makes the six runs incomparable. It is the first thing to
-add afterwards.
+**The guardrail lesson worth keeping in the report:** every one of those runs looked like a loop
+that needed a tighter cap. None of them did. A cap would have stopped them cheaply and left the
+agent just as unable to decide the claim — the guard would have converted a broken prompt into a
+tidy escalation and hidden it. Caps bound the cost of a failure; they do not diagnose it, and
+reaching for a tighter cap first would have cost us the three defects above.
 
 **The stop is loud:** a cap sets `usage["cap_fired"]`, changes the record to an escalation, and
 writes a reason beginning `STOPPED BY GUARDRAIL`. It does not return an empty record or a pretend
