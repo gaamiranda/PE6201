@@ -17,36 +17,111 @@
 
 ## Failure 1 · Loop control — required
 
-**The deletion:** [which guard was removed, and where]
+**The deletion:** `Guards(dedup=False)` in `src/loop.py` — remove action de-duplication, the
+loop's memory of what it has already done. Nothing else changes. Putting the flag back recovers
+the behaviour exactly, which is what makes this a deletion from the working agent rather than a
+separately written bad agent.
+
+Reproduce with `python3 evaluation/reproduce_failure_1.py` — scripted backend, no API key,
+US$0.00, deterministic. Output is written to `evaluation/failure_1_run.json`.
+
+**The symptom:** the agent re-issues an identical `issue_decision_letter(record)` and the claim is
+appended to `results/decisions.jsonl` once per attempt. One claim, four payment records. In a real
+insurer that is the claim paid four times.
 
 ### 1 · The instrumentation that found it
 
-Per run we log: turns used, tokens in/out, estimated cost, whether a cap fired, and the tools called
-in order. Without this a runaway loop is invisible — it raises no exception, it just costs more.
+Per run the loop logs turns, model calls, tokens in and out, estimated cost, which cap fired, and
+**every tool called, in order**. That last field is the only one that shows this failure. The
+repeat appears as `issue_decision_letter` four times in `tools_called` and as four lines in the
+decision log; it appears in no summary statistic we report.
+
+This one was found live, not by reasoning. The same instrumentation caught the related runaway
+recorded in `loop.py`: `CLM-8850` on a live gpt-4o-mini made 60 model calls and burned 307,823
+input tokens while `turns` sat at 4, because the model kept emitting replies carrying neither an
+Action nor a Final. That is why `call_cap` counts model calls rather than turns.
 
 ### 2 · The turn distribution across the whole evaluation set
 
 > One number is not a distribution.
 
-| | Median | Worst case | Runs that hit the step cap |
-|---|---|---|---|
-| | | | |
+Measured with the caps lifted to 20/30, so that nothing is truncated by the number being
+measured, then re-checked under the shipped guards:
+
+| | Median | p90 | Worst case | Runs that hit a cap under shipped guards |
+|---|---|---|---|---|
+| Turns per run, all 42 cases | 6 | 7 | 10 | 0 (`step_cap` 12) |
+| Model calls per run, all 42 cases | 9 | 12 | 14 | 0 (`call_cap` 18) |
+| Unproductive rounds per run | 2 | 3 | 6 | not capped — only `call_cap` bounds it |
+
+And the measurement that actually matters here:
+
+| | Tool calls executed across all 42 cases |
+|---|---|
+| Shipped (`dedup=True`) | 225 |
+| Minus dedup (`dedup=False`) | 225 |
+
+**De-duplication suppressed zero calls across the entire evaluation set.** A suppressed call never
+reaches `tools_called`, so equal totals mean the guard never fired once. Turns, tokens, cost and
+the 38/42 decision rate are identical in both arms.
+
+That is the uncomfortable part of this deliverable and we are reporting it rather than hiding it:
+**on our own evaluation set this guard is indistinguishable from dead code.** A team measuring only
+pass rate would have deleted it as unused. It is insurance against a behaviour our recorded model
+never exhibits — and the moment a model does exhibit it, the cost is paid in duplicate approvals,
+not in a failed test.
 
 ### 3 · The fix, in the code layer
 
-**What actually caught it:** [action de-duplication / step cap / budget ceiling]
+**What actually caught it:** action de-duplication. The loop fingerprints tool name, positional
+args and keyword args; a repeat returns the earlier observation instead of executing the action
+again. The repeat is *answered* rather than ignored, because silence invites the model to try
+again.
 
-**Why the other two would not have:** [...]
+**Why the other two would not have.** Both were measured, not assumed — the third row is the
+induced repeat left to run unbounded:
+
+| Guard | Does it stop the duplicate write? | Measured |
+|---|---|---|
+| Action de-duplication | **Yes — prevents it.** The second attempt never executes | 4 write actions → **1** letter |
+| Step cap | No — it *bounds* it. The run is stopped, but only after the damage | unbounded repeat → **8** letters before `step_cap` fired at turn 12 |
+| Budget ceiling | No. Duplicate writes are cheap; this run cost US$0.00217 and never approached US$0.019 | never fired |
+
+The step cap is the instructive one. It does end the run, so a team that measured only "did the
+loop stop?" would call it sufficient. It stopped this one after **eight** duplicate payment
+records. A guard that limits how many times you pay a claim twice is not a guard against paying a
+claim twice.
 
 ### 4 · Before and after
 
-| | Turns | Tokens | Cost | Pass rate |
-|---|---|---|---|---|
-| Broken | | | | |
-| Fixed | | | | |
+Whole evaluation set, both arms:
 
-**The pass rate did not fall:** [a step cap that stops a runaway also truncates a legitimate long
-run — show this.]
+| | Turns (median/max) | Tool calls | Tokens in | Cost | Pass rate |
+|---|---|---|---|---|---|
+| Broken (`dedup=False`) | 6 / 10 | 225 | 615,698 | US$0.11962 | 38/42 |
+| Fixed (`dedup=True`) | 6 / 10 | 225 | 615,698 | US$0.11962 | 38/42 |
+
+The induced repeat, which is where the two arms separate at all:
+
+| | Letters written | Write actions attempted | Turns | Tokens in | Cost |
+|---|---|---|---|---|---|
+| Broken (`dedup=False`) | **4** | 4 | 8 | 12,814 | US$0.00217 |
+| Fixed (`dedup=True`) | **1** | 4 | 8 | 12,925 | US$0.00218 |
+
+**The pass rate did not fall — and that is the finding, not a footnote.** Every aggregate number
+in the first table is identical across the two arms: same turns, same tool calls, same tokens,
+same cost, same 38/42. A guard that stops a runaway normally also truncates a legitimate long run,
+so the usual thing to show here is that the pass rate survived the guard. This guard does not cost
+even that. The fixed arm is US$0.00001 *more* expensive on the induced case, because answering the
+repeat with the earlier observation is slightly more text than executing it again.
+
+So the honest statement of this failure is not "the pass rate held up". It is: **our reported
+metrics cannot see this failure at all.** Four duplicate approvals and one correct approval score
+identically on every number in the results table. The only evidence is the ordered `tools_called`
+field and the line count of the decision log, and the only reason we tested for it is that the
+gated action is the one thing in this system that changes the world. That is the argument for
+instrumenting actions rather than outcomes, and it is why `evaluation/guardrail-checklist.md`
+row 6 exists as a standing test.
 
 ---
 
