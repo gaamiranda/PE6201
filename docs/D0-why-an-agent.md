@@ -53,7 +53,7 @@ The four questions, answered against our own set. **The second row is the one th
 | The question | Our answer |
 |---|---|
 | Who decides the sequence of steps, and when? | The model, at runtime. We fix the tools, the routing rule and the caps; we do not fix the order |
-| **Does the number of steps vary with the input?** | **Yes — 2 turns to 5 turns, measured end to end on the scripted backend (below), before we add the longer cases** |
+| **Does the number of steps vary with the input?** | **Yes — measured end to end on the scripted backend, 1 turn to 9 across the set; CLM-8941 and CLM-9044 finish in one turn. The dependency-rule examples below *plan* 2 and 5 turns; actual execution can take longer than those planned paths (see below)** |
 | Can you test every path? | **No.** We test *outcomes*, not paths — which is why D4 is an outcome-labelled answer key (`expected_decision` + `must_record`) and not a set of path assertions |
 | What does it cost? | Unpredictable per claim until capped, and we have already been bitten: one live run made **60 model calls and burned 307,823 input tokens** on a claim that needed four tool calls. `Guards.step_cap`, `call_cap` and `budget_ceiling_usd` exist because of it — now **12 turns, 22 model calls, US$0.016**, every one set from the measured distribution, [`../src/loop.py`](../src/loop.py) |
 
@@ -120,16 +120,20 @@ rule makes available, the model captures 2.7%.
 > This replaced an earlier version of this section, which quoted counts from hand-written
 > transcripts in `src/dev_transcripts.py`. That file was deleted in `9b82b5f` when the real
 > recording landed, and the hand-written counts described the shortest legal path rather than
-> anything a model did — a **lower bound on `T`**, where a live model sits at or above
-> them. The distribution that matters for the arithmetic in D0(b) is the live one, which lands with
+> anything a model did — the shortest legal path, which a real model has no obligation to take.
+> The committed recording is not a bound in either direction; it is simply the distribution we have
+> measured. The one that matters for the arithmetic in D0(b) is the live one, which lands with
 > the D5(b) battery. Stating this distinction is the point; a turn count quoted without saying
 > which backend produced it is not a measurement.
 
 **Why five and not the brief's four.** Appendix A shows `CLM-8842` in four turns, folding
 `check_coverage` into turn 2 beside `lookup_policy`. That grouping is only reachable if
 `check_coverage` performs the member → policy hop itself. We made it take a **`policy_id`** instead,
-because that makes a coverage check against a policy the member does not hold *unrepresentable* —
-and it costs exactly one turn. **A poka-yoke bought for a turn, deliberately**, and it is the
+because it forces an explicit policy-id handoff: the id has to come back from `lookup_policy`,
+the call that does the member → policy hop and the date test. It costs exactly one turn.
+**What it does not do is make a wrong pairing impossible** — `check_coverage` validates that the
+policy id exists, not that this claimant holds it, so a policy id arrived at any other way would
+still be answered. The guarantee is a handoff discipline, not a type. **A poka-yoke bought for a turn, deliberately**, and it is the
 clearest single example of what rung 7 costs us: the safety property is cheap, the turn is not,
 and only measurement settles whether the trade was right. D2(c) carries both groupings.
 
@@ -241,37 +245,60 @@ the argument turns on it — but a table that silently goes stale is exactly the
 > The exponent is **steps in ONE run**, not cases in the evaluation set.
 
 ```
-measured run pass rate       P = 0.8289   (63/76 combined, scripted)   or 0.9524 (40/42 decisions)
+measured run pass rate       P = 0.7500   (57/76 combined, scripted)   or 0.9524 (40/42 decisions)
 measured median turns        T = 5        (all 42 cases, scripted)
-implied per-step reliability s = P^(1/T) = 0.9632 combined   /  0.9903 decisions-only
+implied per-step reliability s = P^(1/T) = 0.9441 combined   /  0.9903 decisions-only
 ```
 
-**This closes D4 and D5(a); only the live column is still open.** Both numbers come from
-`python -m harness.run_eval` on the committed recording of `google/gemini-2.5-flash-lite`. The
-live figures land with the D5(b) battery, and a live median `T` will sit at or above the scripted
-one.
+The harness reports three rates and they are not interchangeable. **Code-only 63/76 (82.89%)** is
+"did the structured checks pass". **Combined 57/76 (75.00%)** is that *and* a human judging that
+the record justifies the decision. **Decision-only 40/42 (95.24%)** is the outcome alone, ignoring
+the record. `P` here is the combined rate, for the reason in the next paragraph.
+
+**This closes D4 and D5(a); only the live column is still open.** Both numbers come from the
+committed recording of `google/gemini-2.5-flash-lite`. Reproducing the **combined** rate needs the
+saved human judgements loaded — the bare command reports it as INCOMPLETE, by design, because a
+judgement check that silently defaults to pass is worse than no judgement check:
+
+```bash
+python3 harness/run_eval.py --backend scripted \
+  --judgements results/evaluations/eval-scripted-v2-final.judgements-reviewed.jsonl
+```
+
+The
+live figures land with the D5(b) battery. **Live turn counts remain to be measured** — we are not
+claiming the scripted median bounds them. The deleted hand-written transcripts were shortest paths
+and would have bounded them; the committed recording is real model replies including its mistakes,
+and does not.
 
 **Which `P` to quote, and why it matters more than the arithmetic.** Report the combined
-**0.8289**, not the decision-only 0.9524. The decision-only rate asks "did it reach the right
-outcome"; the combined rate asks "did it reach the right outcome *and* does the record justify
-it". A claims system that decides correctly and cannot say why has not done the job, and the
-14-point gap between those two numbers is our single most useful finding — the agent decides well
-and explains less well.
+**0.7500**, not the decision-only 0.9524 and not the code-only 0.8289. The decision-only rate asks
+"did it reach the right outcome"; the code-only rate adds "and did the structured checks pass"; the
+combined rate adds the thing that actually matters here — "and does the record justify it", judged
+by a person. A claims system that decides correctly and cannot say why has not done the job, and
+the gap between deciding correctly and justifying the decision is our single most useful finding:
+the agent decides well and explains considerably less well.
 
-Holding `s = 0.9632` and varying `T`, which is the only lever D2(c) moves:
+**Compare like with like when you quote that gap.** 40/42 counts unique *cases*; 57/76 counts
+*trials*, with negatives weighted three to one. At trial level the decision-only rate is
+**72/76 = 94.74%** against the combined **57/76 = 75.00%** — a gap of **19.74 points**. "About 20
+points" is right either way, but the two denominators are not the same denominator and a marker
+will check.
+
+Holding `s = 0.9441` and varying `T`, which is the only lever D2(c) moves:
 
 ```
-    T =  2   CLM-8910, measured                    ->  0.928
-    T =  4   by-rule median (D2(c) upper bound)    ->  0.861
-    T =  5   as-recorded median (what we ship)     ->  0.829
-    T =  9   CLM-8842, measured                    ->  0.713
-    T = 12   step_cap — the worst a run may reach  ->  0.637
+    T =  2   CLM-8910, measured                    ->  0.891
+    T =  4   by-rule median (D2(c) upper bound)    ->  0.794
+    T =  5   as-recorded median (what we ship)     ->  0.750
+    T =  9   CLM-8842, measured                    ->  0.596
+    T = 12   step_cap — the worst a run may reach  ->  0.501
 ```
 
 Read the middle rows together, because that pair **is** D2(c)'s business case: the same tool calls,
-the same model, the same per-step quality, and predicted run success of **0.861** at the dependency
-rule's grouping versus **0.829** at the grouping the model actually chose. Over 76 trials that is
-roughly two and a half runs, bought with no extra tokens and no change to any answer — D2(c)
+the same model, the same per-step quality, and predicted run success of **0.794** at the dependency
+rule's grouping versus **0.750** at the grouping the model actually chose. Over 76 trials that is
+roughly three and a half runs, bought with no extra tokens and no change to any answer — D2(c)
 confirms 40/42 in all three arms.
 
 The `T = 9` row is the one to dwell on. `CLM-8842` really does take nine turns today, because the
@@ -280,9 +307,10 @@ evidence, was refused, and went back for it. Cutting `T` is Class 4's biggest of
 and we are currently paying the full price of not doing it.
 
 > Two cautions on our own illustration, stated because a marker will apply them anyway. First, the
-> scripted `T` values are a lower bound (see D0(a)) — a live median will be higher, which makes
-> `s^T` worse, not better. Second, `s` derived at `T = 2` and then applied at `T = 9` assumes steps
-> are independent and equally reliable, and neither is true. It is a diagnostic, not a prediction.
+> scripted `T` values are not a bound on the live ones in either direction (see D0(a)) — they are
+> the only ones we have measured. Second, `s` derived at `T = 5` and then applied at `T = 2` or
+> `T = 9` assumes steps are independent and equally reliable, and neither is true. It is a
+> diagnostic, not a prediction.
 
 These are not three separate exercises:
 
@@ -298,12 +326,16 @@ counted.
 
 **Which is our problem — step quality or step count? Step quality, and it is concentrated in one
 step.** Cutting `T` from 5 to 4 — the whole of what the dependency rule has left to give — moves
-predicted run success from 0.829 to 0.861, worth about 3 points. Fixing the single weakest step
-below would move the measured rate from 63/76 to 72/76, worth about **12 points**. We should spend
-on the step, not the count.
+predicted run success from 0.750 to 0.794, worth about **4 points**. Fixing the single weakest step
+below would move the measured combined rate from 57/76 to 66/76, worth about **12 points**. (In the
+code-only frame where the failing trials are grouped, the same fix is 63/76 to 72/76.) We should
+spend on the step, not the count.
 
-**Weakest step**, found by grouping failing trials by the tool call implicated in the failure:
-**`get_preauthorisation`, in 9 of 13 failing trials.** The loop records `tools_called` in order on
+**Weakest step**, found by grouping **code-check** failures by the tool call implicated:
+**`get_preauthorisation`, in 9 of the 13 code-check failures.** Scope matters here and the table
+below is code-check only. The 76 trials carry **19** combined failures: 13 that fail a code check,
+plus **6** that pass every code check and fail on human judgement (`CLM-8925` ×3, and one trial
+each of `CLM-8842`, `CLM-8850`, `CLM-9041`). The loop records `tools_called` in order on
 every run, so this is a query over results we already have rather than new instrumentation.
 
 | Failing case | Trials | Implicated step | What went wrong |
@@ -319,11 +351,16 @@ the reason in test 1. Narrative reading accounts for 3 of 13; the pre-authorisat
 for 9. The failures are not the agent misreading hostile text — they are the agent knowing perfectly
 well that a pre-authorisation is missing and then writing a record that does not name *which*
 document. That is a record-quality failure sitting on top of correct reasoning, which is exactly the
-gap between our 0.9524 decision rate and our 0.8289 combined rate, localised to one tool. Fixing it raises `s`; removing it lowers `T`;
+shape of the gap between our decision rate and our combined rate. **It is not the whole of that
+gap**: 9 of 13 *code-check* failures are preauthorisation record problems, and the remaining 6
+combined failures are record-quality judgements spread across four other cases. The honest claim is
+that code-check failures are concentrated in one tool, not that one tool explains everything. Fixing it raises `s`; removing it lowers `T`;
 **an unreliable step usually costs both** — when a turn returns something poor the agent re-reads,
-retries or wanders, so `s` falls and `T` inflates at the same time. That is why D7's loop failure and
-this arithmetic are one investigation seen from two ends, and we have already seen the mechanism
-once: the 60-call run in D0(a) is `T` inflating with no bad *outcome* to show for it.
+retries or wanders, so `s` can fall and `T` can rise together. D7's loop failure also shows why
+repeated model calls must be tracked separately from tool-executing turns: in the 60-call run in
+D0(a), model calls and cost grew while the tool-executing turn count
+remained at 4. That incident illustrates why model calls need a separate cap; it is not evidence
+that `T` increased.
 
 **The limits, stated because they are real.** Steps are not independent — a bad observation early
 makes later steps worse, not equally likely to succeed — and they are not equally failure-prone: the
@@ -358,8 +395,14 @@ A good run:
 Every line item carries a disposition that points at something in the data: a coverage decision, a
 named exclusion rule, or a pre-authorisation reference with its validity window. Never at a plausible
 reading of the member's narrative.
-*Tested by (evaluation set):* `must_record` on every ordinary case in the answer key — `CLM-8842`
-requires `31255` refused under `EX-14` and `PA-5521` cited for `62480`, by name. `CLM-8850` and
+*Tested by (evaluation set):* `must_record` in the answer key — `CLM-8842` requires `31255`
+refused under `EX-14` and `PA-5521` cited for `62480`, by name. **All 42 cases (76 trials) receive
+code checks. Six designated cases additionally receive human judgement against their `must_record`
+lists** (`CLM-8842`, `CLM-8850`, `CLM-8888`, `CLM-8925`, `CLM-8952`, `CLM-9041`), covering
+12 trials in total. The answer key states the record requirements for every case, but code checks
+do not exhaustively validate every `must_record` item for the remaining cases. The combined rate
+includes the additional human judgements where required; it does not mean every trial has been
+human-reviewed. `CLM-8850` and
 `CLM-8960` require naming the prior claim that *almost* matched (`CLM-8702`, `CLM-8726`) and the one
 fact that differed, which no plausible story can supply.
 *Also enforced in code:* `unsupported()` refuses a record whose trigger no tool call establishes.
@@ -377,9 +420,16 @@ decision — the right outcome by the wrong trigger is not a pass (`TrialResult.
 `issue_decision_letter` fires once per claim or not at all, after the policy, every line and the
 hospital have resolved, and only once the autonomy gate is satisfied. An escalation reaches it zero
 times and records that it deliberately did not act.
-*Tested by (guardrail checklist):* cases 6 and 7 — the same gated action attempted twice, and the
-gated action attempted before operator confirmation.
-*Also code-checked on every evaluation run:* a count of gate calls in `usage["tools_called"]`.
+*Tested by (guardrail checklist):* case 6 — the same gated action with identical arguments issued
+twice in one run, where de-duplication answers the repeat with the earlier observation instead of
+executing it again, so this test produces one write. Case 7 — the **simulated** confirmation gate refusing an approval that
+carries no per-line dispositions. Neither is a live operator pressing a button; the gate stands in
+for one, and `docs/D3-guardrails.md` says what a deployment would replace it with.
+*Not code-checked on every trial:* the harness does not count gate calls per run. "At most one
+write per claim" is the design target. Case 6 verifies identical-request de-duplication, not a
+per-claim guarantee: a second write with different arguments for the same claim is not covered by
+that test. D7 failure 1 shows what happens without de-duplication — four letters for one claim, invisible in
+every aggregate metric we report.
 
 **4 · Says "I don't know" rather than inventing an answer the records do not support.**
 When a required fact is absent — no pre-authorisation, no itemised bill — the run names the exact
@@ -399,7 +449,7 @@ decisive escalation condition is established, further checks are spend on a deci
 never make.
 *Tested by:* D6 layer 1 + layer 2 at the measured pass rate; and a turn-count check on `CLM-8910`,
 `CLM-8925` and `CLM-8933`, all three of which must finish short of the ordinary path — measured at
-2 turns against `CLM-8842`'s 5.
+**2, 5 and 4 turns** against `CLM-8842`'s **9**.
 
 > Statements 1 and 4 are the ones an eloquent model fails. Statement 3 is the governance one.
 > Statement 5 is the only one that can be true while the other four are false — which is why it is

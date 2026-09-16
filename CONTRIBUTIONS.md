@@ -100,6 +100,8 @@ Append as work lands. One line per meaningful contribution; the commit is the ev
 | 2026-09-15 | SUN YUCONG | `07c89c7`, `c9d5088` | **D7 failure 2** — the v2 `check_coverage` shape, measured in three arms so the return shape is separated from the descriptor that shipped with it; the old shape's contradictory observation found on `CLM-9065` |
 | 2026-09-15 | NIU TONG | `7d3ddaa` | **D5(a)** — the judgement rule settled and written down: a `must_record` fact counts anywhere in the structured record, not only in `reason`. Harness and queue changed to match, 2 tests added, all 12 judgements re-reviewed against the re-recorded transcripts |
 | 2026-09-15 | Goncalo Miranda | | Summary paths made repo-relative — the regenerated evidence file had baked in an absolute local directory, which leaks a personal path and makes two identical runs differ byte-for-byte |
+| 2026-09-16 | ZHENG YONGJIE | `53fdd49` | **D0** — the reliability arithmetic corrected to the combined pass rate, plus fourteen overclaims found by reading the document against the code and the trial records: a code check that did not exist, a poka-yoke stated as a guarantee, turn counts confused with model calls, and grading coverage overstated |
+| 2026-09-16 | Goncalo Miranda | | The policy-id poka-yoke downgraded from a guarantee to a traceability property in `src/tools.py`, `src/contracts.py` and `docs/D2-tool-layer.md` — the same overclaim ZHENG YONGJIE found in D0 had propagated to six more places |
 
 **Evaluation set closed at 42 cases** — 15 shipped by the instructor plus 27 written by the team.
 Every case was labelled from the Appendix A routing table before any agent run, and every label was

@@ -181,26 +181,28 @@ a tracked dependency, not a free pass.
 
 | # | What closes | Unblocked by | Written back into | Owner |
 |---|---|---|---|---|
-| 1 | ⚠️ **D0(b) reliability arithmetic** — the `P` it used was **mislabelled**: 63/76 is the code-only rate, not the combined one. Correction written and sent to ZHENG YONGJIE; closes when he commits it. See the note under this table | D4 labels + the D5(a) run | `docs/D0-why-an-agent.md` and the D0 submission draft | ZHENG YONGJIE |
+| 1 | ✅ **D0(b) reliability arithmetic** — `P = 0.7500` (57/76 combined), `T = 5`, `s = 0.9441`, with all three harness rates named so they cannot be confused again. Fourteen further overclaims found and corrected in review | D4 labels + the D5(a) run | `docs/D0-why-an-agent.md` and the D0 submission draft | ZHENG YONGJIE |
 | 1b | ✅ **D0(a) turn counts** — predicted turns replaced with measured: `CLM-8910` 2 turns / 2 tools / 3 calls, `CLM-8842` 9 turns / 8 tools / 11 calls, each shown beside what the dependency rule permits | the D5(a) run | the D0 submission draft | ZHENG YONGJIE |
 | 2 | ✅ **`Guards.step_cap` and `budget_ceiling_usd`** — 12 turns, 22 model calls, US$0.016, every one from the measured distribution and the ceiling measured across the whole battery | the D5(a) run | `src/loop.py` | SUN YUCONG |
 | 3 | ✅ **D2(b) v1 → v2** — manual 265 → 540 tokens, and what that costs over a full schedule | a working harness | `docs/D2-tool-layer.md` | SUN YUCONG |
 | 4 | ✅ **D2(c) sequential vs parallel** — measured on identical recorded calls, three arms | D5(a) replay over the whole set | `docs/D2-tool-layer.md` | Goncalo, ZHENG YONGJIE |
 | 5 | ⬜ **`PRICES` re-verified** on openrouter.ai **before anyone spends** | — do it before the freeze | `src/backends.py` | WANG HONGJUN |
 
-**Four of the six are closed. Two are open, and both have to shut before Thursday.**
+**Five of the six are closed. One is open.**
 
 **Item 5 — WANG HONGJUN, and it blocks spending.** `price()` raises on an *unknown* model id but
 will happily compute with a stale rate, so a wrong number there corrupts D6 silently rather than
 loudly. Nothing else in the repository will catch it.
 
-**Item 1 — ZHENG YONGJIE, and it is a mislabel, not a missing number.** `docs/D0-why-an-agent.md`
-quoted `P = 0.8289 (63/76 combined)`. 63/76 is the harness's **code-only** rate; its **combined**
-rate — code *and* judgement, which is what D0's own paragraph argues for — is **57/76 = 0.75**.
-Everything downstream moved with it: `s` 0.9632 → **0.9441**, the whole `T` table, and the
-"14-point gap" against the 0.9524 decision rate, which is really **20.24 points**. The argument D0
-makes is unaffected and comes out stronger; only the figures were wrong. The corrected text is
-written and waiting for ZHENG YONGJIE to commit under his own account.
+**Item 1 closed, and it is worth recording how.** `docs/D0-why-an-agent.md` had quoted
+`P = 0.8289 (63/76 combined)`; 63/76 is the harness's **code-only** rate and the combined rate is
+**57/76 = 0.75**, which moved `s` to 0.9441 and the whole `T` table with it. Reviewing that fix,
+ZHENG YONGJIE checked the document line by line against the code and the trial records and found
+**fourteen** further statements that overclaimed — among them a "code-checked on every evaluation
+run" that named a check the harness has never performed, and a poka-yoke described as a guarantee
+that had propagated into four files including `src/contracts.py`. All corrected. The lesson is
+cheap to state and was expensive to find: **a document drifts from the code silently, because
+nothing fails when it does.**
 
 ---
 
