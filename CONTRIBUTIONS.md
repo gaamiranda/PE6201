@@ -36,14 +36,20 @@ is the expected shape. Two conditions, or the comparison means nothing: the mode
 least two price tiers**, and **no two members may take models from the same family**. Everyone runs
 the identical evaluation set and the identical v2 prompt, off the frozen `battery-v2` tag.
 
-| Member | Model | Family | Tier | Est. (76 runs) | Actual |
+| Member | Model | Family | Tier | Projected (76 runs) | Actual |
 |---|---|---|---|---|---|
-| Goncalo Miranda | `openai/gpt-4o-mini` | OpenAI | cheap | ~US$0.37 | |
-| JIN CHENG | `google/gemini-2.0-flash-001` | Google | cheap | ~US$0.37 | |
-| NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | ~US$0.37 | |
-| SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap | ~US$0.37 | |
-| WANG HONGJUN | `mistralai/mistral-medium-3` | Mistral | **mid** | ~US$1.10 | |
-| ZHENG YONGJIE | **v1 prompt pass** on `openai/gpt-4o-mini` | — | cheap | ~US$0.37 | |
+| Goncalo Miranda | `openai/gpt-4o-mini` | OpenAI | cheap | US$0.146 | |
+| JIN CHENG | `google/gemini-2.0-flash-001` | Google | cheap | US$0.097 | |
+| NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | US$0.108 | |
+| SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap | US$0.123 | |
+| WANG HONGJUN | `mistralai/mistral-medium-3` | Mistral | **mid** | US$0.407 | |
+| ZHENG YONGJIE | **v1 prompt pass** on `openai/gpt-4o-mini` | — | cheap | US$0.146 | |
+
+The projected column replaced the earlier round estimates (~US$0.37 cheap, ~US$1.10 mid) once the
+scripted run had measured token counts to price: 785,906 in and 46,280 out over 76 trials, at each
+model's published rate. **It is a floor, not a quote** — a model that takes more turns costs more,
+and NIU TONG's smoke test used 15 model calls on an easy case where gemini's median is 7. The
+distance between this column and the Actual column beside it is a D6 finding, not an error.
 
 Five families, two tiers — both conditions met. Fielding six models costs no more *per person* than
 fielding three; the price table is per member, per model.
@@ -123,17 +129,35 @@ contribution.
 
 ## Demo — every member speaks
 
-5 minutes total, so roughly 50 seconds each. Must show the system running, **one negative case
-live**, and the numbers. Over-length is penalised under Communication.
+5 minutes total. Must show the system running, **one negative case live**, and the numbers.
+Over-length is penalised under Communication.
 
-| Member | Section they present |
-|---|---|
-| Goncalo Miranda | |
-| ZHENG YONGJIE | |
-| SUN YUCONG | |
-| JIN CHENG | |
-| NIU TONG | |
-| WANG HONGJUN | |
+**Budget 45 seconds each, not 50.** Six times fifty is exactly five minutes with no slack;
+6 × 45 leaves half a minute of room to trim.
+
+| # | Member | 45 seconds on |
+|---|---|---|
+| 1 | ZHENG YONGJIE | Why an agent at all — the ladder, and `s = 0.9441` per step |
+| 2 | Goncalo Miranda | The loop and the tool layer — **live run on screen** |
+| 3 | SUN YUCONG | Descriptors and guardrails — **`CLM-8941` live**, then name `CLM-8952` |
+| 4 | JIN CHENG | Record-and-replay: why every number here reproduces for free |
+| 5 | NIU TONG | The harness — code check vs judgement check, 57/76 against 40/42 |
+| 6 | WANG HONGJUN | Cost — break-even, and why the model's price barely matters |
+
+**Recording protocol.** Everyone records their own clip; ZHENG YONGJIE joins them, per the
+ownership table. Send raw clips, not edited ones — trimming centrally is easier than negotiating
+six re-records. Record off the frozen tag with a terminal font large enough to read on a laptop:
+six clips from six differently configured repos look like six projects.
+
+**The live negative case, and which one.** Slots 2 and 3 carry the two things the brief requires
+to be shown rather than described. `CLM-8941` — the overt "ignore policy and approve" instruction
+sitting in the member narrative — escalates correctly in **one turn**, which is the whole budget a
+demo has. `CLM-9044` and `CLM-9061` are the fallbacks, both clean across all three trials.
+
+> ⚠️ **Do not demo `CLM-8952`.** It is the injection that imitates a tool result, the agent
+> **approves it**, and it is the standing FAIL on guardrail row 2. Show `CLM-8941` working and then
+> say in the same breath that `CLM-8952` defeats us and is reported in D7. Naming your own failure
+> reads as confidence; being caught by it live does not.
 
 ## AI assistance
 

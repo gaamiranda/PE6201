@@ -55,6 +55,13 @@ https://github.com/gaamiranda/PE6201
 
 Five families, two price tiers — both battery conditions satisfied.
 
+> **This table is the declaration as submitted on 4 September and is left as submitted.** One row
+> has changed since: WANG HONGJUN moved from `anthropic/claude-haiku-4.5` to
+> `mistralai/mistral-medium-3` when the evaluation set closed at 76 runs rather than 56 and haiku
+> came to roughly US$3.75, over our own US$3 rule. Both battery conditions still hold — five
+> families, two tiers. The reasoning is in [`CONTRIBUTIONS.md`](CONTRIBUTIONS.md) and the live
+> table there is the current one. **Do not "fix" this table to match**: it records what was filed.
+
 ## 5 · Contribution statement
 
 **All members are contributing.**

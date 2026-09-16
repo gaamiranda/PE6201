@@ -118,18 +118,39 @@ so in the report — the brief explicitly allows that, but it has to be a decisi
 
 ## 4 · The live battery — everyone runs one
 
-From `TEAM_DECLARATION.docx`, unchanged:
+From `TEAM_DECLARATION.docx`, with **one change since**: WANG HONGJUN moved off
+`anthropic/claude-haiku-4.5`, which came to roughly US$3.75 over our 76-trial schedule and broke
+our own US$3 rule. The reasoning is recorded in [`CONTRIBUTIONS.md`](CONTRIBUTIONS.md).
 
-| Member | Model | Family | Tier | ~56–60 runs |
+| Member | Model | Family | Tier | Projected, 76 trials |
 |---|---|---|---|---|
-| Goncalo Miranda | `openai/gpt-4o-mini` | OpenAI | cheap | ~US$0.30 |
-| JIN CHENG | `google/gemini-2.0-flash-001` | Google | cheap | ~US$0.30 |
-| NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | ~US$0.30 |
-| SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap | ~US$0.30 |
-| WANG HONGJUN | `anthropic/claude-haiku-4.5` | Anthropic | **mid** | ~US$2.94 |
-| ZHENG YONGJIE | **v1 prompt pass** on `openai/gpt-4o-mini` | — | cheap | ~US$0.30 |
+| Goncalo Miranda | `openai/gpt-4o-mini` | OpenAI | cheap | US$0.146 |
+| JIN CHENG | `google/gemini-2.0-flash-001` | Google | cheap | US$0.097 |
+| NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | US$0.108 |
+| SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap | US$0.123 |
+| WANG HONGJUN | `mistralai/mistral-medium-3` | Mistral | **mid** | US$0.407 |
+| ZHENG YONGJIE | ✅ **v1 prompt pass** on `openai/gpt-4o-mini` | — | cheap | US$0.146 |
 
 Five families, two price tiers — both conditions met. Own key, own model, own numbers.
+
+> **These are projections, not quotes.** They take the scripted run's measured token counts
+> (785,906 in / 46,280 out over 76 trials) and price them at each model's published rate. A live
+> run that takes more turns costs more: NIU TONG's smoke test used **15 model calls on an easy
+> case where gemini's median is 7**. Treat these as a floor and expect chattier models to exceed
+> them. The gap between projection and bill is WANG HONGJUN's to report in D6.
+
+> ✅ **The v1 pass is ZHENG YONGJIE's, decided and unchanged across all four files.** He runs
+> `--prompt-version v1` on `openai/gpt-4o-mini` — the same model Goncalo runs v2 on, because to
+> compare prompts you hold the model fixed. It is the **only** measurement in this project that
+> can show whether the six-field descriptor makes the model better rather than merely bigger:
+> scripted replay is keyed on `(case_id, turn)` alone, so it returns identical replies under both
+> prompts and can price the rewrite but never grade it. We know v2 costs **+275 tokens on every
+> model call**; without this run, `docs/D2-tool-layer.md` reports that cost with nothing beside it.
+>
+> ```bash
+> python3 harness/run_eval.py --backend openrouter \
+>   --model openai/gpt-4o-mini --prompt-version v1
+> ```
 
 **Three rules, or the comparison is void:**
 
