@@ -4,7 +4,7 @@ Team **7** · Section **B** · PE6201 A2 · Problem **A**
 
 > The commit history must corroborate this file. Every member commits under their own GitHub
 > account — see the house rules in [`PLAN.md` §6](PLAN.md). **Add a line to the log below when
-> something lands, not on the 13th.**
+> something lands, not on the 20th.**
 
 Ownership below is exactly what was declared in `TEAM_DECLARATION.docx`, submitted to NTULearn on
 4 September 2026. What each person is blocked by, and by when, is in [`PLAN.md`](PLAN.md).

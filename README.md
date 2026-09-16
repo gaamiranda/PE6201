@@ -123,7 +123,7 @@ Full list in [`PLAN.md` §6](PLAN.md). The three that matter most:
 
 | Date | What |
 |---|---|
-| **Thu 10 Sep, 23:59** | 🔒 Freeze — `battery-v2` tagged. Eval set, v2 prompt and harness final |
-| **Fri 11 Sep** | Everyone runs their live battery off that tag |
-| **Sun 13 Sep, 23:59 SGT** | A2 due — repo, code copy in the NTULearn folder, report, demo link, self-appraisal |
-| Wed 16 Sep, 23:59 SGT | Peer rating (participation requirement) |
+| **Thu 17 Sep, 23:59** | 🔒 Freeze — `battery-v2` tagged. Eval set, v2 prompt and harness final |
+| **Fri 18 Sep** | Everyone runs their live battery off that tag |
+| **Sun 20 Sep, 23:59 SGT** | A2 due — repo, code copy in the NTULearn folder, report, demo link, self-appraisal |
+| Wed 23 Sep, 23:59 SGT | Peer rating (participation requirement) |

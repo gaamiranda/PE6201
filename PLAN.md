@@ -147,24 +147,33 @@ Debug scripted. If you are burning live tokens to find a bug, stop.
 
 Boilerplate — adjust in this file if the team agrees something else.
 
+> **The deadline moved to Sunday 20 September.** The dates below were rewritten on 16 Sep to
+> match. Everything above the rule is what actually happened, dated when it landed; everything
+> below it is what is left.
+
 | Date | What | Who |
 |---|---|---|
-| **Fri 4 Sep** | Declaration filed ✅ · repo restructured · **D0(c) five statements written** | Goncalo, ZHENG YONGJIE |
-| **Sat 5 Sep** | `src/contracts.py` frozen · case baton starts | Goncalo → the six |
-| **Sun 6 Sep** | Tool set (D2a) + descriptors (D2b v1) drafted | Goncalo, ZHENG, SUN YUCONG |
-| **Mon 7 / Tue 8 Sep** | Class 6 · loop + tools working · harness skeleton runs scripted | Goncalo, ZHENG, JIN CHENG, NIU TONG |
-| **Tue 8 Sep** | Case baton finished — all 40 cases labelled, `check_my_data.py` clean | all six |
-| **Wed 9 Sep** | Guardrail layer + 10-case checklist · D7 both failures reproduced | SUN YUCONG, JIN CHENG, NIU TONG |
-| **Thu 10 Sep 23:59** | 🔒 **FREEZE.** Tag `battery-v2`. Eval set, v2 prompt and harness final. | Goncalo tags |
-| **Fri 11 Sep** | **Everyone runs their live battery** off that tag, commits their numbers | all six |
-| **Sat 12 Sep** | Cost model · result tables · six report sections drafted and assembled | WANG HONGJUN, ZHENG YONGJIE |
-| **Sun 13 Sep** | Demo recorded (every member speaks) · self-appraisal · **submit by 23:59 SGT** | all six |
-| Wed 16 Sep | Peer rating — participation requirement | all six |
+| Fri 4 Sep | ✅ Declaration filed · repo restructured · `src/contracts.py` frozen | Goncalo, ZHENG YONGJIE |
+| Sat 6 Sep | ✅ **D0** · the agent: tool layer, ReAct loop, vendor seam (D1, D2a) | ZHENG YONGJIE, Goncalo |
+| Sun 7 Sep | ✅ Case baton finished — 42 cases labelled, `check_my_data.py` clean | all six |
+| Tue 9 Sep | ✅ **D5(a)** record-and-replay: recorder, 42-case transcript, replay check | JIN CHENG |
+| Sat 13 Sep | ✅ **D5(a)** the evaluation harness, 26 tests, code-vs-judgement grading | NIU TONG |
+| Mon 15 Sep | ✅ **D2(b) + D3** descriptors, v2 shape, autonomy gate, guardrail checklist | SUN YUCONG |
+| Mon 15 Sep | ✅ **D7** both failures · **D2(c)** · three prompt/parser defects fixed, all 42 re-recorded | Goncalo, SUN YUCONG |
+| Mon 15 Sep | ✅ Judgement rule settled record-wide · all 12 judgements re-reviewed | NIU TONG |
+| ————— | **— everything below is what is left —** | |
+| **Wed 16 Sep** | **D6** drafted on the scripted numbers · `PRICES` re-verified · freeze checklist closed | WANG HONGJUN |
+| **Thu 17 Sep 23:59** | 🔒 **FREEZE.** Tag `battery-v2`. Eval set, v2 prompt and harness final. | Goncalo tags |
+| **Fri 18 Sep** | **Everyone runs their live battery** off that tag, commits their numbers | all six |
+| **Sat 19 Sep** | D6 actuals filled · result tables · six report sections assembled · demo recorded · self-appraisal | WANG HONGJUN, ZHENG YONGJIE, all six |
+| **Sun 20 Sep** | Final read-through · **submit by 23:59 SGT** | all six |
+| Wed 23 Sep | Peer rating — participation requirement | all six |
 
 **Thursday's freeze is the one date that cannot slip.** Six people running the battery off six
-different commits silently voids the whole comparison.
+different commits silently voids the whole comparison. The extra week bought slack everywhere
+except here: the battery still needs a day of its own, and the assembly still needs the battery.
 
-### The 10 Sep freeze checklist
+### The freeze checklist — 17 Sep
 
 Things that are legitimately unanswerable today and become answerable the moment D4 and D5(a)
 land. Each has a named owner and a document it has to be written back into — a deferred number is
@@ -172,15 +181,26 @@ a tracked dependency, not a free pass.
 
 | # | What closes | Unblocked by | Written back into | Owner |
 |---|---|---|---|---|
-| 1 | **D0(b) reliability arithmetic** — measured `P`, median `T`, and our own `s = P^(1/T)`. Report §1 requires the figure, not the formula | D4 labels + the D5(a) run | `docs/D0-why-an-agent.md` and the D0 submission draft | ZHENG YONGJIE |
-| 1b | **D0(a) turn counts** — CLM-8925 and CLM-8842 currently carry *predicted* turns from our dependency rule (2 and 5), labelled as such. Replace with measured medians. Note the brief's own worked example is 4, and live runs vary run to run — that variance is itself the R7 cost | the D5(a) run | the D0 submission draft | ZHENG YONGJIE |
-| 2 | **`Guards.step_cap` and `budget_ceiling_usd`** — set from the measured turn distribution, not a round number | the D5(a) run | `src/loop.py` | SUN YUCONG |
-| 3 | **D2(b) v1 → v2** — tokens per call, pass rate, guardrail cases, both measured | a working harness | `docs/D2-tool-layer.md` | SUN YUCONG |
-| 4 | **D2(c) sequential vs parallel** — the real comparison, not the dev transcripts | D5(a) replay over the whole set | `docs/D2-tool-layer.md` | Goncalo, ZHENG YONGJIE |
-| 5 | **`PRICES` re-verified** on openrouter.ai before anyone spends | — do it Thu | `src/backends.py` | WANG HONGJUN |
+| 1 | ⚠️ **D0(b) reliability arithmetic** — the `P` it used was **mislabelled**: 63/76 is the code-only rate, not the combined one. Correction written and sent to ZHENG YONGJIE; closes when he commits it. See the note under this table | D4 labels + the D5(a) run | `docs/D0-why-an-agent.md` and the D0 submission draft | ZHENG YONGJIE |
+| 1b | ✅ **D0(a) turn counts** — predicted turns replaced with measured: `CLM-8910` 2 turns / 2 tools / 3 calls, `CLM-8842` 9 turns / 8 tools / 11 calls, each shown beside what the dependency rule permits | the D5(a) run | the D0 submission draft | ZHENG YONGJIE |
+| 2 | ✅ **`Guards.step_cap` and `budget_ceiling_usd`** — 12 turns, 22 model calls, US$0.016, every one from the measured distribution and the ceiling measured across the whole battery | the D5(a) run | `src/loop.py` | SUN YUCONG |
+| 3 | ✅ **D2(b) v1 → v2** — manual 265 → 540 tokens, and what that costs over a full schedule | a working harness | `docs/D2-tool-layer.md` | SUN YUCONG |
+| 4 | ✅ **D2(c) sequential vs parallel** — measured on identical recorded calls, three arms | D5(a) replay over the whole set | `docs/D2-tool-layer.md` | Goncalo, ZHENG YONGJIE |
+| 5 | ⬜ **`PRICES` re-verified** on openrouter.ai **before anyone spends** | — do it before the freeze | `src/backends.py` | WANG HONGJUN |
 
-Item 1 is the one that gets discovered on the 13th if nobody owns it: D0 reads as finished, and the
-gap is a single sentence deep inside it.
+**Four of the six are closed. Two are open, and both have to shut before Thursday.**
+
+**Item 5 — WANG HONGJUN, and it blocks spending.** `price()` raises on an *unknown* model id but
+will happily compute with a stale rate, so a wrong number there corrupts D6 silently rather than
+loudly. Nothing else in the repository will catch it.
+
+**Item 1 — ZHENG YONGJIE, and it is a mislabel, not a missing number.** `docs/D0-why-an-agent.md`
+quoted `P = 0.8289 (63/76 combined)`. 63/76 is the harness's **code-only** rate; its **combined**
+rate — code *and* judgement, which is what D0's own paragraph argues for — is **57/76 = 0.75**.
+Everything downstream moved with it: `s` 0.9632 → **0.9441**, the whole `T` table, and the
+"14-point gap" against the 0.9524 decision rate, which is really **20.24 points**. The argument D0
+makes is unaffected and comes out stronger; only the figures were wrong. The corrected text is
+written and waiting for ZHENG YONGJIE to commit under his own account.
 
 ---
 
@@ -192,7 +212,7 @@ gap is a single sentence deep inside it.
   git config user.name "Your Name"
   git config user.email "the-email-on-your-github-account"
   ```
-- **Add a line to `CONTRIBUTIONS.md` when something lands.** Not on the 13th.
+- **Add a line to `CONTRIBUTIONS.md` when something lands.** Not on the 20th.
 - **Never commit a key.** `.env` is gitignored; keep it that way.
 - **Never edit or delete a row the instructor shipped.** New ids only, inside your block.
   `check_my_data.py` fingerprints every shipped row and will name the one that moved.
