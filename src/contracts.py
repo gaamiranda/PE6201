@@ -290,8 +290,10 @@ class CoverageNextStep(TypedDict, total=False):
 class CoverageResult(TypedDict, total=False):
     """What check_coverage returns for ONE line. Bounded: 3 fields plus up to 2 next steps.
 
-    Takes a policy_id and not a member_id on purpose — a coverage check against a policy the
-    member does not hold cannot be expressed.
+    Takes a policy_id and not a member_id on purpose: the member -> policy hop then happens once,
+    in lookup_policy, and shows up in the evidence trail as its own call. It does NOT make a wrong
+    pairing impossible — this tool checks that the policy id exists, not that the claimant holds
+    it. The property is traceability, not a type.
 
     `needed_next` replaces separate branch flags. It is empty for not_covered lines, so an
     excluded line cannot also ask the agent to chase pre-authorisation or documents. For covered
@@ -392,8 +394,8 @@ GATED_TOOLS = ["issue_decision_letter"]
 #
 # WHY FIVE TURNS AND NOT THE BRIEF'S FOUR. The brief's worked example folds check_coverage into
 # turn 2 beside lookup_policy. That is only reachable if check_coverage does the member -> policy
-# hop itself. We took policy_id instead, because it makes a coverage check against a policy the
-# member does not hold unrepresentable — and paid one turn for it. That is a poka-yoke traded
+# hop itself. We took policy_id instead, because it forces that hop into its own visible call
+# rather than hiding it inside coverage — and paid one turn for it. That is a poka-yoke traded
 # against a turn, deliberately, and it is reported as such: "D2(c) marks the reasoning, not the
 # number" (change notice, 1 Sep). Both groupings get measured; see docs/D2-tool-layer.md.
 DEPENDS_ON = {

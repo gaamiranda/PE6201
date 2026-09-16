@@ -96,7 +96,11 @@ Detail belongs in D2(b), but the decisions are made here because they are signat
 | a duplicate check on any subset of the facts | `check_claim_history(member_id, hospital_id, date_of_service, lines)` — all four required | A three-fact match. The history ships **three deliberate near-misses**, each differing on one fact; every shortcut wrongly escalates a good claim |
 
 A third falls out of the shape already in Appendix A: `check_coverage` takes a **`policy_id`**, not
-a `member_id`, so a coverage check against a policy the member does not hold cannot be expressed.
+a `member_id`, so the member → policy hop has to happen once, in `lookup_policy`, and appears in the
+evidence trail as its own call. Note the difference from the two rows above, which are genuine
+impossibilities — a required argument that cannot be omitted. This one is weaker and we state it as
+such: `check_coverage` checks that the policy id *exists*, not that this claimant holds it. What it
+buys is a visible hop, not an unrepresentable pairing.
 
 ---
 
@@ -121,7 +125,7 @@ State what each makes **impossible** — not what it discourages.
 |---|---|---|
 | `get_preauthorisation(member_id, procedure_code)` | `get_preauthorisation(member_id, procedure_code, date_of_service)` | Returning "approval found" without testing whether it applies on the service date. |
 | a duplicate check on any subset of facts | `check_claim_history(member_id, hospital_id, date_of_service, lines)` | A three-fact duplicate match. All four match facts must be supplied together. |
-| `check_coverage(member_id, procedure_code)` or a free policy lookup inside the model's reasoning | `check_coverage(policy_id, procedure_code)` | Checking coverage against a policy the member does not hold. The caller must use the policy id returned by `lookup_policy`. |
+| `check_coverage(member_id, procedure_code)` or a free policy lookup inside the model's reasoning | `check_coverage(policy_id, procedure_code)` | **Weaker than the rows above, deliberately.** Not an impossibility: it forces the member → policy hop into `lookup_policy`, where the date test lives, and makes it visible in the trace. The tool validates that the policy id exists, not that the claimant holds it. |
 | separate `covered`, `requires_preauth`, and `document_required` flags | `coverage.status` plus `needed_next[]`, empty when `coverage.status == "not_covered"` | The tool observation cannot say a line is excluded and also ask the agent to chase pre-authorisation or documents for that same refused line. |
 
 ### The measured rewrite
@@ -249,14 +253,14 @@ Signatures and the machine-readable version are in [`../src/contracts.py`](../sr
 **Five turns, where the brief's worked example shows four — and this is a deliberate trade, not
 a miss.** The brief folds `check_coverage` into turn 2 beside `lookup_policy`. That grouping is
 only reachable if `check_coverage` does the member → policy hop itself. We took a **`policy_id`**
-instead, because it makes a coverage check against a policy the member does not hold
-*unrepresentable* — and it costs exactly one turn.
+instead, because it forces that hop into its own named call where a reader of the evidence trail
+can see which policy was used — and it costs exactly one turn.
 
 So the choice is a poka-yoke against a turn, and we are measuring both rather than asserting one:
 
 | | Turns | The safety property |
 |---|---|---|
-| `check_coverage(policy_id, procedure_code)` — **shipped** | 5 | Wrong-policy coverage check cannot be expressed |
+| `check_coverage(policy_id, procedure_code)` — **shipped** | 5 | The hop happens once, in `lookup_policy`, and is auditable from the trace |
 | `check_coverage(member_id, procedure_code)` | 4 | The hop is repeated inside the tool and is unverifiable from the trace |
 
 The change notice is explicit that this is ours to decide: *"Where the parallel boundary falls is

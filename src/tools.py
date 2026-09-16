@@ -193,8 +193,16 @@ def check_coverage(policy_id: str, procedure_code: str) -> CoverageResult:
     # line cannot simultaneously return branch flags that ask the agent to chase paperwork.
     # -------------------------------------------------------------------------
     """
-    # POKA-YOKE: takes a policy_id, not a member_id. A coverage check against a policy the
-    # member does not hold cannot be expressed. Costs one turn — see docs/D2-tool-layer.md.
+    # POKA-YOKE: takes a policy_id, not a member_id, which forces the member -> policy hop to
+    # happen once, in lookup_policy, where the date test lives — and to appear in the evidence
+    # trail as its own call. Costs one turn; see docs/D2-tool-layer.md.
+    #
+    # SAY WHAT THIS DOES NOT DO. It does not make a wrong pairing impossible. The check below
+    # validates that the policy id EXISTS, not that this claimant holds it, so a policy id
+    # arrived at some other way would be answered. The property bought here is traceability:
+    # with a member_id the hop would happen invisibly inside this function and no reader of
+    # tools_called could tell which policy was used. That is worth the turn. "Unrepresentable"
+    # would not have been true, and a guarantee we cannot keep is worse than none.
     pol = _POLICIES.get(policy_id)
     if pol is None:
         raise ToolError(f"no policy with id {policy_id}")
