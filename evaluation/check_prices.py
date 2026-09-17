@@ -33,12 +33,16 @@ import loop       # noqa: E402
 # must not set the ceiling.
 BATTERY = [
     "openai/gpt-4o-mini",
-    "google/gemini-2.0-flash-001",
+    "google/gemini-2.5-flash-lite",
     "meta-llama/llama-3.3-70b-instruct",
     "deepseek/deepseek-chat",
     "mistralai/mistral-medium-3",
 ]
+# JIN CHENG's declared google/gemini-2.0-flash-001 was delisted by OpenRouter and replaced on
+# 17 Sep by gemini-2.5-flash-lite, which is also the model D5(a) was recorded from — so the
+# recording model is now a battery model and is no longer listed separately.
 RECORDING_MODEL = "google/gemini-2.5-flash-lite"
+EXTRA = [] if RECORDING_MODEL in BATTERY else [RECORDING_MODEL]
 NOT_FIELDED = ["anthropic/claude-haiku-4.5"]
 
 TRIALS = os.path.join(_ROOT, "results", "evaluations",
@@ -53,7 +57,7 @@ print(f"  {'model':38} {'in':>6} {'out':>6} {'76 trials':>10} {'worst run':>10}"
 
 ceiling = loop.Guards().budget_ceiling_usd
 worst_fielded = 0.0
-for model in BATTERY + [RECORDING_MODEL] + NOT_FIELDED:
+for model in BATTERY + EXTRA + NOT_FIELDED:
     pin, pout = backends.PRICES[model]
     schedule = backends.price(model, tin, tout)
     worst = max(backends.price(model, r["tokens_in"], r["tokens_out"]) for r in rows)

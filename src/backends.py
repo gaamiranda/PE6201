@@ -56,20 +56,35 @@ class BackendError(Exception):
 # ─────────────────────────────────────────────────────────────────────────────
 # Prices. Used to turn a token count into the cost_usd that D6 and D7 both read.
 #
-# ⚠ VERIFY EVERY ROW ON openrouter.ai/models BEFORE THE 18 SEP BATTERY. Prices move, and a
-# wrong number here silently corrupts the cost model rather than raising anything. This is
-# freeze-checklist item 5 (PLAN.md), owned by WANG HONGJUN, and it blocks the battery.
+# ✅ VERIFIED 17 SEPTEMBER 2026 against GET https://openrouter.ai/api/v1/models (444 models
+# listed), which is the provider's own price feed rather than a reading of the web page.
+# Freeze-checklist item 5, WANG HONGJUN. Three rows were wrong and the check is why we know:
+#
+#   google/gemini-2.0-flash-001   DELISTED — no google/gemini-2.0-* exists on OpenRouter at all.
+#                                 It was JIN CHENG's battery model; a live run would have 404ed
+#                                 on the first call. Replaced by gemini-2.5-flash-lite, the only
+#                                 cheap Gemini remaining and, usefully, the model the D5(a)
+#                                 transcripts were recorded from.
+#   deepseek/deepseek-chat        0.14/0.28 -> 0.2574/1.0287. Output was stale by 3.7x. Nothing
+#                                 would have failed: SUN YUCONG's runs would have completed and
+#                                 every cost figure derived from them would have been half.
+#   meta-llama/llama-3.3-70b      0.12/0.30 -> 0.10/0.32. Both moved, in opposite directions.
+#
+# This is exactly the failure mode the warning below describes, caught with a day to spare.
+#
+# ⚠ RE-VERIFY EVERY ROW BEFORE ANY FUTURE BATTERY. price() raises on an unknown model id but
+# computes happily with a stale rate, so a wrong number here corrupts the cost model silently
+# rather than loudly. Nothing else in this repository will catch it.
 # USD per 1,000,000 tokens, (input, output).
 # ─────────────────────────────────────────────────────────────────────────────
 
 PRICES: Dict[str, tuple] = {
     "openai/gpt-4o-mini":                 (0.15, 0.60),
-    "google/gemini-2.0-flash-001":        (0.10, 0.40),
-    "google/gemini-2.5-flash-lite":       (0.10, 0.40),   # the D5(a) recording model
+    "google/gemini-2.5-flash-lite":       (0.10, 0.40),   # D5(a) recording model; JIN CHENG live
     "mistralai/mistral-medium-3":         (0.40, 2.00),
-    "meta-llama/llama-3.3-70b-instruct":  (0.12, 0.30),
-    "deepseek/deepseek-chat":             (0.14, 0.28),
-    "anthropic/claude-haiku-4.5":         (1.00, 5.00),
+    "meta-llama/llama-3.3-70b-instruct":  (0.10, 0.32),
+    "deepseek/deepseek-chat":             (0.2574, 1.0287),
+    "anthropic/claude-haiku-4.5":         (1.00, 5.00),   # priced, not fielded — see PLAN.md
     "scripted":                           (0.00, 0.00),
 }
 

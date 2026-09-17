@@ -98,18 +98,28 @@ class Guards:
     # tokens cost different amounts purely because they were priced at a different model's rate.
     # A ceiling calibrated on one model is a price filter wearing a guard's clothes.
     #
-    # Worst run per model, caps lifted, priced at each battery model's rate:
+    # Worst run per model, caps lifted, priced at each battery model's rate. Re-priced
+    # 17 Sep 2026 against the verified PRICES table (see src/backends.py):
     #
+    #     meta-llama/llama-3.3-70b-instruct max 0.00331
     #     google/gemini-2.5-flash-lite      max 0.00344
-    #     meta-llama/llama-3.3-70b-instruct max 0.00383
-    #     deepseek/deepseek-chat            max 0.00436
     #     openai/gpt-4o-mini                max 0.00516
+    #     deepseek/deepseek-chat            max 0.00885   (was 0.00436 at the stale rate)
     #     mistralai/mistral-medium-3        max 0.01441   <- sets the number
     #
-    # 0.016 clears the worst run in the battery by 11%, and one identical number serves all six.
+    # 0.016 clears the worst run in the battery by 10%, and one identical number serves all six.
     # Comparability requires the guards be byte-identical across the battery: a per-model
     # ceiling would make cap_fired counts incomparable, and cap_fired is the statistic that
     # tells a reader whether a low pass rate is the model or the harness.
+    #
+    # ⚠ THE 10% IS AGAINST SCRIPTED TOKEN COUNTS, AND LIVE RUNS ARE CHATTIER. WANG HONGJUN's
+    # pre-freeze pilot on mistral-medium-3 produced 71% more output tokens than the replay on
+    # near-identical input, which would put that worst run at ~0.0167 and trip this ceiling.
+    # Mistral is the only model close to it; the rest sit 45-79% clear. The ceiling is left at
+    # 0.016 deliberately — it is quoted in D3, D7 and the guardrail checklist as committed
+    # evidence, and one extrapolation from one pre-freeze run on one model is not grounds to
+    # move a guard. If it fires during the battery it is recorded, not silent, and a
+    # budget_ceiling stop must be reported as a harness effect rather than a model failure.
     budget_ceiling_usd: float = 0.016
     dedup: bool = True                   # delete this to reproduce D7 failure 1
     autonomy: Autonomy = "confirm"       # D3(a) chooses and defends this

@@ -104,8 +104,8 @@ commands, and what to check before Friday.
 - **Three models is the floor.** For a team of N, **N − 1 models** is what is expected, with the
   remaining member running the **v1 prompt pass**. A team of six fields five models plus a v1 pass.
 - Every member runs one full battery **on their own key**. Our set is **76 trials** (see below),
-  which on the cheap tier projects to between **US$0.097 and US$0.146** a head — so fielding six
-  models costs no more than fielding three. Per-member projections are in
+  which projects to between **US$0.093 and US$0.407** a head depending on the model — so fielding
+  six models costs no more than fielding three. Per-member projections are in
   [`../PLAN.md`](../PLAN.md); they are a floor, since a chattier model takes more turns.
 - **Two conditions, or the comparison is meaningless:**
   1. the models must span **at least two price tiers**, and

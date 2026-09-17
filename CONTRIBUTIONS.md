@@ -39,9 +39,9 @@ the identical evaluation set and the identical v2 prompt, off the frozen `batter
 | Member | Model | Family | Tier | Projected (76 runs) | Actual |
 |---|---|---|---|---|---|
 | Goncalo Miranda | `openai/gpt-4o-mini` | OpenAI | cheap | US$0.146 | |
-| JIN CHENG | `google/gemini-2.0-flash-001` | Google | cheap | US$0.097 | |
-| NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | US$0.108 | |
-| SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap | US$0.123 | |
+| JIN CHENG | `google/gemini-2.5-flash-lite` | Google | cheap | US$0.097 | |
+| NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | US$0.093 | |
+| SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap† | US$0.250 | |
 | WANG HONGJUN | `mistralai/mistral-medium-3` | Mistral | **mid** | US$0.407 | |
 | ZHENG YONGJIE | **v1 prompt pass** on `openai/gpt-4o-mini` | — | cheap | US$0.146 | |
 
@@ -108,6 +108,10 @@ Append as work lands. One line per meaningful contribution; the commit is the ev
 | 2026-09-15 | Goncalo Miranda | | Summary paths made repo-relative — the regenerated evidence file had baked in an absolute local directory, which leaks a personal path and makes two identical runs differ byte-for-byte |
 | 2026-09-16 | ZHENG YONGJIE | `53fdd49` | **D0** — the reliability arithmetic corrected to the combined pass rate, plus fourteen overclaims found by reading the document against the code and the trial records: a code check that did not exist, a poka-yoke stated as a guarantee, turn counts confused with model calls, and grading coverage overstated |
 | 2026-09-16 | Goncalo Miranda | | The policy-id poka-yoke downgraded from a guarantee to a traceability property in `src/tools.py`, `src/contracts.py` and `docs/D2-tool-layer.md` — the same overclaim ZHENG YONGJIE found in D0 had propagated to six more places |
+| 2026-09-17 | Goncalo Miranda | `53e60e6` | `.env` loaded on the live path. Every instruction in the repo says the OpenRouter key lives in `.env` and `requirements.txt` ships `python-dotenv` to read it, but `load_dotenv` was only ever called in the transcript recorder — so a correctly-placed key failed with an error telling you to place it there. Found one day before six people run the live battery |
+| 2026-09-17 | NIU TONG | `6e148a5`, `385c8b4` | **D5(b) runbook** — per-member commands, model ids, the `--run-id` convention, key hygiene, the judgement workflow, and the `commit_id` check that verifies all six batteries ran off one tag. The harness README's live-battery section corrected from the brief's 40 cases / 56 runs to our measured 42 / 76 |
+| 2026-09-17 | WANG HONGJUN | | **Freeze item 5 — `PRICES` re-verified**, and three of eight rows were wrong. `google/gemini-2.0-flash-001` had been **delisted**: it was JIN CHENG's battery model and his Friday run would have 404ed on the first call. `deepseek/deepseek-chat` output was stale by 3.7×, which would not have failed at all — SUN YUCONG's runs would have completed and every cost figure derived from them would have been half. `meta-llama/llama-3.3-70b-instruct` moved on both input and output |
+| 2026-09-17 | Goncalo Miranda | | Prices corrected against OpenRouter's own price feed, JIN CHENG moved to `google/gemini-2.5-flash-lite`, projections re-priced across `PLAN.md`, the runbook and this file, and the ceiling comment in `src/loop.py` re-measured. Freeze checklist closed |
 
 **Evaluation set closed at 42 cases** — 15 shipped by the instructor plus 27 written by the team.
 Every case was labelled from the Appendix A routing table before any agent run, and every label was

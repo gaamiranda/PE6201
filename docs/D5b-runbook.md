@@ -30,11 +30,26 @@ commit SHA into every trial row it writes. See §7.
 | Member | Model | Family | Tier | Projected, 76 trials |
 |---|---|---|---|---|
 | Goncalo Miranda | `openai/gpt-4o-mini` | OpenAI | cheap | US$0.146 |
-| JIN CHENG | `google/gemini-2.0-flash-001` | Google | cheap | US$0.097 |
-| NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | US$0.108 |
-| SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap | US$0.123 |
+| JIN CHENG | `google/gemini-2.5-flash-lite` | Google | cheap | US$0.097 |
+| NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | US$0.093 |
+| SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap† | US$0.250 |
 | WANG HONGJUN | `mistralai/mistral-medium-3` | Mistral | **mid** | US$0.407 |
 | ZHENG YONGJIE | **v1 prompt pass** on `openai/gpt-4o-mini` | — | cheap | US$0.146 |
+
+> ⚠️ **JIN CHENG's model changed on 17 September.** `google/gemini-2.0-flash-001` was **delisted** —
+> there is no `google/gemini-2.0-*` on OpenRouter at all — and a live run against it returns a 404
+> on the first call. He runs **`google/gemini-2.5-flash-lite`**, the only cheap Gemini remaining.
+> That is also the model the D5(a) transcripts were recorded from, which makes his battery a direct
+> live-versus-replay comparison on one model: a free result for D6, not a problem.
+>
+> **† DeepSeek's price nearly doubled the projection.** The table had `(0.14, 0.28)`; the live rate
+> is `(0.2574, 1.0287)`, so SUN YUCONG's schedule goes from US$0.123 to **US$0.250**. It now sits
+> between gpt-4o-mini and Mistral, so the "cheap" label is arguable — the two-tier condition is met
+> by Mistral either way. Nothing about her runs changes; only what they cost.
+>
+> Both were found by the freeze-checklist price check on 17 September, against OpenRouter's own
+> price feed rather than a reading of the web page. `meta-llama/llama-3.3-70b-instruct` moved too
+> — `(0.12, 0.30)` to `(0.10, 0.32)` — which makes NIU TONG's battery slightly cheaper.
 
 > ⚠️ **WANG HONGJUN is on Mistral, not Anthropic.** He moved off `anthropic/claude-haiku-4.5` on
 > 8 September: it came to roughly **US$3.75** over our schedule and broke our own US$3 rule. If you

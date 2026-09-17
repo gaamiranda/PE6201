@@ -125,11 +125,26 @@ our own US$3 rule. The reasoning is recorded in [`CONTRIBUTIONS.md`](CONTRIBUTIO
 | Member | Model | Family | Tier | Projected, 76 trials |
 |---|---|---|---|---|
 | Goncalo Miranda | `openai/gpt-4o-mini` | OpenAI | cheap | US$0.146 |
-| JIN CHENG | `google/gemini-2.0-flash-001` | Google | cheap | US$0.097 |
-| NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | US$0.108 |
-| SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap | US$0.123 |
+| JIN CHENG | `google/gemini-2.5-flash-lite` | Google | cheap | US$0.097 |
+| NIU TONG | `meta-llama/llama-3.3-70b-instruct` | Meta | cheap | US$0.093 |
+| SUN YUCONG | `deepseek/deepseek-chat` | DeepSeek | cheap† | US$0.250 |
 | WANG HONGJUN | `mistralai/mistral-medium-3` | Mistral | **mid** | US$0.407 |
 | ZHENG YONGJIE | ✅ **v1 prompt pass** on `openai/gpt-4o-mini` | — | cheap | US$0.146 |
+
+> ⚠️ **JIN CHENG's model changed on 17 September.** `google/gemini-2.0-flash-001` was **delisted** —
+> there is no `google/gemini-2.0-*` on OpenRouter at all — and a live run against it returns a 404
+> on the first call. He runs **`google/gemini-2.5-flash-lite`**, the only cheap Gemini remaining.
+> That is also the model the D5(a) transcripts were recorded from, which makes his battery a direct
+> live-versus-replay comparison on one model: a free result for D6, not a problem.
+>
+> **† DeepSeek's price nearly doubled the projection.** The table had `(0.14, 0.28)`; the live rate
+> is `(0.2574, 1.0287)`, so SUN YUCONG's schedule goes from US$0.123 to **US$0.250**. It now sits
+> between gpt-4o-mini and Mistral, so the "cheap" label is arguable — the two-tier condition is met
+> by Mistral either way. Nothing about her runs changes; only what they cost.
+>
+> Both were found by the freeze-checklist price check on 17 September, against OpenRouter's own
+> price feed rather than a reading of the web page. `meta-llama/llama-3.3-70b-instruct` moved too
+> — `(0.12, 0.30)` to `(0.10, 0.32)` — which makes NIU TONG's battery slightly cheaper.
 
 Five families, two price tiers — both conditions met. Own key, own model, own numbers.
 
@@ -207,13 +222,16 @@ a tracked dependency, not a free pass.
 | 2 | ✅ **`Guards.step_cap` and `budget_ceiling_usd`** — 12 turns, 22 model calls, US$0.016, every one from the measured distribution and the ceiling measured across the whole battery | the D5(a) run | `src/loop.py` | SUN YUCONG |
 | 3 | ✅ **D2(b) v1 → v2** — manual 265 → 540 tokens, and what that costs over a full schedule | a working harness | `docs/D2-tool-layer.md` | SUN YUCONG |
 | 4 | ✅ **D2(c) sequential vs parallel** — measured on identical recorded calls, three arms | D5(a) replay over the whole set | `docs/D2-tool-layer.md` | Goncalo, ZHENG YONGJIE |
-| 5 | ⬜ **`PRICES` re-verified** on openrouter.ai **before anyone spends**. `python3 evaluation/check_prices.py` prints what the table currently implies, including whether `budget_ceiling_usd` still clears the battery | — do it before the freeze | `src/backends.py` | WANG HONGJUN |
+| 5 | ✅ **`PRICES` re-verified** on 17 Sep against OpenRouter's own price feed. **Three of eight rows were wrong**: `google/gemini-2.0-flash-001` delisted entirely (JIN CHENG's model — a 404 on call one), `deepseek/deepseek-chat` output stale by 3.7× (SUN YUCONG's — would have completed and halved every cost figure), `meta-llama/llama-3.3-70b-instruct` moved on both. Corrected and re-priced | — done before the freeze | `src/backends.py` | WANG HONGJUN |
 
-**Five of the six are closed. One is open.**
+**All six are closed. The repository is ready to freeze.**
 
-**Item 5 — WANG HONGJUN, and it blocks spending.** `price()` raises on an *unknown* model id but
-will happily compute with a stale rate, so a wrong number there corrupts D6 silently rather than
-loudly. Nothing else in the repository will catch it.
+**Item 5 closed, and it earned its place on this list.** `price()` raises on an *unknown* model id
+but computes happily with a *stale* one, so a wrong rate corrupts D6 silently rather than loudly —
+nothing else in the repository catches it. Three of the eight rows were wrong. One was not a price
+at all: `google/gemini-2.0-flash-001` had been delisted, so JIN CHENG's battery would have failed
+on its first call, on Friday, with the tag already cut. The check that found it took ten seconds
+and ran a day before the battery instead of during it.
 
 **Item 1 closed, and it is worth recording how.** `docs/D0-why-an-agent.md` had quoted
 `P = 0.8289 (63/76 combined)`; 63/76 is the harness's **code-only** rate and the combined rate is

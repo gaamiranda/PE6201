@@ -55,12 +55,18 @@ https://github.com/gaamiranda/PE6201
 
 Five families, two price tiers — both battery conditions satisfied.
 
-> **This table is the declaration as submitted on 4 September and is left as submitted.** One row
-> has changed since: WANG HONGJUN moved from `anthropic/claude-haiku-4.5` to
-> `mistralai/mistral-medium-3` when the evaluation set closed at 76 runs rather than 56 and haiku
-> came to roughly US$3.75, over our own US$3 rule. Both battery conditions still hold — five
-> families, two tiers. The reasoning is in [`CONTRIBUTIONS.md`](CONTRIBUTIONS.md) and the live
-> table there is the current one. **Do not "fix" this table to match**: it records what was filed.
+> **This table is the declaration as submitted on 4 September and is left as submitted.** Two rows
+> have changed since:
+>
+> - **WANG HONGJUN** moved from `anthropic/claude-haiku-4.5` to `mistralai/mistral-medium-3` when
+>   the evaluation set closed at 76 runs rather than 56 and haiku came to roughly US$3.75, over our
+>   own US$3 rule.
+> - **JIN CHENG** moved from `google/gemini-2.0-flash-001` to `google/gemini-2.5-flash-lite` on
+>   17 September: the declared model had been delisted by OpenRouter and no longer exists to run.
+>
+> Both battery conditions still hold — five families, two tiers. The reasoning for both is in
+> [`CONTRIBUTIONS.md`](CONTRIBUTIONS.md) and the live table there is the current one.
+> **Do not "fix" this table to match**: it records what was filed.
 
 ## 5 · Contribution statement
 
