@@ -47,9 +47,11 @@ The review queue therefore includes the complete structured final record, includ
 as `missing`, `lines_resolved`, `trigger`, `escalate_to`, `approved_total`, and `refused_total`.
 Reviewers must not fill gaps from fixtures, case IDs, transcripts, or hidden Thought content.
 
-For a live battery, add `--backend openrouter` and the model. Scripted is the default, so it
-is entirely possible to follow every instruction, spend nothing, and hand in replayed output
-that looks like a real result.
+For a live battery, add `--backend openrouter` and the model — but follow
+[`../docs/D5b-runbook.md`](../docs/D5b-runbook.md), which has the per-member commands, the model
+ids, the `--run-id` convention and the free checks to run *before* you spend anything. Scripted is
+the default, so it is entirely possible to follow every instruction, spend nothing, and hand in
+replayed output that looks like a real result.
 
 ## Requirements it must satisfy
 
@@ -95,10 +97,16 @@ it. That second question belongs to the D5 battery, not to a guardrail case.
 
 ## The live battery — every member runs one
 
+**Runbook: [`../docs/D5b-runbook.md`](../docs/D5b-runbook.md).** This section is the policy — what
+the battery has to satisfy and why. That file is the procedure: who runs which model, the exact
+commands, and what to check before Friday.
+
 - **Three models is the floor.** For a team of N, **N − 1 models** is what is expected, with the
   remaining member running the **v1 prompt pass**. A team of six fields five models plus a v1 pass.
-- Every member runs one full battery **on their own key**. At 56 runs on the cheap tier that is
-  about **US$0.27 each**, so fielding six models costs no more than fielding three.
+- Every member runs one full battery **on their own key**. Our set is **76 trials** (see below),
+  which on the cheap tier projects to between **US$0.097 and US$0.146** a head — so fielding six
+  models costs no more than fielding three. Per-member projections are in
+  [`../PLAN.md`](../PLAN.md); they are a floor, since a chattier model takes more turns.
 - **Two conditions, or the comparison is meaningless:**
   1. the models must span **at least two price tiers**, and
   2. **no two members may pick models from the same family**.
@@ -116,9 +124,15 @@ the difference is not attributable to anything.
 Pass rate stated **with the model, the prompt version, the run count and the date**, and the
 negative cases reported separately — the headline number hides them.
 
+Our set is **42 cases, 17 of them negative**: 25 ordinary × 1 trial + 17 negative × 3 trials =
+**76 trials**. The harness expands that itself. A summary reporting any other total is wrong.
+
+This is the scripted baseline, stated in the required form — the live batteries replace the model
+name and the figures, nothing else:
+
 ```
-<model>, v2 prompt, 40 cases (8 negative) = 56 runs, 48 passed (85.7%);
-on the 8 negative cases alone, 19/24 (79.2%)
+google/gemini-2.5-flash-lite, v2 prompt, 42 cases (17 negative) = 76 runs,
+57 passed (75.00%); on the 17 negative cases alone, 36/51 (70.59%)
 ```
 
 Report §3 is still 350 words. Tables do not count toward the cap, so put **every** model in the
