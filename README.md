@@ -16,19 +16,26 @@ and by when.
 
 ---
 
-## ⚠️ Status — 4 September 2026
+## Status — 17 September 2026
 
-The build is in progress. What a stranger can run today, and what is not there yet:
+Everything below runs from a clean clone, offline, with no API key. The numbers in the report are
+the numbers this repository prints.
 
 | | Status |
 |---|---|
-| The reference data, the answer key and `check_my_data.py` | ✅ present and runnable |
-| The evaluation set (15 of a target 40 cases labelled) | 🚧 in progress — [`PLAN.md` §3](PLAN.md) |
-| The agent, the tool layer, the guardrails (`src/`) | 🚧 not yet committed |
-| The evaluation harness and the scripted run (`harness/`) | 🚧 not yet committed — due 8 Sep |
-| Result tables (`results/`) | 🚧 empty until the runs happen |
+| The reference data, the answer key and `check_my_data.py` | ✅ runnable |
+| The evaluation set — **42 cases, 17 negative, 76 trials** | ✅ closed |
+| The agent: loop, tool layer, guardrails (`src/`) | ✅ committed |
+| The evaluation harness and the scripted run (`harness/`) | ✅ 28 tests, reproduces below |
+| Result tables (`results/`) | ✅ committed |
+| The live battery across six models (D5(b)) | 🚧 runs 18 Sep — [`docs/D5b-runbook.md`](docs/D5b-runbook.md) |
+| The report — six sections, 2,000 words | 🚧 in draft — [`PLAN.md` §6](PLAN.md) |
 
-This block is deleted, and the reproduce section below filled in, once the harness lands.
+**One guardrail case fails and is meant to.** Row 2 of
+[`evaluation/guardrail-checklist.md`](evaluation/guardrail-checklist.md) — a prompt injection that
+imitates a tool result — is not caught: the agent approves `CLM-8952`. It is reported rather than
+hidden, because a checklist that passes everything is not evidence of anything. See
+[`docs/D7-failures.md`](docs/D7-failures.md).
 
 ---
 
@@ -44,17 +51,49 @@ python3 check_my_data.py        # → "Your data hangs together."
 
 Standard library only. No arguments, no packages to install.
 
-## Reproduce our numbers (once the harness lands)
+## Reproduce our numbers
+
+No network, no key, no cost. `BACKEND = "scripted"` is the default and replays a committed
+transcript, so every figure below comes back byte-identical on any machine.
 
 ```bash
 python -m venv .venv && source .venv/bin/activate    # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
-python -m harness.run_eval                            # BACKEND="scripted" is the default
+python3 -m unittest discover -s harness -p 'test_*.py'      # 28 tests, offline
+
+python3 harness/run_eval.py \
+  --backend scripted \
+  --judgements results/evaluations/eval-scripted-v2-final.judgements-reviewed.jsonl \
+  --output-dir results/evaluations \
+  --run-id yourname
 ```
 
-<!-- TODO (JIN CHENG / NIU TONG, by 8 Sep): paste the expected tail of this output so a marker
-     can diff against it — cases, trials, pass rate, median turns, total cost. -->
+Expected tail — diff against this:
+
+```
+Cases: 42 unique; 25 ordinary; 17 negative (7 request_document, 10 escalate)
+Trials: 25 ordinary + 51 negative = 76 total
+Code checks: 42 cases / 76 trials
+Provisional code-only rate: 63/76 (82.89%)
+Provisional negative code-only rate: 39/51 (76.47%)
+Final combined pass rate: 57/76 (75.00%)
+Final negative pass rate: 36/51 (70.59%)
+Decision-only sanity rate: 72/76 (94.74%) across weighted trials
+Decision-only case rate: 40/42 (95.24%) across unique cases
+Tokens: 785906 in; 46280 out
+Actual spend: US$0.00
+Projected cost, 42-case single pass: US$0.058572
+Projected cost, formal 76-trial schedule: US$0.097096
+Median turns: 5.0; caps fired: 0; runtime errors: 0
+Provisional code-failed case IDs: CLM-8888, CLM-8894, CLM-8952, CLM-8960, CLM-9002
+```
+
+**Three rates, and they are not interchangeable.** **63/76** is the code check alone. **57/76** is
+the one to quote — code *and* human judgement, which six cases require. **40/42** is decisions only,
+ignoring whether the record named the facts it had to name. A bare `python3 harness/run_eval.py`
+with no `--judgements` prints `INCOMPLETE`, deliberately: fresh trials carry no judgement verdicts,
+and the harness refuses to pass the code-only rate off as the final one.
 
 The scripted backend replays deterministic canned responses. **It must stay the default**: if the
 harness does not run this way, Technical Execution is capped.
@@ -68,12 +107,16 @@ backend. If you find yourself spending live tokens on any of those three, stop.
 ### Running the live battery (costs credit)
 
 ```bash
-export OPENROUTER_API_KEY=...        # never commit this
-python -m harness.run_eval --backend openrouter --model <model-id>
+# the key lives in .env at the repository root, which is gitignored — never commit it
+cp .env.example .env && $EDITOR .env
+
+python3 harness/run_eval.py --backend openrouter --model <model-id> --run-id <yourname-model>
 ```
 
-Every member runs one live model on their own key, off the frozen `battery-v2` tag. Who runs which
-model, and the two conditions that make the comparison valid, are in [`PLAN.md` §4](PLAN.md).
+Every member runs one live model on their own key, off the frozen `battery-v2` tag.
+**[`docs/D5b-runbook.md`](docs/D5b-runbook.md) is the procedure** — who runs which model, the exact
+commands, and the free checks to run before spending anything. The two conditions that make the
+comparison valid are in [`PLAN.md` §4](PLAN.md).
 
 ---
 
@@ -90,6 +133,7 @@ model, and the two conditions that make the comparison valid, are in [`PLAN.md` 
 | `evaluation/guardrail-checklist.md` | The ≥10 guardrail cases (separate from the eval set) | D3(b) |
 | `results/` | Run outputs, result tables, turn distributions, cost tables | D4, D5, D6, D7 |
 | `docs/` | The written deliverables the report is built from | D0, D2, D3, D4, D6, D7 |
+| [`docs/D5b-runbook.md`](docs/D5b-runbook.md) | How each member runs their live battery | D5(b) |
 
 **There is no `fixtures/` directory.** The fixture data is `A2_reference_data/`, and it stays
 where it is — both scripts anchor on their own path, so the generator, the checker, `data_A/` and
@@ -113,7 +157,7 @@ The brief's order, and the order we work in:
 
 ## House rules
 
-Full list in [`PLAN.md` §6](PLAN.md). The three that matter most:
+Full list in [`PLAN.md` §7](PLAN.md). The three that matter most:
 
 - **Commit under your own account** — individual marks are adjusted against this history.
 - **Never edit or delete a row the instructor shipped** — new ids only, inside your block.
@@ -125,5 +169,6 @@ Full list in [`PLAN.md` §6](PLAN.md). The three that matter most:
 |---|---|
 | **Thu 17 Sep, 23:59** | 🔒 Freeze — `battery-v2` tagged. Eval set, v2 prompt and harness final |
 | **Fri 18 Sep** | Everyone runs their live battery off that tag |
+| **Sat 19 Sep** | D6 actuals · result tables · six report sections assembled · demo recorded |
 | **Sun 20 Sep, 23:59 SGT** | A2 due — repo, code copy in the NTULearn folder, report, demo link, self-appraisal |
 | Wed 23 Sep, 23:59 SGT | Peer rating (participation requirement) |

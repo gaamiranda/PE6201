@@ -245,7 +245,47 @@ nothing fails when it does.**
 
 ---
 
-## 6 · House rules
+## 6 · The report — six sections, 2,000 words
+
+**This is what is actually marked.** The `docs/` files are working evidence; the report is the
+argument built on them. As of 17 September not a word of it exists, and it is the largest single
+piece of work left. The brief caps prose at 2,000 words; tables and figures do not count.
+
+**Draft your section now.** Four of the six depend on nothing that has not already landed, and the
+two that do are blocked only on *numbers*, not on structure — write the prose with the scripted
+figures in place and swap them on Saturday. Anyone waiting for Friday before starting is choosing
+to write 2,000 words in one day.
+
+| § | Section | Words | Owner | Evidence it rests on | Blocked? |
+|---|---|---|---|---|---|
+| 1 | **Why an agent at all** — the ladder, why rung 7, what rungs 1–6 would not have delivered, and `s = P^(1/T) = 0.9441` | 350 | ZHENG YONGJIE | `docs/D0-why-an-agent.md` | no |
+| 2 | **The system we built** — the loop, the tool layer, the six-field descriptor, and the autonomy gate on the one irreversible step | 300 | Goncalo Miranda | `docs/D2-tool-layer.md`, `src/loop.py` | no |
+| 3 | **Evaluation and results** — code check vs judgement check, 57/76 against 40/42, and the six-model table | 350 | NIU TONG | `harness/`, `results/evaluations/` | **numbers only** |
+| 4 | **Cost to serve** — the three layers, break-even, and which lever dominated the bill | 400 | WANG HONGJUN | `docs/D6-cost-model.md` | **numbers only** |
+| 5 | **What broke, and what we changed** — both D7 failures, the guardrail checklist, and the standing FAIL we did not hide | 350 | SUN YUCONG | `docs/D7-failures.md`, `evaluation/guardrail-checklist.md` | no |
+| 6 | **The architecture we did not build** — why not multi-agent, argued from the evidence rather than asserted | 250 | JIN CHENG | Pre-read 5, both Cognition papers ([`RESOURCES.md`](RESOURCES.md)) | no |
+
+**ZHENG YONGJIE assembles all six** and owns the final word count. Send him prose, not bullet
+points — six differently-voiced fragments read like six projects, and Communication is a marked
+criterion.
+
+> **§3 and §4 are blocked on numbers, not on writing.** Both can be drafted in full this week
+> against the committed scripted run — 57/76, 40/42, US$0.097096 — with the six-model comparison
+> left as a gap to fill on Saturday. That is a paragraph of editing, not a section of writing.
+
+**The one thing every section must do.** The brief marks Reasoning & Justification, and its own
+words are *"a cost model that only reports a number says nothing about our design."* That applies
+to all six sections, not just §4. A section that reports what we did scores less than one that says
+what we chose, what we rejected, and what the evidence made us change our mind about. We have a
+great deal of the third kind: fourteen overclaims found in D0 by reading it against the code, a
+poka-yoke we described as a guarantee and had to downgrade in seven places, a delisted model caught
+one day before the battery, and a guardrail row that still fails. **Every defect we found was
+ours** — what we showed the model contradicted what we accepted back from it. That is the honest
+through-line of this project and it is worth more than a clean result would have been.
+
+---
+
+## 7 · House rules
 
 - **Commit under your own account.** Individual marks are adjusted against the commit history,
   and section 8 says the log must be corroborated by it. Once, before your first commit:
