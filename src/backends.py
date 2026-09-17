@@ -56,8 +56,9 @@ class BackendError(Exception):
 # ─────────────────────────────────────────────────────────────────────────────
 # Prices. Used to turn a token count into the cost_usd that D6 and D7 both read.
 #
-# ⚠ VERIFY EVERY ROW ON openrouter.ai/models BEFORE THE 11 SEP BATTERY. Prices move, and a
-# wrong number here silently corrupts the cost model rather than raising anything.
+# ⚠ VERIFY EVERY ROW ON openrouter.ai/models BEFORE THE 18 SEP BATTERY. Prices move, and a
+# wrong number here silently corrupts the cost model rather than raising anything. This is
+# freeze-checklist item 5 (PLAN.md), owned by WANG HONGJUN, and it blocks the battery.
 # USD per 1,000,000 tokens, (input, output).
 # ─────────────────────────────────────────────────────────────────────────────
 

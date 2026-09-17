@@ -207,7 +207,7 @@ a tracked dependency, not a free pass.
 | 2 | ✅ **`Guards.step_cap` and `budget_ceiling_usd`** — 12 turns, 22 model calls, US$0.016, every one from the measured distribution and the ceiling measured across the whole battery | the D5(a) run | `src/loop.py` | SUN YUCONG |
 | 3 | ✅ **D2(b) v1 → v2** — manual 265 → 540 tokens, and what that costs over a full schedule | a working harness | `docs/D2-tool-layer.md` | SUN YUCONG |
 | 4 | ✅ **D2(c) sequential vs parallel** — measured on identical recorded calls, three arms | D5(a) replay over the whole set | `docs/D2-tool-layer.md` | Goncalo, ZHENG YONGJIE |
-| 5 | ⬜ **`PRICES` re-verified** on openrouter.ai **before anyone spends** | — do it before the freeze | `src/backends.py` | WANG HONGJUN |
+| 5 | ⬜ **`PRICES` re-verified** on openrouter.ai **before anyone spends**. `python3 evaluation/check_prices.py` prints what the table currently implies, including whether `budget_ceiling_usd` still clears the battery | — do it before the freeze | `src/backends.py` | WANG HONGJUN |
 
 **Five of the six are closed. One is open.**
 
