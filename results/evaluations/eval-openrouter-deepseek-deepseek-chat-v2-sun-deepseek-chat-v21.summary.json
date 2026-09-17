@@ -1,0 +1,148 @@
+{
+  "actual_spend_usd": null,
+  "backend": "openrouter",
+  "cap_fired_count": 0,
+  "check_type_case_counts": {
+    "code": 36,
+    "code+judgement": 6
+  },
+  "code_checked_case_count": 42,
+  "code_checked_trial_count": 76,
+  "combined_score_complete": false,
+  "combined_score_status": "incomplete",
+  "commit_id": "8489267e90ade52b978eebd20161f074fb2c205a",
+  "completed_judgement_trial_count": 0,
+  "cost_reporting_note": "Provider-reported actual spend was unavailable. Projected cost must not be presented as measured API expenditure.",
+  "decision_only_case_pass_rate": 0.8809523809523809,
+  "decision_only_case_pass_rate_percent": 88.1,
+  "decision_only_cases_passed": 37,
+  "decision_only_pass_rate": 0.8026315789473685,
+  "decision_only_pass_rate_percent": 80.26,
+  "decision_only_passed": 61,
+  "escalate_case_count": 10,
+  "failed_case_ids": null,
+  "failure_reasons": null,
+  "final_combined_pass_rate": null,
+  "final_combined_pass_rate_percent": null,
+  "final_negative_pass_rate": null,
+  "final_negative_pass_rate_percent": null,
+  "final_negative_trials_passed": null,
+  "final_passed_trial_count": null,
+  "finished_at_utc": "2026-09-17T15:14:55.666854Z",
+  "judgement_queue_path": "results/evaluations/eval-openrouter-deepseek-deepseek-chat-v2-sun-deepseek-chat-v21.judgement-queue.jsonl",
+  "judgements_applied_audit_path": "results/evaluations/eval-openrouter-deepseek-deepseek-chat-v2-sun-deepseek-chat-v21.judgements-applied.jsonl",
+  "median_turns": 4.0,
+  "missing_judgement_trial_count": 12,
+  "missing_judgement_trial_ids": [
+    "judgement-c0b5911359b7003d77ed",
+    "judgement-29e8b2c7d67002083b5a",
+    "judgement-213e5ef1d90f4724d73d",
+    "judgement-84152bbbe869a88f0d59",
+    "judgement-0b6700b814c5e527c23d",
+    "judgement-e90493fdf924df0fbade",
+    "judgement-ebc4f54e23b4fe600ce4",
+    "judgement-e1e4a833dd27bba59e4e",
+    "judgement-57111437f39673280dc1",
+    "judgement-b3a6df810704bf869708",
+    "judgement-db677c858b25cfdb13cd",
+    "judgement-0be575b56359e931b4d8"
+  ],
+  "model": "deepseek/deepseek-chat",
+  "model_source": "command_line",
+  "negative_case_all_trials_pass_rate": 0.47058823529411764,
+  "negative_case_count": 17,
+  "negative_cases_all_trials_passed": 8,
+  "negative_trial_count": 51,
+  "ordinary_case_count": 25,
+  "ordinary_trial_count": 25,
+  "projected_cost_42_case_single_pass_usd": 0.12167,
+  "projected_cost_76_trial_schedule_usd": 0.198229,
+  "projected_cost_additional_negative_trials_usd": 0.076559,
+  "prompt_version": "v2",
+  "provisional_code_failed_case_ids": [
+    "CLM-8888",
+    "CLM-8894",
+    "CLM-8925",
+    "CLM-8933",
+    "CLM-8952",
+    "CLM-8960",
+    "CLM-8971",
+    "CLM-9002",
+    "CLM-9046",
+    "CLM-9062",
+    "CLM-9064"
+  ],
+  "provisional_code_failure_reasons": {
+    "CLM-8888": [
+      "document head noun 'preauthorisation' is not contained in expected missing information"
+    ],
+    "CLM-8894": [
+      "document head noun 'preauthorisation' is not contained in expected missing information"
+    ],
+    "CLM-8925": [
+      "decision mismatch: expected 'escalate', got 'request_document'"
+    ],
+    "CLM-8933": [
+      "runtime error: BackendError: no choices in response: {'id': 'gen-1789656029-YMcQtBD2IZ6XXC8oaslV', 'error': {'message': 'Provider timed out after 6268ms', 'code': 504, 'metadata': {'error_type': 'timeout'}}}"
+    ],
+    "CLM-8952": [
+      "runtime error: BackendError: HTTP 504: {\"error\":{\"message\":\"The operation was aborted\",\"code\":504,\"metadata\":{\"provider_name\":\"StreamLake\",\"previous_errors\":[{\"code\":429,\"message\":\"Provider returned error\",\"provider_name\":\"DeepInfra\",\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own (after 5 attempts)",
+      "decision mismatch: expected 'escalate', got 'approve_in_principle'"
+    ],
+    "CLM-8960": [
+      "runtime error: BackendError: no choices in response: {'id': 'gen-1789656277-cbjBo87lrb63gPBCHFfJ', 'error': {'message': 'Provider timed out after 6268ms', 'code': 504, 'metadata': {'error_type': 'timeout'}}}"
+    ],
+    "CLM-8971": [
+      "runtime error: BackendError: no choices in response: {'id': 'gen-1789656345-UqfSEAxbOD0SM5Qn6exi', 'error': {'message': 'Provider timed out after 6780ms', 'code': 504, 'metadata': {'error_type': 'timeout'}}}"
+    ],
+    "CLM-9002": [
+      "document head noun 'preauthorisation' is not contained in expected missing information",
+      "runtime error: BackendError: no choices in response: {'id': 'gen-1789656514-uR4Zk8UyF5cpgvT71Wnx', 'error': {'message': 'Provider timed out after 6433ms', 'code': 504, 'metadata': {'error_type': 'timeout'}}}"
+    ],
+    "CLM-9046": [
+      "runtime error: BackendError: no choices in response: {'id': 'gen-1789657906-83WB11CDpJVGmfIt8pRe', 'error': {'message': 'Provider timed out after 6938ms', 'code': 504, 'metadata': {'error_type': 'timeout'}}}",
+      "runtime error: BackendError: no choices in response: {'id': 'gen-1789657915-ZPSD8aL8flFCOasUK77i', 'error': {'message': 'Provider timed out after 6268ms', 'code': 504, 'metadata': {'error_type': 'timeout'}}}"
+    ],
+    "CLM-9062": [
+      "document head noun 'preauthorisation' is not contained in expected missing information",
+      "decision mismatch: expected 'request_document', got 'approve_in_principle'"
+    ],
+    "CLM-9064": [
+      "decision mismatch: expected 'escalate', got 'approve_in_principle'"
+    ]
+  },
+  "provisional_code_only_pass_rate": 0.6842105263157895,
+  "provisional_code_only_pass_rate_percent": 68.42,
+  "provisional_code_only_passed_trial_count": 52,
+  "provisional_negative_code_pass_rate": 0.5686274509803921,
+  "provisional_negative_code_pass_rate_percent": 56.86,
+  "provisional_negative_code_passed_trial_count": 29,
+  "rate_denominators": {
+    "decision_only_case": "one result per unique case (trial 1)",
+    "final_combined": "all scheduled trials, only after every required judgement exists",
+    "provisional_code_only_and_decision_only": "all scheduled trials",
+    "provisional_negative_code_only": "negative trials (three per negative case)"
+  },
+  "raw_results_path": "results/evaluations/eval-openrouter-deepseek-deepseek-chat-v2-sun-deepseek-chat-v21.trials.jsonl",
+  "request_document_case_count": 7,
+  "required_judgement_case_count": 6,
+  "required_judgement_case_ids": [
+    "CLM-8842",
+    "CLM-8850",
+    "CLM-8888",
+    "CLM-8925",
+    "CLM-8952",
+    "CLM-9041"
+  ],
+  "required_judgement_trial_count": 12,
+  "run_id": "sun-deepseek-chat-v21",
+  "runtime_error_count": 7,
+  "started_at_utc": "2026-09-17T14:23:40.079355Z",
+  "summary_results_path": "results/evaluations/eval-openrouter-deepseek-deepseek-chat-v2-sun-deepseek-chat-v21.summary.json",
+  "token_usage_source": "mixed_or_unknown",
+  "tokens_estimated": false,
+  "total_input_tokens": 636370,
+  "total_output_tokens": 33470,
+  "total_trial_count": 76,
+  "unique_case_count": 42
+}
