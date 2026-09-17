@@ -113,7 +113,7 @@ cp .env.example .env && $EDITOR .env
 python3 harness/run_eval.py --backend openrouter --model <model-id> --run-id <yourname-model>
 ```
 
-Every member runs one live model on their own key, off the frozen `battery-v2` tag.
+Every member runs one live model on their own key, off the frozen `battery-v2.1` tag.
 **[`docs/D5b-runbook.md`](docs/D5b-runbook.md) is the procedure** — who runs which model, the exact
 commands, and the free checks to run before spending anything. The two conditions that make the
 comparison valid are in [`PLAN.md` §4](PLAN.md).
@@ -167,7 +167,7 @@ Full list in [`PLAN.md` §7](PLAN.md). The three that matter most:
 
 | Date | What |
 |---|---|
-| **Thu 17 Sep, 23:59** | 🔒 Freeze — `battery-v2` tagged. Eval set, v2 prompt and harness final |
+| **Thu 17 Sep, 23:59** | 🔒 Freeze — `battery-v2.1` tagged. Eval set, v2 prompt and harness final |
 | **Fri 18 Sep** | Everyone runs their live battery off that tag |
 | **Sat 19 Sep** | D6 actuals · result tables · six report sections assembled · demo recorded |
 | **Sun 20 Sep, 23:59 SGT** | A2 due — repo, code copy in the NTULearn folder, report, demo link, self-appraisal |

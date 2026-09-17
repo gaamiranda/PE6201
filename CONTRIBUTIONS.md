@@ -34,7 +34,7 @@ suggested strands are a suggestion.
 Three models is the floor. For a team of six, **five models plus one member on the v1 prompt pass**
 is the expected shape. Two conditions, or the comparison means nothing: the models must span **at
 least two price tiers**, and **no two members may take models from the same family**. Everyone runs
-the identical evaluation set and the identical v2 prompt, off the frozen `battery-v2` tag.
+the identical evaluation set and the identical v2 prompt, off the frozen `battery-v2.1` tag.
 
 | Member | Model | Family | Tier | Projected (76 runs) | Actual |
 |---|---|---|---|---|---|
@@ -112,6 +112,8 @@ Append as work lands. One line per meaningful contribution; the commit is the ev
 | 2026-09-17 | NIU TONG | `6e148a5`, `385c8b4` | **D5(b) runbook** — per-member commands, model ids, the `--run-id` convention, key hygiene, the judgement workflow, and the `commit_id` check that verifies all six batteries ran off one tag. The harness README's live-battery section corrected from the brief's 40 cases / 56 runs to our measured 42 / 76 |
 | 2026-09-17 | WANG HONGJUN | | **Freeze item 5 — `PRICES` re-verified**, and three of eight rows were wrong. `google/gemini-2.0-flash-001` had been **delisted**: it was JIN CHENG's battery model and his Friday run would have 404ed on the first call. `deepseek/deepseek-chat` output was stale by 3.7×, which would not have failed at all — SUN YUCONG's runs would have completed and every cost figure derived from them would have been half. `meta-llama/llama-3.3-70b-instruct` moved on both input and output |
 | 2026-09-17 | Goncalo Miranda | | Prices corrected against OpenRouter's own price feed, JIN CHENG moved to `google/gemini-2.5-flash-lite`, projections re-priced across `PLAN.md`, the runbook and this file, and the ceiling comment in `src/loop.py` re-measured. Freeze checklist closed |
+| 2026-09-17 | SUN YUCONG | | **First live battery attempt**, `deepseek/deepseek-chat` off `battery-v2` — 61 of 76 trials lost to OpenRouter `HTTP 429` rate limits and some 504s. Reported as structurally complete but **not** a model score, partial output kept. The run is void; the defect it exposed was ours |
+| 2026-09-17 | Goncalo Miranda | | Retry with exponential backoff and `Retry-After` on the live path. A 429 is a transport failure — nothing billed, nothing decided — but the harness recorded it as a runtime error and moved on instantly, hammering the endpoint harder the more it was throttled. 4xx other than 429 still fails on the first call, which is how the delisted model id was caught. Re-tagged `battery-v2.1`; all scripted numbers unchanged |
 
 **Evaluation set closed at 42 cases** — 15 shipped by the instructor plus 27 written by the team.
 Every case was labelled from the Appendix A routing table before any agent run, and every label was

@@ -22,6 +22,9 @@ from __future__ import annotations
 
 import os
 import json
+import random
+import sys
+import time
 from pathlib import Path
 
 from typing import Dict, List, Optional
@@ -305,18 +308,54 @@ def _openrouter_complete(
             "OPENROUTER_API_KEY not set. Put it in .env at the repository root "
             "(gitignored) and `pip install -r requirements.txt`, or export it in your shell."
         )
-    try:
-        r = requests.post(
-            f"{BASE_URL}/chat/completions",
-            headers={"Authorization": f"Bearer {key}"},
-            json={"model": model, "messages": messages,
-                  "temperature": 0, "max_tokens": 1024},
-            timeout=90,
-        )
-    except Exception as exc:
-        raise BackendError(f"request failed: {exc}")
-    if r.status_code != 200:
-        raise BackendError(f"HTTP {r.status_code}: {r.text[:300]}")
+    # RETRY, and why it is here rather than in the harness. A 429 or a 502 is a TRANSPORT
+    # failure: the model was never asked, nothing was billed, and nothing about the case was
+    # decided. Without a retry the harness recorded it as a runtime error and moved straight on
+    # to the next trial — which, because a failed call returns instantly, made it hammer the
+    # endpoint *faster* the more it was being throttled. SUN YUCONG's deepseek battery lost
+    # 61 of 76 trials to exactly that on 17 Sep.
+    #
+    # It cannot affect the comparison. temperature=0 means a retried request returns the same
+    # reply, retries are not new model calls so `call_cap` accounting is untouched, and a 429
+    # bills nothing. What is retried is the delivery, never the question or the answer.
+    #
+    # 4xx other than 429 is NOT retried and must not be: "is not a valid model ID" should fail
+    # on call one, loudly, rather than four times slowly. That is how the delisted
+    # google/gemini-2.0-flash-001 was caught.
+    RETRY_ON = {429, 500, 502, 503, 504}
+    attempts, delay = 5, 2.0
+    last = ""
+    for attempt in range(1, attempts + 1):
+        try:
+            r = requests.post(
+                f"{BASE_URL}/chat/completions",
+                headers={"Authorization": f"Bearer {key}"},
+                json={"model": model, "messages": messages,
+                      "temperature": 0, "max_tokens": 1024},
+                timeout=90,
+            )
+        except Exception as exc:                      # connection reset, read timeout, DNS
+            last = f"request failed: {exc}"
+        else:
+            if r.status_code == 200:
+                break
+            last = f"HTTP {r.status_code}: {r.text[:300]}"
+            if r.status_code not in RETRY_ON:
+                raise BackendError(last)
+            # Providers say how long to wait; believe them over our own backoff when they do.
+            after = r.headers.get("Retry-After")
+            if after:
+                try:
+                    delay = max(delay, min(float(after), 60.0))
+                except ValueError:
+                    pass
+        if attempt == attempts:
+            raise BackendError(f"{last} (after {attempts} attempts)")
+        wait = delay * (2 ** (attempt - 1)) * (0.5 + random.random())
+        print(f"  [backend] {last[:80]} — retry {attempt}/{attempts - 1} in {wait:.1f}s",
+              file=sys.stderr, flush=True)
+        time.sleep(wait)
+
     d = r.json()
 
     if "choices" not in d:

@@ -169,7 +169,7 @@ Five families, two price tiers — both conditions met. Own key, own model, own 
 
 **Three rules, or the comparison is void:**
 
-1. Everyone runs the **same commit** — the `battery-v2` tag (see §5).
+1. Everyone runs the **same commit** — the `battery-v2.1` tag (see §5).
 2. Everyone runs the **same v2 prompt**. The model id is the only string that differs.
 3. **Verify your model id on openrouter.ai/models before you run.** A wrong id is a runtime 404.
    Avoid `:free` variants and reasoning models.
@@ -199,7 +199,7 @@ Boilerplate — adjust in this file if the team agrees something else.
 | Mon 15 Sep | ✅ Judgement rule settled record-wide · all 12 judgements re-reviewed | NIU TONG |
 | ————— | **— everything below is what is left —** | |
 | **Wed 16 Sep** | **D6** drafted on the scripted numbers · `PRICES` re-verified · freeze checklist closed | WANG HONGJUN |
-| **Thu 17 Sep 23:59** | 🔒 **FREEZE.** Tag `battery-v2`. Eval set, v2 prompt and harness final. | Goncalo tags |
+| **Thu 17 Sep 23:59** | 🔒 **FREEZE.** Tag `battery-v2.1`. Eval set, v2 prompt and harness final. | Goncalo tags |
 | **Fri 18 Sep** | **Everyone runs their live battery** off that tag, commits their numbers | all six |
 | **Sat 19 Sep** | D6 actuals filled · result tables · six report sections assembled · demo recorded · self-appraisal | WANG HONGJUN, ZHENG YONGJIE, all six |
 | **Sun 20 Sep** | Final read-through · **submit by 23:59 SGT** | all six |

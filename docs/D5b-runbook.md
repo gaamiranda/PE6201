@@ -16,7 +16,7 @@ One page, six people, one day. Read it before Friday, not on Friday.
 - temperature or any other runtime parameter (`temperature=0` is set in `src/backends.py`; without
   it a passing case can flip between runs and the battery stops being a comparison)
 
-**Everyone runs the same commit — the `battery-v2` tag.** During the comparison the only things
+**Everyone runs the same commit — the `battery-v2.1` tag.** During the comparison the only things
 that may differ between two members are the **model id** and, for ZHENG YONGJIE alone, the
 **prompt version**.
 
@@ -115,11 +115,23 @@ with a zero balance fails the same way as no key at all.
 
 ## 4 · The run
 
-**After the `battery-v2` tag is announced — not before.** A run off any other commit is void and
+> ⚠️ **The tag was re-cut as `battery-v2.1` on 17 September.** The first battery run off
+> `battery-v2` — SUN YUCONG on `deepseek/deepseek-chat` — lost **61 of its 76 trials** to
+> OpenRouter `HTTP 429` rate limits. The harness had no retry: a throttled call became a runtime
+> error and the run moved straight to the next trial, which, because a failed call returns
+> instantly, made it hit the endpoint *faster the more it was being throttled*. `v2.1` adds
+> retry with backoff on the live path only. **If you ran off `battery-v2`, that run is void — run
+> again off `v2.1`.** Nothing else changed, and every scripted number is identical.
+>
+> You will now see lines like `[backend] HTTP 429 ... — retry 1/4 in 1.7s` during a live run.
+> That is the fix working; leave it alone. A run that still fails after five attempts records a
+> runtime error, as before.
+
+**After the `battery-v2.1` tag is announced — not before.** A run off any other commit is void and
 has to be paid for twice.
 
 ```bash
-git fetch --tags && git checkout battery-v2
+git fetch --tags && git checkout battery-v2.1
 
 python3 harness/run_eval.py \
   --backend openrouter \
