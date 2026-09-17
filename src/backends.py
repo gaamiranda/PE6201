@@ -272,9 +272,24 @@ def _openrouter_complete(
     estimated, which is what makes the D5(b) numbers quotable as measurements.
     """
     import requests
+
     key = os.environ.get("OPENROUTER_API_KEY")
     if not key:
-        raise BackendError("OPENROUTER_API_KEY not set. It lives in .env, which is gitignored.")
+        # .env is where every instruction in this repository tells you to put the key, so load it
+        # here or those instructions are wrong. Loaded lazily, inside the live path only: the
+        # scripted backend must keep running on a bare clone with no third-party packages at all.
+        try:
+            from dotenv import load_dotenv
+        except ImportError:
+            pass
+        else:
+            load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+            key = os.environ.get("OPENROUTER_API_KEY")
+    if not key:
+        raise BackendError(
+            "OPENROUTER_API_KEY not set. Put it in .env at the repository root "
+            "(gitignored) and `pip install -r requirements.txt`, or export it in your shell."
+        )
     try:
         r = requests.post(
             f"{BASE_URL}/chat/completions",
