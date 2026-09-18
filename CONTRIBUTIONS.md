@@ -183,7 +183,7 @@ was AI-assisted.
 | Encoding team members' cases into the fixtures, and checking each label against the routing table | Claude | Each case's author |
 | The evaluation harness's judgement queue viewer and the single-case demo runner (`evaluation/show_judgements.py`, `evaluation/demo_one_case.py`) | Claude | Goncalo Miranda |
 | **D5(b) human judgements, `openai/gpt-4o-mini` run — 12 verdicts drafted, then confirmed one by one before the combined score was computed.** Drafted against the record-wide rule and deliberately calibrated to NIU TONG's wording on the scripted run, so the same standard applies across all six batteries rather than a new one per member | Claude | Goncalo Miranda |
-| **D5(b) human judgements, `meta-llama/llama-3.3-70b-instruct` run — 12 verdicts drafted, then reviewed.** The AI draft and the human review are committed as separate files so the audit trail shows both; the verdicts agreed | AI assistant | NIU TONG |
+| **D5(b) human judgements, `meta-llama/llama-3.3-70b-instruct` run — 12 AI-drafted verdicts individually checked against the complete structured final records.** The draft and NIU TONG's human-reviewed JSONL are retained separately; the final result is recombined offline from her reviewed file, with the same verdicts | GPT | NIU TONG |
 | §2 and §5 report drafts — argument and structure; every figure checked against a committed file before commit | Claude | Goncalo Miranda (§2), SUN YUCONG (§5) |
 
 **On the judgement rows specifically.** The brief and `harness/README.md` both define the judgement
