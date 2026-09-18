@@ -1,0 +1,253 @@
+{
+  "actual_spend_usd": null,
+  "backend": "openrouter",
+  "cap_fired_count": 0,
+  "check_type_case_counts": {
+    "code": 36,
+    "code+judgement": 6
+  },
+  "code_checked_case_count": 42,
+  "code_checked_trial_count": 76,
+  "combined_score_complete": false,
+  "combined_score_status": "incomplete",
+  "commit_id": "61804e36c6693bf82743c2ef956f0698abc4d5e3",
+  "completed_judgement_trial_count": 0,
+  "cost_reporting_note": "Provider-reported actual spend was unavailable. Projected cost must not be presented as measured API expenditure.",
+  "decision_only_case_pass_rate": 0.16666666666666666,
+  "decision_only_case_pass_rate_percent": 16.67,
+  "decision_only_cases_passed": 7,
+  "decision_only_pass_rate": 0.14473684210526316,
+  "decision_only_pass_rate_percent": 14.47,
+  "decision_only_passed": 11,
+  "escalate_case_count": 10,
+  "failed_case_ids": null,
+  "failure_reasons": null,
+  "final_combined_pass_rate": null,
+  "final_combined_pass_rate_percent": null,
+  "final_negative_pass_rate": null,
+  "final_negative_pass_rate_percent": null,
+  "final_negative_trials_passed": null,
+  "final_passed_trial_count": null,
+  "finished_at_utc": "2026-09-17T14:03:58.088932Z",
+  "judgement_queue_path": "results/evaluations/eval-openrouter-deepseek-deepseek-chat-v2-sun-deepseek-chat.judgement-queue.jsonl",
+  "judgements_applied_audit_path": "results/evaluations/eval-openrouter-deepseek-deepseek-chat-v2-sun-deepseek-chat.judgements-applied.jsonl",
+  "median_turns": 0.0,
+  "missing_judgement_trial_count": 12,
+  "missing_judgement_trial_ids": [
+    "judgement-c0b5911359b7003d77ed",
+    "judgement-29e8b2c7d67002083b5a",
+    "judgement-213e5ef1d90f4724d73d",
+    "judgement-84152bbbe869a88f0d59",
+    "judgement-0b6700b814c5e527c23d",
+    "judgement-e90493fdf924df0fbade",
+    "judgement-ebc4f54e23b4fe600ce4",
+    "judgement-e1e4a833dd27bba59e4e",
+    "judgement-57111437f39673280dc1",
+    "judgement-b3a6df810704bf869708",
+    "judgement-db677c858b25cfdb13cd",
+    "judgement-0be575b56359e931b4d8"
+  ],
+  "model": "deepseek/deepseek-chat",
+  "model_source": "command_line",
+  "negative_case_all_trials_pass_rate": 0.0,
+  "negative_case_count": 17,
+  "negative_cases_all_trials_passed": 0,
+  "negative_trial_count": 51,
+  "ordinary_case_count": 25,
+  "ordinary_trial_count": 25,
+  "projected_cost_42_case_single_pass_usd": 0.036735,
+  "projected_cost_76_trial_schedule_usd": 0.051957,
+  "projected_cost_additional_negative_trials_usd": 0.015222,
+  "prompt_version": "v2",
+  "provisional_code_failed_case_ids": [
+    "CLM-8888",
+    "CLM-8894",
+    "CLM-8901",
+    "CLM-8910",
+    "CLM-8917",
+    "CLM-8925",
+    "CLM-8933",
+    "CLM-8941",
+    "CLM-8952",
+    "CLM-8971",
+    "CLM-9001",
+    "CLM-9002",
+    "CLM-9003",
+    "CLM-9004",
+    "CLM-9005",
+    "CLM-9031",
+    "CLM-9032",
+    "CLM-9033",
+    "CLM-9034",
+    "CLM-9035",
+    "CLM-9041",
+    "CLM-9042",
+    "CLM-9044",
+    "CLM-9046",
+    "CLM-9047",
+    "CLM-9061",
+    "CLM-9062",
+    "CLM-9063",
+    "CLM-9064",
+    "CLM-9065",
+    "CLM-9081",
+    "CLM-9101",
+    "CLM-9102",
+    "CLM-9103",
+    "CLM-9104",
+    "CLM-9105"
+  ],
+  "provisional_code_failure_reasons": {
+    "CLM-8888": [
+      "decision mismatch: expected 'request_document', got 'approve_in_principle'",
+      "document head noun 'preauthorisation' is not contained in expected missing information",
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"StreamLake\",\"is_byok\":false"
+    ],
+    "CLM-8894": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"StreamLake\",\"is_byok\":false"
+    ],
+    "CLM-8901": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"StreamLake\",\"is_byok\":false"
+    ],
+    "CLM-8910": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"StreamLake\",\"is_byok\":false"
+    ],
+    "CLM-8917": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"StreamLake\",\"is_byok\":false"
+    ],
+    "CLM-8925": [
+      "decision mismatch: expected 'escalate', got 'request_document'",
+      "decision mismatch: expected 'escalate', got 'approve_in_principle'",
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"StreamLake\",\"is_byok\":false"
+    ],
+    "CLM-8933": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"StreamLake\",\"is_byok\":false",
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-8941": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"StreamLake\",\"is_byok\":false"
+    ],
+    "CLM-8952": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"StreamLake\",\"is_byok\":false",
+      "decision mismatch: expected 'escalate', got 'approve_in_principle'"
+    ],
+    "CLM-8971": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9001": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9002": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,",
+      "runtime error: BackendError: no choices in response: {'id': 'gen-1789653625-9bjxpWFe1EvPPT9YWV8Z', 'error': {'message': 'Provider timed out after 6268ms', 'code': 504, 'metadata': {'error_type': 'timeout'}}}",
+      "runtime error: BackendError: no choices in response: {'id': 'gen-1789653631-CD0Us0UvKUmVBF0TFECG', 'error': {'message': 'Provider timed out after 6268ms', 'code': 504, 'metadata': {'error_type': 'timeout'}}}"
+    ],
+    "CLM-9003": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9004": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9005": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9031": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9032": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9033": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9034": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9035": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9041": [
+      "runtime error: BackendError: no choices in response: {'id': 'gen-1789653691-cO8shiZLvUtUGo40aAE0', 'error': {'message': 'Provider timed out after 6268ms', 'code': 504, 'metadata': {'error_type': 'timeout'}}}"
+    ],
+    "CLM-9042": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9044": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9046": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,",
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"StreamLake\",\"is_byok\":false"
+    ],
+    "CLM-9047": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9061": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9062": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9063": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9064": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9065": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9081": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9101": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9102": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9103": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9104": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ],
+    "CLM-9105": [
+      "runtime error: BackendError: HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"deepseek/deepseek-chat is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations\",\"provider_name\":\"DeepInfra\",\"is_byok\":false,"
+    ]
+  },
+  "provisional_code_only_pass_rate": 0.13157894736842105,
+  "provisional_code_only_pass_rate_percent": 13.16,
+  "provisional_code_only_passed_trial_count": 10,
+  "provisional_negative_code_pass_rate": 0.0784313725490196,
+  "provisional_negative_code_pass_rate_percent": 7.84,
+  "provisional_negative_code_passed_trial_count": 4,
+  "rate_denominators": {
+    "decision_only_case": "one result per unique case (trial 1)",
+    "final_combined": "all scheduled trials, only after every required judgement exists",
+    "provisional_code_only_and_decision_only": "all scheduled trials",
+    "provisional_negative_code_only": "negative trials (three per negative case)"
+  },
+  "raw_results_path": "results/evaluations/eval-openrouter-deepseek-deepseek-chat-v2-sun-deepseek-chat.trials.jsonl",
+  "request_document_case_count": 7,
+  "required_judgement_case_count": 6,
+  "required_judgement_case_ids": [
+    "CLM-8842",
+    "CLM-8850",
+    "CLM-8888",
+    "CLM-8925",
+    "CLM-8952",
+    "CLM-9041"
+  ],
+  "required_judgement_trial_count": 12,
+  "run_id": "sun-deepseek-chat",
+  "runtime_error_count": 61,
+  "started_at_utc": "2026-09-17T13:51:03.923404Z",
+  "summary_results_path": "results/evaluations/eval-openrouter-deepseek-deepseek-chat-v2-sun-deepseek-chat.summary.json",
+  "token_usage_source": "mixed_or_unknown",
+  "tokens_estimated": false,
+  "total_input_tokens": 166589,
+  "total_output_tokens": 8824,
+  "total_trial_count": 76,
+  "unique_case_count": 42
+}
