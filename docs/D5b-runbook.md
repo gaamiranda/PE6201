@@ -126,6 +126,29 @@ with a zero balance fails the same way as no key at all.
 > You will now see lines like `[backend] HTTP 429 ... — retry 1/4 in 1.7s` during a live run.
 > That is the fix working; leave it alone. A run that still fails after five attempts records a
 > runtime error, as before.
+>
+> **Salvage rule, added 19 September.** "Void" above was written to stop a member submitting a
+> run that *lost trials to throttling*. It is not a statement about the commit hash. A
+> `battery-v2` run is salvageable, and must be kept rather than repeated, when all three hold:
+>
+> 1. **The diff is transport-only.** `git diff battery-v2 battery-v2.1 -- src/ harness/ evaluation/`
+>    returns exactly one file, `src/backends.py`, +51/−12, in two hunks: three added imports
+>    (`random`, `sys`, `time`) and the failure branch of `_openrouter_complete`. No change to the
+>    loop, the tools, the prompt, the scoring, or the judgement rule.
+> 2. **`PRICES` is unchanged.** The two tables are byte-identical, so every projected cost is
+>    computed from the same price model as the other five batteries.
+> 3. **The run recorded zero runtime errors.** This is the one that matters. The retry only
+>    executes when a request fails. A run that never failed a request never reached the changed
+>    code, so re-running could not produce a more correct number — only a different one, because
+>    the harness is non-deterministic at `temperature=0` (§3).
+>
+> **WANG HONGJUN's `mistralai/mistral-medium-3` battery is kept under this rule**, stamped
+> `commit_id 61804e3`. It reported 0 runtime errors and 0 caps across all 76 trials. Re-running it
+> would have discarded twelve completed human judgements and bought a *different* result, not a
+> better one. Five batteries carry `8489267`; this one carries `61804e3`, and the reason is here.
+>
+> If any of the three conditions fails, the run is void as originally written. SUN YUCONG's first
+> DeepSeek run fails condition 3 by 61 trials and is kept only as evidence of the defect.
 
 **After the `battery-v2.1` tag is announced — not before.** A run off any other commit is void and
 has to be paid for twice.
