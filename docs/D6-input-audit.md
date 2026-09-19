@@ -74,9 +74,9 @@ Sources: `evaluation/d2c_run.json`, reproducible via `python3 evaluation/measure
 
 | Arm | Median turns | Total turns | Input tokens | Output tokens | Cost | Decisions |
 |---|---:|---:|---:|---:|---:|---:|
-| Sequential | 5 | 222 | 413,519 | 15,012 | US$0.071031 | 40/42 |
-| As recorded | 5 | 216 | 404,192 | 14,974 | US$0.069609 | 40/42 |
-| By dependency rule | 4 | 183 | 353,484 | 14,746 | US$0.061867 | 40/42 |
+| Sequential | 5 | 222 | 413,515 | 15,012 | US$0.071031 | 40/42 |
+| As recorded | 5 | 216 | 404,188 | 14,974 | US$0.069609 | 40/42 |
+| By dependency rule | 4 | 183 | 353,481 | 14,746 | US$0.061867 | 40/42 |
 
 Measured saving versus sequential:
 
@@ -117,7 +117,7 @@ Source: `src/loop.py`, `Guards`.
 
 ## Report files to update later
 
-- `cost_model/D6_cost_model.ipynb`: Step 2 will make it read these inputs and calculate the D6
+- `evaluation/d6_cost_model.ipynb`: Step 2 will make it read these inputs and calculate the D6
   outputs.
 - `docs/D6-cost-model.md`: Step 3 will fill the working D6 evidence document.
 - `docs/report/S4-cost-to-serve.md`: Step 4 should create this report section, because

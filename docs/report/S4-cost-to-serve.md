@@ -2,7 +2,7 @@
 
 ## 1. Baseline Assumptions
 
-Using the Class 5 three-layer model, our baseline is layer 1 token cost plus layer 2 expected fallback cost, multiplied by 8,000 claims per month, plus a US$500 per month fixed layer 3 deployment assumption. Retrieval and tool fees are zero because the repository records no separate provider charge. We ship the model with a 12-turn step cap, a 22-call cap, a US$0.016 per run budget ceiling, and a US$1,000 per user per month deployment assumption. Prompt caching and reasoning-token adjustments were not used or measured.
+Using the Class 5 three-layer model, our baseline is layer 1 token cost plus layer 2 expected fallback cost, multiplied by 8,000 claims per month, plus a US$500 per month fixed layer 3 deployment assumption. Retrieval and tool fees are zero because the repository records no separate provider charge. We ship the model with a 12-turn step cap, a 22-call cap, a US$0.016 per run budget ceiling, and a US$1,000 per user per month spend limit. The limit is a guardrail, not a cost: it caps what a single user can consume and never enters the layer 3 figure, which is the US$500 monthly fixed assumption above. Prompt caching and reasoning-token adjustments were not used or measured.
 
 ## 2. Three-Layer Cost Model
 
@@ -22,7 +22,7 @@ Because we used scripted replay for testing, we assumed we had tuned it well and
 
 Lever 1 :  Removing two rejected tool descriptors reduces input tokens by 96,288 and projected cost by US$0.009640 on the 76-trial replay. This shows that a thinner tool block lowers cost linearly because the tool manual is re-sent on each model call.
 
-Lever 2 :  With dependency-rule grouping, tool-executing turns fall from 222 to 183, and input tokens fall from 413,519 to 353,484. This shows that parallelising tool calls works.
+Lever 2 :  With dependency-rule grouping, tool-executing turns fall from 222 to 183, and input tokens fall from 413,515 to 353,481. This shows that parallelising tool calls works.
 
 Lever 3 : The measured result supports the Class 5 idea that a fat observation or manual compounds through later ReAct context. A descriptor increase of about 275 tokens becomes +131,216 input tokens across the 76-trial schedule. At the same time, the shipped return shape reduces interface risk: the old shape could return a contradictory observation, while the new shape makes that contradiction unrepresentable.
 
