@@ -1,0 +1,89 @@
+{
+  "purpose": "D6 supplementary sensitivity analysis comparing deepseek/deepseek-chat against mistralai/mistral-medium-3.",
+  "assumptions": {
+    "volume_claims_per_month": 8000,
+    "failure_cost_usd": 7.6,
+    "fixed_monthly_usd": 500.0,
+    "retrieval_usd_per_run": 0.0,
+    "tool_usd_per_run": 0.0,
+    "source": "results/d6_cost_model.json"
+  },
+  "models": {
+    "deepseek/deepseek-chat": {
+      "role": "candidate_to_test",
+      "pass_count": 50,
+      "trials": 76,
+      "success_rate": 0.6578947368421053,
+      "layer_1_variable_usd": 0.0028363442092105263,
+      "layer_2_fallback_usd": 2.5999999999999996,
+      "cost_per_successful_claim_usd": 2.60283634420921,
+      "monthly_total_usd": 21322.69075367368
+    },
+    "mistralai/mistral-medium-3": {
+      "role": "comparison_target",
+      "pass_count": 53,
+      "trials": 76,
+      "success_rate": 0.6973684210526315,
+      "layer_1_variable_usd": 0.006188063157894736,
+      "layer_2_fallback_usd": 2.3000000000000003,
+      "cost_per_successful_claim_usd": 2.306188063157895,
+      "monthly_total_usd": 18949.50450526316
+    }
+  },
+  "break_even": {
+    "question": "What success rate does deepseek/deepseek-chat need for its monthly cost to match mistralai/mistral-medium-3?",
+    "formula": "p_deepseek = 1 - (mistral_cost_per_successful_claim - deepseek_layer_1_variable_cost) / failure_cost",
+    "deepseek_break_even_success_rate": 0.6969274054014889,
+    "deepseek_break_even_success_rate_percent": 69.69274054014889,
+    "deepseek_measured_success_rate_percent": 65.78947368421052,
+    "required_increase_percentage_points": 3.903266855938366,
+    "equivalent_trial_count_threshold": "52.966/76, so 53/76 clears the break-even point",
+    "additional_successes_needed_on_76_trial_schedule": 3,
+    "monthly_total_at_break_even_usd": 18949.50450526316
+  },
+  "sensitivity_table": [
+    {
+      "model": "deepseek/deepseek-chat",
+      "point": "P - 10pp",
+      "success_rate_percent": 55.78947368421053,
+      "cost_per_successful_claim_usd": 3.3628363442092104,
+      "monthly_total_usd": 27402.690753673684
+    },
+    {
+      "model": "deepseek/deepseek-chat",
+      "point": "P measured",
+      "success_rate_percent": 65.78947368421052,
+      "cost_per_successful_claim_usd": 2.60283634420921,
+      "monthly_total_usd": 21322.69075367368
+    },
+    {
+      "model": "deepseek/deepseek-chat",
+      "point": "P + 10pp",
+      "success_rate_percent": 75.78947368421052,
+      "cost_per_successful_claim_usd": 1.8428363442092107,
+      "monthly_total_usd": 15242.690753673685
+    },
+    {
+      "model": "mistralai/mistral-medium-3",
+      "point": "P - 10pp",
+      "success_rate_percent": 59.73684210526316,
+      "cost_per_successful_claim_usd": 3.0661880631578946,
+      "monthly_total_usd": 25029.50450526316
+    },
+    {
+      "model": "mistralai/mistral-medium-3",
+      "point": "P measured",
+      "success_rate_percent": 69.73684210526315,
+      "cost_per_successful_claim_usd": 2.306188063157895,
+      "monthly_total_usd": 18949.50450526316
+    },
+    {
+      "model": "mistralai/mistral-medium-3",
+      "point": "P + 10pp",
+      "success_rate_percent": 79.73684210526315,
+      "cost_per_successful_claim_usd": 1.5461880631578948,
+      "monthly_total_usd": 12869.50450526316
+    }
+  ],
+  "conclusion": "At measured rates, DeepSeek is more expensive than Mistral because its lower success rate adds more expected fallback cost than its lower token price saves. DeepSeek needs about 69.69% success, or effectively 53/76 passes, to match Mistral's cost."
+}

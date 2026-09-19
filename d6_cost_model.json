@@ -1,0 +1,308 @@
+{
+  "assumptions": {
+    "volume_claims_per_month": 8000,
+    "failure_cost_usd": 7.6,
+    "retrieval_usd_per_run": 0.0,
+    "tool_usd_per_run": 0.0,
+    "fixed_monthly_usd": 500.0,
+    "fixed_monthly_note": "experience-based deployment assumption",
+    "monthly_limit_usd_per_user": 1000.0,
+    "monthly_limit_note": "experience-based deployment assumption"
+  },
+  "model_rows": [
+    {
+      "file": "eval-openrouter-deepseek-deepseek-chat-v2-sun-deepseek-chat-v21-rerun2-final.summary.json",
+      "model": "deepseek/deepseek-chat",
+      "run_id": "sun-deepseek-chat-v21-rerun2-final",
+      "backend": "openrouter",
+      "pass_count": 50,
+      "trials": 76,
+      "success_rate": 0.6578947368421053,
+      "input_tokens_total": 695532,
+      "output_tokens_total": 35513,
+      "input_tokens_per_run": 9151.736842105263,
+      "output_tokens_per_run": 467.2763157894737,
+      "median_turns": 4.0,
+      "caps_fired": 0,
+      "combined_score_status": "complete",
+      "missing_judgements": 0,
+      "price_in": 0.2574,
+      "price_out": 1.0287,
+      "use": "live_v2_battery",
+      "layer_1_variable_usd": 0.0028363442092105263,
+      "layer_2_fallback_usd": 2.5999999999999996,
+      "layer_3_fixed_monthly_usd": 500.0,
+      "cost_per_successful_claim_usd": 2.60283634420921,
+      "monthly_total_usd": 21322.69075367368
+    },
+    {
+      "file": "eval-openrouter-google-gemini-2.5-flash-lite-v2-jincheng-gemini25flashlite-final.summary.json",
+      "model": "google/gemini-2.5-flash-lite",
+      "run_id": "jincheng-gemini25flashlite-final",
+      "backend": "openrouter",
+      "pass_count": 58,
+      "trials": 76,
+      "success_rate": 0.7631578947368421,
+      "input_tokens_total": 795150,
+      "output_tokens_total": 63818,
+      "input_tokens_per_run": 10462.5,
+      "output_tokens_per_run": 839.7105263157895,
+      "median_turns": 5.0,
+      "caps_fired": 0,
+      "combined_score_status": "complete",
+      "missing_judgements": 0,
+      "price_in": 0.1,
+      "price_out": 0.4,
+      "use": "live_v2_battery",
+      "layer_1_variable_usd": 0.001382134210526316,
+      "layer_2_fallback_usd": 1.7999999999999996,
+      "layer_3_fixed_monthly_usd": 500.0,
+      "cost_per_successful_claim_usd": 1.8013821342105258,
+      "monthly_total_usd": 14911.057073684207
+    },
+    {
+      "file": "eval-openrouter-meta-llama-llama-3.3-70b-instruct-v2-niu-tong-final.summary.json",
+      "model": "meta-llama/llama-3.3-70b-instruct",
+      "run_id": "niu-tong-final",
+      "backend": "openrouter",
+      "pass_count": 42,
+      "trials": 76,
+      "success_rate": 0.5526315789473685,
+      "input_tokens_total": 681411,
+      "output_tokens_total": 43990,
+      "input_tokens_per_run": 8965.934210526315,
+      "output_tokens_per_run": 578.8157894736842,
+      "median_turns": 5.0,
+      "caps_fired": 0,
+      "combined_score_status": "complete",
+      "missing_judgements": 0,
+      "price_in": 0.1,
+      "price_out": 0.32,
+      "use": "live_v2_battery",
+      "layer_1_variable_usd": 0.0010818144736842105,
+      "layer_2_fallback_usd": 3.3999999999999995,
+      "layer_3_fixed_monthly_usd": 500.0,
+      "cost_per_successful_claim_usd": 3.4010818144736836,
+      "monthly_total_usd": 27708.65451578947
+    },
+    {
+      "file": "eval-openrouter-mistralai-mistral-medium-3-v2-wang-mistral-medium-3-final.summary.json",
+      "model": "mistralai/mistral-medium-3",
+      "run_id": "wang-mistral-medium-3-final",
+      "backend": "openrouter",
+      "pass_count": 53,
+      "trials": 76,
+      "success_rate": 0.6973684210526315,
+      "input_tokens_total": 794727,
+      "output_tokens_total": 76201,
+      "input_tokens_per_run": 10456.934210526315,
+      "output_tokens_per_run": 1002.6447368421053,
+      "median_turns": 4.0,
+      "caps_fired": 0,
+      "combined_score_status": "complete",
+      "missing_judgements": 0,
+      "price_in": 0.4,
+      "price_out": 2.0,
+      "use": "live_v2_battery",
+      "layer_1_variable_usd": 0.006188063157894736,
+      "layer_2_fallback_usd": 2.3000000000000003,
+      "layer_3_fixed_monthly_usd": 500.0,
+      "cost_per_successful_claim_usd": 2.306188063157895,
+      "monthly_total_usd": 18949.50450526316
+    },
+    {
+      "file": "eval-openrouter-openai-gpt-4o-mini-v1-zheng-v1-final.summary.json",
+      "model": "openai/gpt-4o-mini",
+      "run_id": "zheng-v1-final",
+      "backend": "openrouter",
+      "pass_count": 28,
+      "trials": 76,
+      "success_rate": 0.3684210526315789,
+      "input_tokens_total": 1120947,
+      "output_tokens_total": 54342,
+      "input_tokens_per_run": 14749.302631578947,
+      "output_tokens_per_run": 715.0263157894736,
+      "median_turns": 4.0,
+      "caps_fired": 10,
+      "combined_score_status": "complete",
+      "missing_judgements": 0,
+      "price_in": 0.15,
+      "price_out": 0.6,
+      "use": "v1_prompt_comparison_only",
+      "layer_1_variable_usd": 0.0026414111842105264,
+      "layer_2_fallback_usd": 4.8,
+      "layer_3_fixed_monthly_usd": 500.0,
+      "cost_per_successful_claim_usd": 4.802641411184211,
+      "monthly_total_usd": 38921.131289473684
+    },
+    {
+      "file": "eval-openrouter-openai-gpt-4o-mini-v2-goncalo-gpt4omini-final.summary.json",
+      "model": "openai/gpt-4o-mini",
+      "run_id": "goncalo-gpt4omini-final",
+      "backend": "openrouter",
+      "pass_count": 31,
+      "trials": 76,
+      "success_rate": 0.40789473684210525,
+      "input_tokens_total": 1537210,
+      "output_tokens_total": 68289,
+      "input_tokens_per_run": 20226.447368421053,
+      "output_tokens_per_run": 898.5394736842105,
+      "median_turns": 4.0,
+      "caps_fired": 12,
+      "combined_score_status": "complete",
+      "missing_judgements": 0,
+      "price_in": 0.15,
+      "price_out": 0.6,
+      "use": "live_v2_battery",
+      "layer_1_variable_usd": 0.003573090789473684,
+      "layer_2_fallback_usd": 4.499999999999999,
+      "layer_3_fixed_monthly_usd": 500.0,
+      "cost_per_successful_claim_usd": 4.503573090789473,
+      "monthly_total_usd": 36528.584726315785
+    },
+    {
+      "file": "eval-scripted-v2-final.summary.json",
+      "model": "google/gemini-2.5-flash-lite",
+      "run_id": "final2",
+      "backend": "scripted",
+      "pass_count": 57,
+      "trials": 76,
+      "success_rate": 0.75,
+      "input_tokens_total": 785906,
+      "output_tokens_total": 46280,
+      "input_tokens_per_run": 10340.868421052632,
+      "output_tokens_per_run": 608.9473684210526,
+      "median_turns": 5.0,
+      "caps_fired": 0,
+      "combined_score_status": "complete",
+      "missing_judgements": 0,
+      "price_in": 0.1,
+      "price_out": 0.4,
+      "use": "scripted_baseline",
+      "layer_1_variable_usd": 0.0012776657894736842,
+      "layer_2_fallback_usd": 1.9,
+      "layer_3_fixed_monthly_usd": 500.0,
+      "cost_per_successful_claim_usd": 1.9012776657894737,
+      "monthly_total_usd": 15710.22132631579
+    }
+  ],
+  "headline": {
+    "cheap_model": "google/gemini-2.5-flash-lite",
+    "mid_model": "mistralai/mistral-medium-3",
+    "cheap_success_rate": 0.7631578947368421,
+    "mid_success_rate": 0.6973684210526315,
+    "break_even_success_rate_for_cheap": 0.6967360619806093,
+    "cheap_break_even_gap": 0.06642183275623281,
+    "monthly_saving_vs_mid_usd": 4038.447431578954,
+    "annual_saving_vs_mid_usd": 48461.36917894745
+  },
+  "sensitivity": {
+    "google/gemini-2.5-flash-lite": [
+      {
+        "success_rate": 0.6631578947368422,
+        "cost_per_successful_claim_usd": 2.561382134210526,
+        "monthly_total_usd": 20991.057073684206
+      },
+      {
+        "success_rate": 0.7131578947368422,
+        "cost_per_successful_claim_usd": 2.1813821342105255,
+        "monthly_total_usd": 17951.057073684206
+      },
+      {
+        "success_rate": 0.7631578947368423,
+        "cost_per_successful_claim_usd": 1.801382134210525,
+        "monthly_total_usd": 14911.0570736842
+      },
+      {
+        "success_rate": 0.8131578947368423,
+        "cost_per_successful_claim_usd": 1.4213821342105246,
+        "monthly_total_usd": 11871.057073684196
+      },
+      {
+        "success_rate": 0.8631578947368423,
+        "cost_per_successful_claim_usd": 1.0413821342105243,
+        "monthly_total_usd": 8831.057073684195
+      }
+    ],
+    "mistralai/mistral-medium-3": [
+      {
+        "success_rate": 0.5973684210526315,
+        "cost_per_successful_claim_usd": 3.066188063157895,
+        "monthly_total_usd": 25029.504505263158
+      },
+      {
+        "success_rate": 0.6473684210526316,
+        "cost_per_successful_claim_usd": 2.6861880631578945,
+        "monthly_total_usd": 21989.504505263158
+      },
+      {
+        "success_rate": 0.6973684210526316,
+        "cost_per_successful_claim_usd": 2.306188063157894,
+        "monthly_total_usd": 18949.504505263154
+      },
+      {
+        "success_rate": 0.7473684210526317,
+        "cost_per_successful_claim_usd": 1.9261880631578938,
+        "monthly_total_usd": 15909.50450526315
+      },
+      {
+        "success_rate": 0.7973684210526317,
+        "cost_per_successful_claim_usd": 1.5461880631578935,
+        "monthly_total_usd": 12869.504505263149
+      }
+    ]
+  },
+  "sensitivity_robust": false,
+  "cost_ledger": {
+    "lever_1_tool_block_B": {
+      "status": "measured counterfactual prompt-prefix replay; live model behaviour not re-measured",
+      "source": "evaluation/d6_lever1_run.json",
+      "before": "counterfactual fat tool block with check_required_documents and lookup_member descriptors",
+      "after": "shipped tool block",
+      "manual_tokens_before": 743,
+      "manual_tokens_after": 540,
+      "input_tokens_before": 882206,
+      "input_tokens_after": 785918,
+      "cost_before_usd": 0.106736,
+      "cost_after_usd": 0.097096,
+      "delta_input_tokens_removed": 96288,
+      "delta_cost_usd_removed": 0.00964,
+      "decisions_before": "72/76",
+      "decisions_after": "72/76"
+    },
+    "lever_2_turn_count_T": {
+      "before": "sequential",
+      "after": "by dependency rule",
+      "turns_before": 222,
+      "turns_after": 183,
+      "input_tokens_before": 413519,
+      "input_tokens_after": 353484,
+      "cost_before_usd": 0.071031,
+      "cost_after_usd": 0.061867,
+      "decisions_before": "40/42",
+      "decisions_after": "40/42"
+    },
+    "lever_3_observation_size_D": {
+      "manual_tokens_before": 265,
+      "manual_tokens_after": 540,
+      "check_coverage_block_before": 32,
+      "check_coverage_block_after": 307,
+      "descriptor_delta_input_tokens": 131216,
+      "return_shape_delta_input_tokens": -1751,
+      "interpretation": "safety/interface improvement, not cost reduction"
+    },
+    "lever_4_success_rate": {
+      "one_percentage_point_monthly_value_usd": 608.0,
+      "headline_success_gap": 0.06578947368421062,
+      "dominates": true,
+      "reason": "At US$7.60 per failure and 8,000 claims/month, one pass-rate point is worth US$608/month, far more than the token bill."
+    }
+  },
+  "caps": {
+    "step_cap_turns": 12,
+    "call_cap_model_calls": 22,
+    "budget_ceiling_usd_per_run": 0.016,
+    "monthly_limit_usd_per_user": 1000.0
+  },
+  "report_ready_summary": "At Project A's 8,000 claims/month and US$7.60 failure cost, google/gemini-2.5-flash-lite is the lowest all-in v2 live option: 76.32% pass rate, US$1.8014 per successful claim, and US$14,911.06 per month. Against mistralai/mistral-medium-3, the cheap row clears break-even by 6.64% and changes monthly cost by US$4,038.45. The dominant lever is success rate: one percentage point is worth US$608.00 per month, which overwhelms the token-level savings from tool and turn reductions."
+}
