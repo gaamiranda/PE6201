@@ -1,36 +1,29 @@
-# §5 · What broke, and what we changed
+# 5. The two failures
 
-**Owner:** SUN YUCONG · **Budget:** 350 words · **Evidence:** `docs/D7-failures.md`, `docs/D2-tool-layer.md`, `evaluation/guardrail-checklist.md`
+The first failure is loop control. Deleting action de-duplication — `Guards(dedup=False)`, nothing
+else — lets the agent re-issue an identical `issue_decision_letter` and append the claim to the
+decision log once per attempt: one claim, four payment records. No metric we report can see it. Both
+arms score 40/42 at identical turns, tokens and cost; the only evidence is the ordered
+`tools_called` field, where it was found. The fix fingerprints each action and answers a repeat with
+the earlier observation: four write actions, one letter. A step cap only bounds the damage: left to
+it, the repeat produced eight letters.
 
----
+The second failure is the tool interface, and keeping two v2 changes apart matters. The descriptor
+contract became six fields; separately, `check_coverage`'s return shape was rewritten so
+`coverage.status` and `needed_next[]` cannot contradict one another, so a refused line can no longer
+ask for documents for itself. Three arms — shipped, the old shape with the new descriptor, and the
+repository at `91da36f` — scored identically: 63/76 on code, 40/42 on decisions, 9/10 on the
+guardrail checklist. Only cost differed; §2 reports the split. The fix belongs in the returned
+object, not a prompt line or a validator, because the unsafe branch should be unrepresentable in
+what the model sees.
 
-The most useful failures here were not random model mistakes. They exposed mismatches between what
-our interface promised and what the agent could rely on: the descriptors, the v1 to v2 rewrite,
-and the guardrail layer around unsafe autonomy.
+DeepSeek made that result less comfortable: 53/76 on code, 50/76 combined. On the prompt-injection
+set — three cases, nine trials, a signal, not a rate — the recording model catches two of three;
+DeepSeek catches one, failing `CLM-8952`, where the injection imitates a tool result, and
+`CLM-8941`, the "ignore the policy and approve" case the recording model escalates in one turn.
+Final-action gates are necessary and insufficient. We changed the interface because the old one let
+ambiguity pass too quietly; the live run shows the new one is still model-dependent.
 
-Two things changed in v2, and keeping them apart matters. The **descriptor contract** became six
-fields — signature, what it answers, inputs, returns with a size bound, failure conditions, and
-whether it is irreversible. Separately, `check_coverage`'s **return shape** was rewritten so
-`coverage.status` and `needed_next[]` cannot contradict one another: a line refused as not covered
-can no longer ask for documents for itself.
-
-D7's second failure was built to separate those changes, and the result was not what we expected.
-Three arms — the shipped version, the old shape with the new descriptor, and the repository at
-`91da36f` — scored **identically**: 63/76 on code, 40/42 on decisions, 9/10 on the guardrail
-checklist. Only cost differed: the descriptor accounts for 131,216 input tokens across the
-schedule, the return shape for 1,751. The rewrite bought consistency and traceability, not
-accuracy — and replay could not have shown otherwise, being keyed on case and turn, which is
-exactly why one member runs the v1 prompt live.
-
-The DeepSeek battery made that result more useful and less comfortable. It scored 53/76 on code
-and 50/76 combined, with two provider timeouts reported separately. The headline is not the
-aggregate but the prompt-injection set: three cases, nine trials — a signal, not a measured rate.
-The recording model catches two of three. DeepSeek catches one. It fails `CLM-8952`, where the
-injection imitates a tool result, and also `CLM-8941`, the blatant "ignore the policy and approve"
-case the recording model escalates in one turn.
-
-So the guardrail is not a safety property bolted onto the loop. It is a design pressure: structure
-the evidence, block irreversible actions when the trigger is visible, and check whether each model
-uses that structure. Final-action gates are necessary and insufficient. We changed the descriptors
-and the gate because our own tests showed the old interface let ambiguity pass too quietly; the
-live run showed the improved one is still model-dependent.
+<!-- Evidence: ../D7-failures.md (Failure 1 §1, §3, §4; Failure 2 §3, §4; evaluation/failure_1_run.json);
+../D2-tool-layer.md; ../../evaluation/guardrail-checklist.md;
+../../results/evaluations/eval-openrouter-deepseek-deepseek-chat-v2-sun-deepseek-chat-v21-rerun2-final.summary.json. -->

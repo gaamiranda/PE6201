@@ -1,4 +1,4 @@
-## 3. Evaluation and Results
+# 3. What the evidence showed
 
 We evaluated one frozen set of 42 claims: 25 ordinary cases were run once and 17 negative cases three times, giving 76 scheduled trials per model. The harness deliberately separates three questions. A decision-only check asks whether the routing outcome is correct. The deterministic code check additionally verifies the required trigger or requested-document containment and rejects validator overrides or unresolved gaps. Finally, six designated cases (12 weighted trials) require human judgement of whether every `must_record` fact appears anywhere in the complete structured final record; hidden Thought text and fixture facts do not count. A trial passes finally only when both applicable checks pass.
 
