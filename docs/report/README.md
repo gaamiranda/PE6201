@@ -5,12 +5,12 @@ One file per section, named `S<n>-<slug>.md`. Owners and word budgets are in
 
 | § | Section | Words | Owner | File |
 |---|---|---|---|---|
-| 1 | Why an agent at all | 350 | ZHENG YONGJIE | `S1-why-an-agent.md` |
+| 1 | Why an agent at all | 350 | ZHENG YONGJIE | ✅ `S1-why-an-agent.md` |
 | 2 | The system we built | 300 | Goncalo Miranda | ✅ `S2-the-system-we-built.md` |
-| 3 | Evaluation and results | 350 | NIU TONG | `S3-evaluation-and-results.md` |
+| 3 | Evaluation and results | 350 | NIU TONG | ✅ `S3-evaluation-and-results.md` |
 | 4 | Cost to serve | 400 | WANG HONGJUN | `S4-cost-to-serve.md` |
 | 5 | What broke, and what we changed | 350 | SUN YUCONG | ✅ `S5-what-broke.md` |
-| 6 | The architecture we did not build | 250 | JIN CHENG | `S6-the-architecture-we-did-not-build.md` |
+| 6 | The architecture we did not build | 250 | JIN CHENG | ✅ `S6-the-architecture-we-did-not-build.md` |
 
 **Prose, not bullets.** Six differently-voiced fragments read like six projects, and Communication
 is a marked criterion. Write paragraphs and let ZHENG YONGJIE smooth the joins.
