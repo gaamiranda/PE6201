@@ -1,0 +1,20 @@
+machine   arm64 · Darwin · Python 3.9.6
+method    median of 2000 calls each, wall clock, warm process
+date      2026-09-19
+
+system of record                               tool                       median
+--------------------------------------------------------------------------------
+claims.json                                    get_claim                 0.79 us
+policies.json                                  lookup_policy             0.83 us
+procedures + exclusions + required_documents   check_coverage            0.58 us
+preauthorisations.json                         get_preauthorisation      0.96 us
+hospitals.json                                 get_hospital_status       0.25 us
+decided_claims.json                            check_claim_history       6.54 us
+--------------------------------------------------------------------------------
+load all 8 fixture files (once, at import)                              0.261 ms
+
+decided_claims.json currently holds 6 rows. check_claim_history scans them linearly,
+so re-run this after the case baton (PLAN.md §3) — that row is the only one that grows.
+
+Compare against one model call: 1-3 s. Ground truth is roughly six orders of magnitude cheaper
+than the reasoning it corrects, which is what lets the loop iterate without a human in each turn.
